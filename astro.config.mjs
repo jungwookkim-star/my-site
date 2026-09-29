@@ -6,7 +6,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://connectmobile.pages.dev',
+	site: 'https://connectmobile.kr',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{
