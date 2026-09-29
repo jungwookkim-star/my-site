@@ -4,6 +4,9 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, HOURS, HOLIDAY_NOTE } from '../consts';
 
+import { getNaverPosts, NAVER_BLOG_URL } from '../lib/naverBlog';
+const naverPosts = await getNaverPosts(6);
+
 const featured = [
 	{ src: '/plans/prepaid-kt-396-459.webp', alt: 'KT 선불 396/459 요금제', label: '선불 BEST' },
 	{ src: '/plans/prepaid-lg-5g-464.webp', alt: 'L망 5G 선불 464 요금제', label: '선불 신규' },
@@ -61,6 +64,11 @@ const faqs = [
 			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
 			summary { cursor: pointer; font-weight: 700; }
 			details p { margin: 0.6rem 0 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
+			.nposts { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+			.nposts li { display: flex; justify-content: space-between; gap: 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.8rem 1.2rem; margin-bottom: 0.6rem; font-size: 0.95rem; }
+			.nposts a { color: var(--black); text-decoration: none; font-weight: 700; }
+			.nposts a:hover { color: var(--accent); }
+			.nposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
 			.final { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2.5rem 1rem; }
 			.final h2 { margin-top: 0; }
 		</style>
@@ -136,6 +144,19 @@ const faqs = [
 					<details><summary>{f.q}</summary><p>{f.a}</p></details>
 				))}
 			</section>
+
+			{naverPosts.length > 0 && (
+				<section id="naver">
+					<h2 class="sec">네이버 블로그 최신 글</h2>
+					<p class="sub">개통 관련 정보를 블로그에서도 확인하세요.</p>
+					<ul class="nposts">
+						{naverPosts.map((p) => (
+							<li><a href={p.link} target="_blank" rel="noopener">{p.title}</a><time>{p.date.toISOString().slice(0, 10)}</time></li>
+						))}
+					</ul>
+					<p style="text-align:center"><a class="btn ghost" href={NAVER_BLOG_URL} target="_blank" rel="noopener">네이버 블로그 바로가기 →</a></p>
+				</section>
+			)}
 
 			<section>
 				<div class="final">
