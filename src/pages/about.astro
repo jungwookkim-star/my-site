@@ -1,7 +1,7 @@
 ---
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
-import { SITE_TITLE, ADDRESS, HOURS, PHONE } from '../consts';
+import { SITE_TITLE, ADDRESS, HOURS, PHONE, PHONE_LINK, KAKAO_URL, BUSINESS_INFO } from '../consts';
 ---
 
 <Layout
@@ -10,10 +10,27 @@ import { SITE_TITLE, ADDRESS, HOURS, PHONE } from '../consts';
 	pubDate={new Date('September 29 2026')}
 	heroImage={AboutHeroImage}
 >
-	<p>{SITE_TITLE}는 선불·후불 휴대폰 개통을 도와드리는 센터입니다. (센터 소개 문구를 여기에 적어주세요.)</p>
+	<p>
+		<strong>{SITE_TITLE}</strong>는 선불·후불 휴대폰 개통을 도와드리는 센터입니다.
+		복잡한 개통 절차를 쉽고 빠르게 안내해 드립니다.
+	</p>
+
+	<h2>이런 점이 좋습니다</h2>
 	<ul>
-		<li>전화: {PHONE}</li>
+		<li>약정 NO · 위약금 NO · 유심비 NO 요금제 안내</li>
+		<li>KT망, LG망 선불 요금제와 KT망 후불 결합 요금제 취급</li>
+		<li>전국 어디서나 비대면 상담과 개통</li>
+		<li>번호이동과 신규 개통 모두 상담 가능</li>
+	</ul>
+
+	<h2>상담·문의</h2>
+	<ul>
+		<li>전화: <a href={PHONE_LINK}>{PHONE}</a></li>
+		<li>카카오톡: <a href={KAKAO_URL} target="_blank" rel="noopener">채널 바로가기</a></li>
 		<li>운영시간: {HOURS}</li>
 		<li>개통 지역: {ADDRESS}</li>
 	</ul>
+
+	<h2>사업자 정보</h2>
+	<p>{BUSINESS_INFO}</p>
 </Layout>
