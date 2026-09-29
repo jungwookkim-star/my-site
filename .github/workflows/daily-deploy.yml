@@ -1,10 +1,11 @@
-# 매일 아침 사이트를 다시 배포해서 네이버 블로그 최신 글이 홈 화면에 반영되게 합니다.
+﻿# 하루 두 번 사이트를 다시 배포해서 네이버 블로그 최신 글이 홈 화면에 반영되게 합니다.
 # 배포 주소는 GitHub 저장소의 Secret(CF_DEPLOY_HOOK)에 저장되어 있습니다.
 name: Daily deploy
 
 on:
   schedule:
     - cron: '0 22 * * *' # 매일 한국시간 오전 7시
+    - cron: '0 10 * * *' # 매일 한국시간 오후 7시
   workflow_dispatch: # GitHub Actions 화면에서 수동 실행도 가능
 
 jobs:

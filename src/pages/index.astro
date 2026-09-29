@@ -5,7 +5,7 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, HOURS, HOLIDAY_NOTE } from '../consts';
 
 import { getNaverPosts, NAVER_BLOG_URL } from '../lib/naverBlog';
-const naverPosts = await getNaverPosts(6);
+const naverPosts = await getNaverPosts(10);
 
 const featured = [
 	{ src: '/plans/prepaid-kt-396-459.webp', alt: 'KT 선불 396/459 요금제', label: '선불 BEST' },
