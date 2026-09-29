@@ -1,0 +1,14 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="소개"
+	description="이 사이트와 저에 대한 소개"
+	pubDate={new Date('September 29 2026')}
+	heroImage={AboutHeroImage}
+>
+	<p>안녕하세요! 여기에 자기소개를 적어주세요.</p>
+	<p>이 파일은 <code>src/pages/about.astro</code> 입니다. 내용을 바꾸고 저장하면 소개 페이지가 바뀝니다.</p>
+</Layout>
