@@ -1,0 +1,29 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { REGIONS } from '../../data/regions';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="전국 지역별 개통 안내 | 커넥트모바일" description="전국 시·도 어디서나 비대면 선불·후불 휴대폰 개통. 지역을 선택해 안내를 확인하세요." />
+		<style>
+			.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.8rem; margin-top: 1.5rem; }
+			.grid a { background: #fff; box-shadow: var(--box-shadow); border-radius: 12px; padding: 1rem; text-align: center; text-decoration: none; color: var(--black); font-weight: 700; }
+			.grid a:hover { background: #eef1ff; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="wide">
+			<h1 style="text-align:center">전국 지역별 개통 안내</h1>
+			<p style="text-align:center">전국 어디서나 비대면으로 개통 상담이 가능합니다. 지역을 선택해 보세요.</p>
+			<div class="grid">
+				{REGIONS.map((r) => <a href={`/region/${r.slug}/`}>{r.name}</a>)}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
