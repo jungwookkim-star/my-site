@@ -2,47 +2,147 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, HOURS } from '../consts';
+
+const featured = [
+	{ src: '/plans/prepaid-kt-396-459.webp', alt: 'KT 선불 396/459 요금제', label: '선불 BEST' },
+	{ src: '/plans/prepaid-lg-5g-464.webp', alt: 'L망 5G 선불 464 요금제', label: '선불 신규' },
+	{ src: '/plans/postpaid-naverpay.webp', alt: 'KT망 네이버페이 결합 요금제', label: '후불 인기' },
+	{ src: '/plans/postpaid-daiso.webp', alt: 'KT망 다이소 결합 요금제', label: '후불 인기' },
+];
+
+const faqs = [
+	{ q: '개통하려면 무엇이 필요한가요?', a: '본인 신분증과 본인 명의 확인이 필요합니다. 개통 방식에 따라 필요한 서류가 다를 수 있으니 전화나 카카오톡으로 먼저 문의해 주세요.' },
+	{ q: '약정이나 위약금이 있나요?', a: '커넥트모바일 요금제는 약정 NO, 위약금 NO, 유심비 NO 입니다.' },
+	{ q: '선불과 후불은 무엇이 다른가요?', a: '선불은 먼저 요금을 내고 쓰는 방식, 후불은 사용 후 다음 달에 요금을 내는 방식입니다. 상황에 맞는 방식을 상담해 드립니다.' },
+	{ q: '기존 번호 그대로 쓸 수 있나요?', a: '번호이동과 신규 개통 모두 가능합니다. 자세한 조건은 상담 시 안내해 드립니다.' },
+	{ q: '직접 방문해야 하나요?', a: '전국 어디서나 비대면으로 개통 상담과 진행이 가능합니다.' },
+	{ q: '언제 문의할 수 있나요?', a: `운영시간은 ${HOURS} 입니다. 카카오톡은 언제든 남겨두시면 순서대로 답변드립니다.` },
+	{ q: '요금제는 변경될 수 있나요?', a: '요금제 및 제공량은 통신사 사정에 따라 변경될 수 있습니다. 개통 전 최신 내용을 안내해 드립니다.' },
+];
 ---
 
 <!doctype html>
 <html lang="ko">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			.hero { text-align: center; padding: 3rem 0 2rem; }
+			.hero .badge { display: inline-block; background: #eef1ff; color: var(--accent); font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 999px; font-size: 0.85rem; }
+			.hero h1 { font-size: 2.2rem; margin: 0.8rem 0 0.5rem; }
+			.hero p { color: rgb(var(--gray)); margin: 0; }
+			.chips { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.2rem; }
+			.chips span { background: #fff; box-shadow: var(--box-shadow); padding: 0.3rem 0.9rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; }
+			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.alt { background: #fee500; color: #191919; }
+			.btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			section { margin-top: 4rem; }
+			h2.sec { text-align: center; margin-bottom: 0.3rem; }
+			.sub { text-align: center; color: rgb(var(--gray)); margin: 0 0 1.5rem; font-size: 0.9rem; }
+			.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+			.card { background: #fff; border-radius: 12px; padding: 1.2rem; box-shadow: var(--box-shadow); }
+			.card h3 { margin-top: 0; }
+			.card p, .card li { font-size: 0.9rem; }
+			.card ul { padding-left: 1.1rem; margin: 0.5rem 0 0; }
+			.card.pre { border-top: 5px solid #0d9488; }
+			.card.post { border-top: 5px solid var(--accent); }
+			.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; counter-reset: s; padding: 0; list-style: none; }
+			.steps li { background: #fff; border-radius: 12px; padding: 1.2rem; box-shadow: var(--box-shadow); font-size: 0.95rem; position: relative; }
+			.steps li::before { counter-increment: s; content: counter(s); display: block; width: 2rem; height: 2rem; line-height: 2rem; text-align: center; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; margin-bottom: 0.6rem; }
+			.feat { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+			.feat figure { margin: 0; position: relative; }
+			.feat img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--box-shadow); margin: 0; }
+			.feat figcaption { position: absolute; top: 8px; left: 8px; background: #ff3b30; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; }
+			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
+			summary { cursor: pointer; font-weight: 700; }
+			details p { margin: 0.6rem 0 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
+			.final { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2.5rem 1rem; }
+			.final h2 { margin-top: 0; }
+		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a>{' '}
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>{' '}
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+		<main class="wide">
+			<div class="hero">
+				<span class="badge">KT망 · LG망 알뜰폰 개통</span>
+				<h1>선불·후불 개통, 한 번에 끝내세요</h1>
+				<p>전국 어디서나 비대면으로 간편하게 개통해 드립니다.</p>
+				<div class="chips">
+					<span>약정 NO</span><span>위약금 NO</span><span>유심비 NO</span><span>간편 개통</span>
+				</div>
+				<div class="cta">
+					<a class="btn" href={PHONE_LINK}>📞 전화 상담 {PHONE}</a>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">💬 카카오톡 문의</a>
+					<a class="btn ghost" href="/plans">요금제 보기</a>
+				</div>
+			</div>
+
+			<section id="types">
+				<h2 class="sec">선불 · 후불, 어떤 게 맞을까요?</h2>
+				<p class="sub">상황에 맞는 방식을 상담으로 정확히 안내해 드립니다.</p>
+				<div class="cards">
+					<div class="card pre">
+						<h3>선불 요금제</h3>
+						<p>먼저 요금을 내고 사용하는 방식입니다.</p>
+						<ul>
+							<li>약정·위약금 없이 원하는 기간만 사용</li>
+							<li>본인 명의로 간편하게 개통</li>
+							<li>KT망 · LG망(5G 포함) 선택 가능</li>
+						</ul>
+					</div>
+					<div class="card post">
+						<h3>후불 요금제</h3>
+						<p>사용 후 다음 달에 요금을 내는 방식입니다.</p>
+						<ul>
+							<li>월 19,500원부터, 음성·문자 무제한 요금제</li>
+							<li>네이버페이·쿠팡캐시·CU·다이소·올리브영·밀리의 서재 혜택 결합</li>
+							<li>KT망 기반 요금제</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section id="featured">
+				<h2 class="sec">인기 요금제</h2>
+				<p class="sub">고객님들이 많이 찾는 요금제입니다.</p>
+				<div class="feat">
+					{featured.map((f) => (
+						<figure><img src={f.src} alt={f.alt} loading="lazy" /><figcaption>{f.label}</figcaption></figure>
+					))}
+				</div>
+				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans">전체 요금제 보기 →</a></p>
+			</section>
+
+			<section id="steps">
+				<h2 class="sec">개통 절차</h2>
+				<p class="sub">문의부터 개통 완료까지 담당자가 함께합니다.</p>
+				<ol class="steps">
+					<li><strong>문의</strong><br />전화 또는 카카오톡으로 문의</li>
+					<li><strong>상담</strong><br />요금제·개통 방식 확인</li>
+					<li><strong>서류 확인</strong><br />본인 확인 및 필요 서류 안내</li>
+					<li><strong>개통 완료</strong><br />개통 후 사용 방법 안내</li>
+				</ol>
+			</section>
+
+			<section id="faq">
+				<h2 class="sec">자주 묻는 질문</h2>
+				<p class="sub">궁금한 점을 눌러 확인하세요.</p>
+				{faqs.map((f) => (
+					<details><summary>{f.q}</summary><p>{f.a}</p></details>
+				))}
+			</section>
+
+			<section>
+				<div class="final">
+					<h2>지금 바로 상담받으세요</h2>
+					<p>운영시간 {HOURS}</p>
+					<div class="cta">
+						<a class="btn" href={PHONE_LINK}>📞 {PHONE}</a>
+						<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">💬 카카오톡 문의</a>
+					</div>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>

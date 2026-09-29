@@ -1,0 +1,63 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { PHONE, PHONE_LINK, KAKAO_URL } from '../consts';
+
+const postpaid = [
+	{ src: '/plans/postpaid-milli.webp', alt: 'KT망 밀리의 서재 요금제' },
+	{ src: '/plans/postpaid-naverpay.webp', alt: 'KT망 네이버페이 결합 요금제' },
+	{ src: '/plans/postpaid-coupang.webp', alt: 'KT망 쿠팡캐시 결합 요금제' },
+	{ src: '/plans/postpaid-cu.webp', alt: 'KT망 CU 결합 요금제' },
+	{ src: '/plans/postpaid-daiso.webp', alt: 'KT망 다이소 결합 요금제' },
+	{ src: '/plans/postpaid-oliveyoung.webp', alt: 'KT망 올리브영 결합 요금제' },
+];
+const prepaid = [
+	{ src: '/plans/prepaid-kt-396-459.webp', alt: 'KT 선불 396/459 요금제' },
+	{ src: '/plans/prepaid-lg-5g-464.webp', alt: 'L망 5G 선불 464 요금제' },
+	{ src: '/plans/prepaid-kt-table.webp', alt: 'KT 선불 요금제 표' },
+	{ src: '/plans/prepaid-lg-table.webp', alt: 'LG 선불 요금제 표' },
+];
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="요금제 안내" description="커넥트모바일 후불·선불 요금제 안내" />
+		<style>
+			.tabs { display: flex; gap: 0.5rem; justify-content: center; margin: 1rem 0 2rem; }
+			.tabs a { padding: 0.5rem 1.2rem; border-radius: 999px; background: rgb(var(--gray-light)); text-decoration: none; color: var(--black); font-weight: 700; }
+			.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.2rem; }
+			.grid img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--box-shadow); margin: 0; }
+			h2 { text-align: center; margin-top: 3rem; scroll-margin-top: 1rem; }
+			.note { text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); }
+			.cta { text-align: center; margin-top: 2rem; }
+			.btn { display: inline-block; margin: 0.3rem; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.alt { background: #fee500; color: #191919; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="wide">
+			<h1 style="text-align:center">요금제 안내</h1>
+			<div class="tabs"><a href="#postpaid">후불 요금제</a><a href="#prepaid">선불 요금제</a></div>
+
+			<h2 id="postpaid">후불 요금제 (KT망 결합)</h2>
+			<div class="grid">
+				{postpaid.map((i) => <img src={i.src} alt={i.alt} loading="lazy" />)}
+			</div>
+
+			<h2 id="prepaid">선불 요금제</h2>
+			<div class="grid">
+				{prepaid.map((i) => <img src={i.src} alt={i.alt} loading="lazy" />)}
+			</div>
+
+			<p class="note">※ 요금제 및 제공량은 통신사 사정에 따라 변경될 수 있습니다.</p>
+			<div class="cta">
+				<a class="btn" href={PHONE_LINK}>📞 {PHONE}</a>
+				<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">💬 카카오톡 문의</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

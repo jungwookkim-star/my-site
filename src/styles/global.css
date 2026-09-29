@@ -139,3 +139,12 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+/* 한글 폰트 + 넓은 메인 영역 */
+body {
+	font-family: var(--font-atkinson), 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+	font-size: 18px;
+}
+main.wide {
+	width: 960px;
+}

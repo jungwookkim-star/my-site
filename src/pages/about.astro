@@ -1,14 +1,19 @@
 ---
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
+import { SITE_TITLE, ADDRESS, HOURS, PHONE } from '../consts';
 ---
 
 <Layout
-	title="소개"
-	description="이 사이트와 저에 대한 소개"
+	title="센터 소개"
+	description={`${SITE_TITLE} 소개`}
 	pubDate={new Date('September 29 2026')}
 	heroImage={AboutHeroImage}
 >
-	<p>안녕하세요! 여기에 자기소개를 적어주세요.</p>
-	<p>이 파일은 <code>src/pages/about.astro</code> 입니다. 내용을 바꾸고 저장하면 소개 페이지가 바뀝니다.</p>
+	<p>{SITE_TITLE}는 선불·후불 휴대폰 개통을 도와드리는 센터입니다. (센터 소개 문구를 여기에 적어주세요.)</p>
+	<ul>
+		<li>전화: {PHONE}</li>
+		<li>운영시간: {HOURS}</li>
+		<li>개통 지역: {ADDRESS}</li>
+	</ul>
 </Layout>
