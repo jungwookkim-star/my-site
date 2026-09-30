@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, HOURS, HOLIDAY_NOTE } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
 
 import { getNaverPosts, NAVER_BLOG_URL } from '../lib/naverBlog';
 const naverPosts = await getNaverPosts(10);
@@ -43,6 +43,7 @@ const faqs = [
 			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
 			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
 			.btn.alt { background: #fee500; color: #191919; }
+				.btn.self { background: #ff3b30; color: #fff; }
 			.btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 			section { margin-top: 4rem; }
 			h2.sec { text-align: center; margin-bottom: 0.3rem; }
@@ -135,6 +136,7 @@ const faqs = [
 					<li><strong>셀프개통 (약 10분)</strong><br />안내에 따라 직접 개통, 막히면 바로 도움</li>
 					<li><strong>사용 시작</strong><br />개통 후 사용 방법까지 안내</li>
 				</ol>
+				<p style="text-align:center;margin-top:1.5rem"><a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통 바로가기</a></p>
 			</section>
 
 			<section id="faq">
@@ -163,6 +165,7 @@ const faqs = [
 					<h2>지금 바로 상담받으세요</h2>
 					<p>운영시간 {HOURS}<br /><small>{HOLIDAY_NOTE}</small></p>
 					<div class="cta">
+						<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통 바로가기</a>
 						<a class="btn" href={PHONE_LINK}>📞 {PHONE}</a>
 						<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">💬 카카오톡 문의</a>
 					</div>

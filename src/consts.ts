@@ -7,6 +7,7 @@ export const SITE_DESCRIPTION = '선불·후불 휴대폰 개통을 빠르고 �
 export const PHONE = '010-2848-6849';
 export const PHONE_LINK = 'tel:01028486849';
 export const KAKAO_URL = 'http://pf.kakao.com/_QKvfX';
+export const SELF_ACTIVATION_URL = 'https://www.n-telecom.co.kr/connect';
 export const ADDRESS = '전국 어디서나 비대면 개통 가능';
 export const HOURS = '오전 9:00 ~ 오후 10:00';
 export const HOLIDAY_NOTE = '명절 연휴에는 개통이 일부 제한될 수 있습니다.';

@@ -3,7 +3,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { REGIONS } from '../../data/regions';
-import { PHONE, PHONE_LINK, KAKAO_URL, HOURS } from '../../consts';
+import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS } from '../../consts';
 
 export function getStaticPaths() {
 	return REGIONS.map((region) => ({ params: { slug: region.slug }, props: { region } }));
@@ -32,6 +32,7 @@ const faqs = [
 			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
 			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
 			.btn.alt { background: #fee500; color: #191919; }
+			.btn.self { background: #ff3b30; color: #fff; }
 			.btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 			section { margin-top: 3rem; }
 			h2.sec { text-align: center; }
@@ -51,6 +52,7 @@ const faqs = [
 				<h1>{region.name} 알뜰폰 선불폰·후불폰 개통</h1>
 				<p>{region.full} 어디서나 비대면으로 간편하게 개통해 드립니다.</p>
 				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통 바로가기</a>
 					<a class="btn" href={PHONE_LINK}>📞 전화 상담 {PHONE}</a>
 					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">💬 카카오톡 문의</a>
 				</div>
