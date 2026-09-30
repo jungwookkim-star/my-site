@@ -1,7 +1,7 @@
 // 사이트 전체에서 쓰는 정보입니다. 여기만 고치면 모든 페이지에 반영됩니다.
 
 export const SITE_TITLE = '커넥트모바일 선후불개통센터';
-export const SITE_DESCRIPTION = '선불·후불 휴대폰 개통을 빠르고 간편하게. 커넥트모바일 선후불개통센터입니다.';
+export const SITE_DESCRIPTION = '선불·알뜰 요금제 휴대폰 개통을 빠르고 간편하게. 커넥트모바일 선후불개통센터입니다.';
 
 // 연락처 및 사업자 정보
 export const PHONE = '010-2848-6849';
