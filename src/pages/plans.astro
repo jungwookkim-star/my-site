@@ -25,9 +25,9 @@ const prepaid = [
 	<head>
 		<BaseHead title="요금제 안내" description="커넥트모바일 후불·선불 요금제 안내" />
 		<style>
-			.tabs { display: flex; gap: 0.5rem; justify-content: center; margin: 1rem 0 2rem; }
+			.tabs { position: sticky; top: 0; z-index: 5; padding: 0.5rem 0; background: #f5f7fb; display: flex; gap: 0.5rem; justify-content: center; margin: 1rem 0 2rem; }
 			.tabs a { padding: 0.5rem 1.2rem; border-radius: 999px; background: rgb(var(--gray-light)); text-decoration: none; color: var(--black); font-weight: 700; }
-			.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.2rem; }
+			.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 1.2rem; }
 			.grid img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--box-shadow); margin: 0; }
 			h2 { text-align: center; margin-top: 3rem; scroll-margin-top: 1rem; }
 			.note { text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); }
@@ -41,16 +41,17 @@ const prepaid = [
 		<Header />
 		<main class="wide">
 			<h1 style="text-align:center">요금제 안내</h1>
+			<p class="note">이미지를 누르면 크게 볼 수 있습니다.</p>
 			<div class="tabs"><a href="#postpaid">후불 요금제</a><a href="#prepaid">선불 요금제</a></div>
 
 			<h2 id="postpaid">후불 요금제 (KT망 결합)</h2>
 			<div class="grid">
-				{postpaid.map((i) => <img src={i.src} alt={i.alt} loading="lazy" />)}
+				{postpaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
 			</div>
 
 			<h2 id="prepaid">선불 요금제</h2>
 			<div class="grid">
-				{prepaid.map((i) => <img src={i.src} alt={i.alt} loading="lazy" />)}
+				{prepaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
 			</div>
 
 			<p class="note">※ 요금제 및 제공량은 통신사 사정에 따라 변경될 수 있습니다.</p>

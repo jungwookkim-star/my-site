@@ -38,6 +38,8 @@ const faqs = [
 			.hero .badge { display: inline-block; background: #eef1ff; color: var(--accent); font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 999px; font-size: 0.85rem; }
 			.hero h1 { font-size: 2.2rem; margin: 0.8rem 0 0.5rem; }
 			.hero p { color: rgb(var(--gray)); margin: 0; }
+				.trust { display: flex; gap: 0.4rem 1.2rem; justify-content: center; flex-wrap: wrap; margin-top: 1.4rem; font-size: 0.85rem; color: rgb(var(--gray)); }
+				.trust b { color: rgb(var(--gray-dark)); }
 			.chips { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.2rem; }
 			.chips span { background: #fff; box-shadow: var(--box-shadow); padding: 0.3rem 0.9rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; }
 			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
@@ -82,7 +84,7 @@ const faqs = [
 				<h1>선불·후불 개통, 한 번에 끝내세요</h1>
 				<p>전국 어디서나 유심 택배 배송, 10분 셀프개통으로 간편하게 시작하세요.</p>
 				<div class="chips">
-					<span>약정 NO</span><span>위약금 NO</span><span>유심비 NO</span><span>택배 유심 배송</span><span>10분 셀프개통</span><span>미납·연체 개통 가능</span><span>외국인·미성년자 가능</span>
+					<span>약정 NO</span><span>위약금 NO</span><span>유심비 NO</span><span>10분 셀프개통</span>
 				</div>
 				<div class="cta">
 					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통 바로가기</a>
@@ -90,6 +92,7 @@ const faqs = [
 					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">💬 카카오톡 문의</a>
 					<a class="btn ghost" href="/plans">요금제 보기</a>
 				</div>
+					<div class="trust"><span><b>미납·연체</b> 개통 가능</span><span><b>외국인·미성년자</b> 가능</span><span><b>운영</b> {HOURS}</span><span><b>전국</b> 택배 유심 배송</span></div>
 			</div>
 
 			<section id="types">
