@@ -23,13 +23,17 @@ const prepaid = [
 <!doctype html>
 <html lang="ko">
 	<head>
-		<BaseHead title="선불폰 요금제 비교 KT·LG 선불·알뜰 요금 | 커넥트모바일" description="KT망·LG망 선불폰 요금제와 KT망 알뜰(후불) 결합 요금제를 한눈에 비교하세요. 월 12,100원부터, 약정·위약금·유심비 없음." />
+		<BaseHead title="선불폰 요금제 비교 KT·LG 선불·알뜰 요금 | 커넥트모바일" description="KT망·LG망 선불폰 요금제와 KT망 알뜰 결합 요금제를 한눈에 비교하세요. 월 12,100원부터, 약정·위약금·유심비 없음." />
 		<style>
 			.tabs { position: sticky; top: 0; z-index: 5; padding: 0.5rem 0; background: #f5f7fb; display: flex; gap: 0.5rem; justify-content: center; margin: 1rem 0 2rem; }
 			.tabs a { padding: 0.5rem 1.2rem; border-radius: 999px; background: rgb(var(--gray-light)); text-decoration: none; color: var(--black); font-weight: 700; }
 			.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 1.2rem; }
 			.grid img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--box-shadow); margin: 0; }
 			h2 { text-align: center; margin-top: 3rem; scroll-margin-top: 4.5rem; }
+			.filter { display: flex; gap: 0.5rem; justify-content: center; margin-top: 2rem; }
+			.filter button { border: 0; padding: 0.5rem 1.2rem; border-radius: 999px; background: rgb(var(--gray-light)); font: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+			.filter button.on { background: var(--accent); color: #fff; }
+			.group[hidden] { display: none; }
 			.carrier { margin: 2.5rem 0 1rem; font-size: 1.3rem; }
 			.note { text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); }
 			.cta { text-align: center; margin-top: 2rem; }
@@ -55,10 +59,19 @@ const prepaid = [
 				{prepaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
 			</div>
 
-			<h3 class="carrier">KT망 선불 요금제</h3>
-			<PlanCards plans={ktPrepaid} />
-			<h3 class="carrier">LG(L)망 선불 요금제</h3>
-			<PlanCards plans={lgPrepaid} />
+			<div class="filter" role="group" aria-label="통신사 선택">
+				<button type="button" data-f="all" class="on">전체</button>
+				<button type="button" data-f="kt">KT망</button>
+				<button type="button" data-f="lg">LG(L)망</button>
+			</div>
+			<div class="group" data-carrier="kt">
+				<h3 class="carrier">KT망 선불 요금제</h3>
+				<PlanCards plans={ktPrepaid} />
+			</div>
+			<div class="group" data-carrier="lg">
+				<h3 class="carrier">LG(L)망 선불 요금제</h3>
+				<PlanCards plans={lgPrepaid} />
+			</div>
 
 			<p class="note">※ 요금제 및 제공량은 통신사 사정에 따라 변경될 수 있습니다.</p>
 			<div class="cta">
@@ -68,5 +81,13 @@ const prepaid = [
 			</div>
 		</main>
 		<Footer />
+		<script>
+			const btns = document.querySelectorAll<HTMLButtonElement>(".filter button");
+			const groups = document.querySelectorAll<HTMLElement>(".group");
+			btns.forEach((b) => b.addEventListener("click", () => {
+				btns.forEach((x) => x.classList.toggle("on", x === b));
+				groups.forEach((g) => { g.hidden = b.dataset.f !== "all" && g.dataset.carrier !== b.dataset.f; });
+			}));
+		</script>
 	</body>
 </html>
