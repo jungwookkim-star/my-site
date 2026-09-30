@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PlanCards from '../components/PlanCards.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
+import { postpaidPartners } from '../data/postpaidPlans';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
 
 const postpaid = [
@@ -31,7 +32,10 @@ const prepaid = [
 			.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 1.2rem; }
 			.grid img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--box-shadow); margin: 0; }
 			h2 { text-align: center; margin-top: 3rem; scroll-margin-top: 4.5rem; }
-			.filter { display: flex; gap: 0.5rem; justify-content: center; margin-top: 2rem; }
+			.filter { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
+			.imgs { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-top: 2rem; }
+			.imgs summary { cursor: pointer; font-weight: 700; }
+			.imgs .grid { margin-top: 1rem; }
 			.filter button { border: 0; padding: 0.5rem 1.2rem; border-radius: 999px; background: rgb(var(--gray-light)); font: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
 			.filter button.on { background: var(--accent); color: #fff; }
 			.group[hidden] { display: none; }
@@ -47,29 +51,43 @@ const prepaid = [
 		<Header />
 		<main class="wide">
 			<h1 style="text-align:center">요금제 안내</h1>
-			<p class="note">이미지를 누르면 크게 볼 수 있습니다.</p>
 			<div class="tabs"><a href="#postpaid">알뜰 요금제</a><a href="#prepaid">선불 요금제</a></div>
 
 			<h2 id="postpaid">알뜰 요금제 (KT망 결합·후불)</h2>
-			<div class="grid">
-				{postpaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
+			<p class="note">통화·문자 기본제공 요금제입니다. 제휴처를 골라 확인하세요.</p>
+			<div class="filter" data-scope="post" role="group" aria-label="제휴처 선택">
+				<button type="button" data-f="all" class="on">전체</button>
+				{postpaidPartners.map((p) => <button type="button" data-f={p.key}>{p.name}</button>)}
 			</div>
+			{postpaidPartners.map((p) => (
+				<div class="group" data-scope="post" data-key={p.key}>
+					<h3 class="carrier">{p.name} 제휴 요금제</h3>
+					<PlanCards plans={p.plans} />
+				</div>
+			))}
+			<details class="imgs">
+				<summary>제휴 혜택 상세 이미지 보기</summary>
+				<p class="note">이미지를 누르면 크게 볼 수 있습니다.</p>
+				<div class="grid">
+					{postpaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
+				</div>
+			</details>
 
 			<h2 id="prepaid">선불 요금제</h2>
 			<div class="grid">
 				{prepaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
 			</div>
 
-			<div class="filter" role="group" aria-label="통신사 선택">
+			<div class="filter" data-scope="pre" role="group" aria-label="통신사 선택">
 				<button type="button" data-f="all" class="on">전체</button>
 				<button type="button" data-f="kt">KT망</button>
 				<button type="button" data-f="lg">LG(L)망</button>
 			</div>
-			<div class="group" data-carrier="kt">
+			<div class="group" data-scope="pre" data-key="kt">
 				<h3 class="carrier">KT망 선불 요금제</h3>
 				<PlanCards plans={ktPrepaid} />
 			</div>
-			<div class="group" data-carrier="lg">
+			<div class="group" data-scope="pre" data-key="lg">
 				<h3 class="carrier">LG(L)망 선불 요금제</h3>
 				<PlanCards plans={lgPrepaid} />
 			</div>
@@ -83,12 +101,15 @@ const prepaid = [
 		</main>
 		<Footer />
 		<script>
-			const btns = document.querySelectorAll<HTMLButtonElement>(".filter button");
-			const groups = document.querySelectorAll<HTMLElement>(".group");
-			btns.forEach((b) => b.addEventListener("click", () => {
-				btns.forEach((x) => x.classList.toggle("on", x === b));
-				groups.forEach((g) => { g.hidden = b.dataset.f !== "all" && g.dataset.carrier !== b.dataset.f; });
-			}));
+				document.querySelectorAll<HTMLElement>(".filter").forEach((bar) => {
+					const scope = bar.dataset.scope;
+					const btns = bar.querySelectorAll<HTMLButtonElement>("button");
+					const groups = document.querySelectorAll<HTMLElement>(`.group[data-scope="${scope}"]`);
+					btns.forEach((b) => b.addEventListener("click", () => {
+						btns.forEach((x) => x.classList.toggle("on", x === b));
+						groups.forEach((g) => { g.hidden = b.dataset.f !== "all" && g.dataset.key !== b.dataset.f; });
+					}));
+				});
 		</script>
 	</body>
 </html>

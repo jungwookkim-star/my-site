@@ -2,6 +2,7 @@
 import Icon from '../components/Icon.astro';
 import PlanCards from '../components/PlanCards.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
+import { postpaidPartners } from '../data/postpaidPlans';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -11,10 +12,7 @@ import { getNaverPosts, NAVER_BLOG_URL } from '../lib/naverBlog';
 const naverPosts = await getNaverPosts(10);
 
 const popularPrepaid = [...ktPrepaid, ...lgPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB', 'L망 5G 선불 20GB+'].includes(p.name));
-const featured = [
-	{ src: '/plans/postpaid-naverpay.webp', alt: 'KT망 네이버페이 결합 요금제', label: '알뜰 인기' },
-	{ src: '/plans/postpaid-daiso.webp', alt: 'KT망 다이소 결합 요금제', label: '알뜰 인기' },
-];
+const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 11GB+일2GB'].includes(p.name));
 
 const faqs = [
 	{ q: '개통하려면 무엇이 필요한가요?', a: '본인 신분증과 본인 명의 확인이 필요합니다. 개통 방식에 따라 필요한 서류가 다를 수 있으니 전화나 카카오톡으로 먼저 문의해 주세요.' },
@@ -150,13 +148,10 @@ const faqSchema = {
 			<section id="featured">
 				<h2 class="sec">인기 요금제</h2>
 				<p class="sub">고객님들이 많이 찾는 요금제입니다.</p>
+				<h3 class="featsub">선불 요금제 인기</h3>
 				<PlanCards plans={popularPrepaid} />
 				<h3 class="featsub">알뜰 요금제 인기</h3>
-				<div class="feat">
-					{featured.map((f) => (
-						<figure><img src={f.src} alt={f.alt} loading="lazy" /><figcaption>{f.label}</figcaption></figure>
-					))}
-				</div>
+				<PlanCards plans={popularPostpaid} />
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans">전체 요금제 보기<Icon name="arrow" /></a></p>
 			</section>
 
