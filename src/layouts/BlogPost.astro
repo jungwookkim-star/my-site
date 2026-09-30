@@ -14,7 +14,21 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 <html lang="ko">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead
+			title={title}
+			description={description}
+			jsonLd={{
+				'@context': 'https://schema.org',
+				'@type': 'Article',
+				headline: title,
+				description,
+				datePublished: pubDate.toISOString(),
+				dateModified: (updatedDate ?? pubDate).toISOString(),
+				inLanguage: 'ko',
+				author: { '@type': 'Organization', name: '커넥트모바일' },
+				publisher: { '@type': 'Organization', name: '커넥트모바일 선후불개통센터' },
+			}}
+		/>
 		<style>
 			main {
 				width: calc(100% - 2em);
