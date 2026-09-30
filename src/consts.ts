@@ -14,3 +14,4 @@ export const HOLIDAY_NOTE = '명절 연휴에는 개통이 일부 제한될 수 
 export const BUSINESS_INFO = '상호: 커넥트모바일 | 사업자등록번호: 499-37-01511';
 
 export const GA_ID = 'G-ESSXNKWHDS';
+export const NAVER_WA_ID = '12264ddd1f1df90';
