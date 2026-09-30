@@ -23,7 +23,7 @@ const prepaid = [
 <!doctype html>
 <html lang="ko">
 	<head>
-		<BaseHead title="선불폰 요금제 비교 KT·LG 선불·후불 요금 | 커넥트모바일" description="KT망·LG망 선불폰 요금제와 KT망 후불 결합 요금제를 한눈에 비교하세요. 월 12,100원부터, 약정·위약금·유심비 없음." />
+		<BaseHead title="선불폰 요금제 비교 KT·LG 선불·알뜰 요금 | 커넥트모바일" description="KT망·LG망 선불폰 요금제와 KT망 알뜰(후불) 결합 요금제를 한눈에 비교하세요. 월 12,100원부터, 약정·위약금·유심비 없음." />
 		<style>
 			.tabs { position: sticky; top: 0; z-index: 5; padding: 0.5rem 0; background: #f5f7fb; display: flex; gap: 0.5rem; justify-content: center; margin: 1rem 0 2rem; }
 			.tabs a { padding: 0.5rem 1.2rem; border-radius: 999px; background: rgb(var(--gray-light)); text-decoration: none; color: var(--black); font-weight: 700; }
@@ -43,9 +43,9 @@ const prepaid = [
 		<main class="wide">
 			<h1 style="text-align:center">요금제 안내</h1>
 			<p class="note">이미지를 누르면 크게 볼 수 있습니다.</p>
-			<div class="tabs"><a href="#postpaid">후불 요금제</a><a href="#prepaid">선불 요금제</a></div>
+			<div class="tabs"><a href="#postpaid">알뜰 요금제</a><a href="#prepaid">선불 요금제</a></div>
 
-			<h2 id="postpaid">후불 요금제 (KT망 결합)</h2>
+			<h2 id="postpaid">알뜰 요금제 (KT망 결합·후불)</h2>
 			<div class="grid">
 				{postpaid.map((i) => <a href={i.src} target="_blank" rel="noopener" aria-label={i.alt + " 크게 보기"}><img src={i.src} alt={i.alt} loading="lazy" /></a>)}
 			</div>
