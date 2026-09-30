@@ -9,7 +9,7 @@ const today = new Date();
 	<p>전화 <a href={PHONE_LINK}>{PHONE}</a> · {HOURS}</p>
 	<p>{ADDRESS}</p>
 	<p>{BUSINESS_INFO}</p>
-	<p><a href="/region/">전국 지역별 개통 안내</a> · <a href="https://blog.naver.com/juadsl01" target="_blank" rel="noopener">네이버 블로그</a></p>
+	<p><a href="/region/">전국 지역별 개통 안내</a> · <a href="/privacy">개인정보·방문 통계 안내</a> · <a href="https://blog.naver.com/juadsl01" target="_blank" rel="noopener">네이버 블로그</a></p>
 	<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 </footer>
 <div class="sticky-cta">
@@ -64,4 +64,27 @@ const today = new Date();
 			io.observe(el);
 		});
 	}
+</script>
+
+<script>
+	import { SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
+
+	// 주요 버튼 클릭을 Google Analytics 이벤트로 기록합니다.
+	function track(name: string, params: Record<string, string> = {}) {
+		const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+		if (gtag) gtag('event', name, { page_path: location.pathname, ...params });
+	}
+
+	document.addEventListener('click', (e) => {
+		const el = e.target as HTMLElement;
+		const ask = el.closest<HTMLElement>('.ask');
+		if (ask) return track('plan_inquiry', { plan_name: ask.dataset.plan ?? '' });
+		const a = el.closest<HTMLAnchorElement>('a[href]');
+		if (!a) return;
+		const href = a.getAttribute('href') ?? '';
+		const where = a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
+		if (href.startsWith(SELF_ACTIVATION_URL)) track('self_activation_click', { where });
+		else if (href.startsWith(KAKAO_URL)) track('kakao_click', { where });
+		else if (href.startsWith('tel:')) track('phone_click', { where });
+	});
 </script>
