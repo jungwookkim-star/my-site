@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import type { PrepaidPlan } from '../data/prepaidPlans';
 import { KAKAO_URL } from '../consts';
 
@@ -32,7 +33,7 @@ const { plans } = Astro.props;
 					<strong>월 {p.price}</strong>
 					{p.daily && <span>{p.daily}</span>}
 				</footer>
-				<button type="button" class="ask" data-plan={p.name} data-kakao={KAKAO_URL}>💬 이 요금제로 문의하기</button>
+				<button type="button" class="ask" data-plan={p.name} data-kakao={KAKAO_URL}><Icon name="chat" />이 요금제로 문의하기</button>
 			</article>
 		))
 	}

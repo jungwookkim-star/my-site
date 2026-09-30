@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import { SITE_TITLE, PHONE, PHONE_LINK, ADDRESS, HOURS, BUSINESS_INFO, SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
 const today = new Date();
 ---
@@ -12,9 +13,9 @@ const today = new Date();
 	<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 </footer>
 <div class="sticky-cta">
-	<a class="call" href={PHONE_LINK}>📞 전화</a>
-	<a class="kakao" href={KAKAO_URL} target="_blank" rel="noopener">💬 카톡</a>
-	<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통</a>
+	<a class="call" href={PHONE_LINK}><Icon name="phone" />전화</a>
+	<a class="kakao" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카톡</a>
+	<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통</a>
 </div>
 <style>
 	.sticky-cta { display: none; }
@@ -39,3 +40,28 @@ const today = new Date();
 	}
 	footer p { margin: 0.2em 0; }
 </style>
+
+<script>
+	const targets = document.querySelectorAll<HTMLElement>(
+		'.plan, .card, .who > div, .steps li, .feat figure, main details, .nposts li, .final, .post-cta',
+	);
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if ('IntersectionObserver' in window && !reduce) {
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((e) => {
+					if (e.isIntersecting) {
+						e.target.classList.add('in');
+						io.unobserve(e.target);
+					}
+				});
+			},
+			{ threshold: 0.08 },
+		);
+		targets.forEach((el) => {
+			if (el.getBoundingClientRect().top < window.innerHeight) return;
+			el.classList.add('rv');
+			io.observe(el);
+		});
+	}
+</script>
