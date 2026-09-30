@@ -186,3 +186,30 @@ body { background: #f5f7fb; }
 @media (prefers-reduced-motion: reduce) {
 	.rv { opacity: 1; translate: none; transition: none; }
 }
+
+/* 배경·분위기 개선 */
+:root {
+	--box-shadow: 0 1px 2px rgba(var(--gray), 12%), 0 10px 28px rgba(var(--gray), 14%);
+}
+body {
+	background:
+		radial-gradient(44rem 26rem at 8% -6%, rgba(35, 55, 255, 0.13), transparent 62%),
+		radial-gradient(38rem 24rem at 96% 2%, rgba(168, 85, 247, 0.11), transparent 62%),
+		radial-gradient(30rem 20rem at 60% 22rem, rgba(56, 189, 248, 0.08), transparent 65%),
+		#f6f8ff;
+	background-repeat: no-repeat;
+}
+/* 화면 전체 폭으로 깔리는 띠 배경 */
+.band {
+	position: relative;
+	padding: 3rem 0;
+	box-shadow: 0 0 0 100vmax #eaf0ff;
+	clip-path: inset(0 -100vmax);
+	background: #eaf0ff;
+}
+.band-white {
+	box-shadow: 0 0 0 100vmax #fff;
+	background: #fff;
+}
+.band .plan, .band .card, .band details { box-shadow: 0 1px 2px rgba(var(--gray), 10%), 0 6px 18px rgba(var(--gray), 12%); }
+.hero h1 { background: linear-gradient(90deg, #1b2bd6, #6d3df0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
