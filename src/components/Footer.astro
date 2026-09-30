@@ -1,5 +1,5 @@
 ---
-import { SITE_TITLE, PHONE, PHONE_LINK, ADDRESS, HOURS, BUSINESS_INFO } from '../consts';
+import { SITE_TITLE, PHONE, PHONE_LINK, ADDRESS, HOURS, BUSINESS_INFO, SELF_ACTIVATION_URL } from '../consts';
 const today = new Date();
 ---
 
@@ -11,10 +11,26 @@ const today = new Date();
 	<p><a href="/region/">전국 지역별 개통 안내</a> · <a href="https://blog.naver.com/juadsl01" target="_blank" rel="noopener">네이버 블로그</a></p>
 	<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 </footer>
+<div class="sticky-cta">
+	<a class="call" href={PHONE_LINK}>📞 전화 상담</a>
+	<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통</a>
+</div>
 <style>
+	.sticky-cta { display: none; }
+	@media (max-width: 720px) {
+		footer { padding-bottom: 6em !important; }
+		.sticky-cta {
+			display: flex; gap: 0.5rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+			padding: 0.6rem 0.8rem calc(0.6rem + env(safe-area-inset-bottom)); background: #fff;
+			box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+		}
+		.sticky-cta a { flex: 1; text-align: center; padding: 0.75rem 0; border-radius: 999px; font-weight: 700; text-decoration: none; color: #fff; }
+		.sticky-cta .call { background: var(--accent); }
+		.sticky-cta .self { background: #ff3b30; }
+	}
 	footer {
 		padding: 2em 1em 4em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
+		background: transparent;
 		color: rgb(var(--gray));
 		text-align: center;
 		font-size: 0.85rem;
