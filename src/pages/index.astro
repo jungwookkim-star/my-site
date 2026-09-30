@@ -1,6 +1,7 @@
 ---
 import Icon from '../components/Icon.astro';
 import PlanCards from '../components/PlanCards.astro';
+import PlanFinder from '../components/PlanFinder.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import BaseHead from '../components/BaseHead.astro';
@@ -112,10 +113,17 @@ const faqSchema = {
 				</div>
 				<div class="cta sub-cta">
 					<a class="btn sm alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+					<a class="btn sm ghost" href="#finder">요금제 찾기</a>
 					<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 				</div>
 					<div class="trust"><span><b>미납·연체</b> 개통 가능</span><span><b>외국인·미성년자</b> 가능</span><span><b>운영</b> {HOURS}</span><span><b>전국</b> 택배 유심 배송</span></div>
 			</div>
+
+			<section id="finder">
+				<h2 class="sec">내게 맞는 요금제 찾기</h2>
+				<p class="sub">질문 3개에 답하면 알맞은 요금제를 추천해 드려요.</p>
+				<PlanFinder />
+			</section>
 
 			<section id="types">
 				<h2 class="sec">어떤 요금제가 필요하세요?</h2>
