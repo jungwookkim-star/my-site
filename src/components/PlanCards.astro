@@ -1,0 +1,54 @@
+---
+import type { PrepaidPlan } from '../data/prepaidPlans';
+
+interface Props {
+	plans: PrepaidPlan[];
+}
+const { plans } = Astro.props;
+---
+
+<div class="plan-grid">
+	{
+		plans.map((p) => (
+			<article class="plan">
+				<header>
+					<h3>{p.name}</h3>
+					{p.badge && <span class="pbadge">{p.badge}</span>}
+				</header>
+				<dl>
+					<div><dt>음성</dt><dd>{p.voice}</dd></div>
+					<div><dt>문자</dt><dd>{p.sms}</dd></div>
+					<div>
+						<dt>데이터</dt>
+						<dd>
+							{p.data}
+							{p.dataNote && <small>{p.dataNote}</small>}
+						</dd>
+					</div>
+				</dl>
+				{p.note && <p class="pnote">※ {p.note}</p>}
+				<footer>
+					<strong>월 {p.price}</strong>
+					{p.daily && <span>{p.daily}</span>}
+				</footer>
+			</article>
+		))
+	}
+</div>
+
+<style>
+	.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1rem; }
+	.plan { display: flex; flex-direction: column; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+	.plan header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+	.plan h3 { margin: 0 0 0.6rem; font-size: 1.1rem; line-height: 1.35; }
+	.pbadge { background: #ff3b30; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; white-space: nowrap; }
+	dl { margin: 0; flex: 1; }
+	dl div { display: flex; gap: 0.8rem; padding: 0.45rem 0; border-top: 1px solid rgb(var(--gray-light)); font-size: 0.9rem; }
+	dt { width: 3.2rem; flex-shrink: 0; color: rgb(var(--gray)); font-weight: 700; }
+	dd { margin: 0; line-height: 1.5; }
+	dd small { display: block; color: rgb(var(--gray)); font-size: 0.78rem; }
+	.pnote { margin: 0.5rem 0 0; font-size: 0.8rem; color: #c2410c; }
+	.plan footer { display: flex; justify-content: space-between; align-items: baseline; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 2px solid rgb(var(--gray-light)); }
+	.plan footer strong { font-size: 1.3rem; color: var(--accent); }
+	.plan footer span { font-size: 0.8rem; color: rgb(var(--gray)); }
+</style>
