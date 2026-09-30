@@ -1,5 +1,5 @@
 ---
-import { SITE_TITLE, PHONE, PHONE_LINK, ADDRESS, HOURS, BUSINESS_INFO, SELF_ACTIVATION_URL } from '../consts';
+import { SITE_TITLE, PHONE, PHONE_LINK, ADDRESS, HOURS, BUSINESS_INFO, SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
 const today = new Date();
 ---
 
@@ -12,7 +12,8 @@ const today = new Date();
 	<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 </footer>
 <div class="sticky-cta">
-	<a class="call" href={PHONE_LINK}>📞 전화 상담</a>
+	<a class="call" href={PHONE_LINK}>📞 전화</a>
+	<a class="kakao" href={KAKAO_URL} target="_blank" rel="noopener">💬 카톡</a>
 	<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener">🚀 셀프개통</a>
 </div>
 <style>
@@ -26,7 +27,8 @@ const today = new Date();
 		}
 		.sticky-cta a { flex: 1; text-align: center; padding: 0.75rem 0; border-radius: 999px; font-weight: 700; text-decoration: none; color: #fff; }
 		.sticky-cta .call { background: var(--accent); }
-		.sticky-cta .self { background: #ff3b30; }
+		.sticky-cta .kakao { background: #fee500; color: #191919; }
+		.sticky-cta .self { background: #ff3b30; flex: 1.4; }
 	}
 	footer {
 		padding: 2em 1em 4em 1em;
