@@ -73,9 +73,21 @@ const faqSchema = {
 			.who { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
 			.who div { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 1.1rem 1.2rem; }
 			.who p { margin: 0.4rem 0 0; font-size: 0.88rem; color: rgb(var(--gray-dark)); }
-			.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; counter-reset: s; padding: 0; list-style: none; }
-			.steps li { background: #fff; border-radius: 12px; padding: 1.2rem; box-shadow: var(--box-shadow); font-size: 0.95rem; position: relative; }
-			.steps li::before { counter-increment: s; content: counter(s); display: block; width: 2rem; height: 2rem; line-height: 2rem; text-align: center; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; margin-bottom: 0.6rem; }
+			.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+			.flow li { position: relative; text-align: center; padding: 0 0.4rem; }
+			.flow li:not(:last-child)::after { content: ''; position: absolute; top: 31px; left: calc(50% + 40px); right: calc(-50% + 40px); border-top: 2px dashed #aab6ff; }
+			.fi { display: inline-flex; align-items: center; justify-content: center; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #2337ff, #7c3aed); color: #fff; font-size: 1.7rem; box-shadow: 0 8px 20px rgba(35, 55, 255, 0.28); margin-bottom: 0.7rem; }
+			.fi :global(.ic) { margin: 0; width: 1em; height: 1em; }
+			.flow small { display: block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; color: var(--accent); }
+			.flow strong { display: block; font-size: 1.08rem; margin: 0.1rem 0 0.3rem; }
+			.flow p { margin: 0 0 0.6rem; font-size: 0.88rem; color: rgb(var(--gray-dark)); line-height: 1.55; }
+			.ft { display: inline-block; background: #fff; border: 1px solid #d9defa; color: var(--accent); font-size: 0.78rem; font-weight: 700; padding: 0.15rem 0.7rem; border-radius: 999px; }
+			@media (max-width: 720px) {
+				.flow { grid-template-columns: 1fr; gap: 1.4rem; }
+				.flow li { text-align: left; padding-left: 5rem; min-height: 62px; }
+				.fi { position: absolute; left: 0; top: 0; margin: 0; width: 56px; height: 56px; font-size: 1.5rem; }
+				.flow li:not(:last-child)::after { top: 62px; bottom: -1.4rem; left: 27px; right: auto; border-top: 0; border-left: 2px dashed #aab6ff; }
+			}
 			.ftabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
 			.ftabs button { border: 0; padding: 0.55rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
 			.ftabs button.on { background: var(--accent); color: #fff; }
@@ -189,11 +201,35 @@ const faqSchema = {
 			<section id="steps">
 				<h2 class="sec">개통 절차</h2>
 				<p class="sub">문의부터 개통 완료까지 담당자가 함께합니다.</p>
-				<ol class="steps">
-					<li><strong>문의·상담</strong><br />전화 또는 카카오톡으로 요금제와 개통 방식 확인</li>
-					<li><strong>유심 택배 수령</strong><br />전국 어디서나 유심을 택배로 받아요</li>
-					<li><strong>셀프개통 (약 10분)</strong><br />안내에 따라 직접 개통, 막히면 바로 도움</li>
-					<li><strong>사용 시작</strong><br />개통 후 사용 방법까지 안내</li>
+				<ol class="flow">
+					<li>
+						<span class="fi"><Icon name="chat" /></span>
+						<small>STEP 1</small>
+						<strong>문의·상담</strong>
+						<p>전화 또는 카카오톡으로 요금제와 개통 방식을 확인해요.</p>
+						<span class="ft">전화 · 카카오톡</span>
+					</li>
+					<li>
+						<span class="fi"><Icon name="box" /></span>
+						<small>STEP 2</small>
+						<strong>유심 택배 수령</strong>
+						<p>전국 어디서나 유심을 택배로 받아요.</p>
+						<span class="ft">유심비 0원</span>
+					</li>
+					<li>
+						<span class="fi"><Icon name="rocket" /></span>
+						<small>STEP 3</small>
+						<strong>셀프개통</strong>
+						<p>안내에 따라 직접 개통해요. 막히면 바로 도움을 드려요.</p>
+						<span class="ft">약 10분</span>
+					</li>
+					<li>
+						<span class="fi"><Icon name="check" /></span>
+						<small>STEP 4</small>
+						<strong>사용 시작</strong>
+						<p>개통 후 사용 방법까지 안내해 드려요. 선불은 개통 당일 충전을 잊지 마세요.</p>
+						<span class="ft">개통 직후</span>
+					</li>
 				</ol>
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a> <a class="btn ghost" href="/guide">개통 과정 자세히 보기<Icon name="arrow" /></a></p>
 			</section>
