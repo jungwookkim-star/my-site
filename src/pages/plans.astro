@@ -6,6 +6,7 @@ import Header from '../components/Header.astro';
 import PlanCards from '../components/PlanCards.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
+import { ktPrepaidMore, lgPrepaidMore, lgPostpaid } from '../data/morePlans';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
 
 const postpaid = [
@@ -33,6 +34,9 @@ const prepaid = [
 			.grid img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--box-shadow); margin: 0; }
 			h2 { text-align: center; margin-top: 3rem; scroll-margin-top: 4.5rem; }
 			.filter { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
+			.more { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-top: 1.2rem; }
+			.more summary { cursor: pointer; font-weight: 700; }
+			.more[open] summary { margin-bottom: 1rem; }
 			.imgs { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-top: 2rem; }
 			.imgs summary { cursor: pointer; font-weight: 700; }
 			.imgs .grid { margin-top: 1rem; }
@@ -54,8 +58,8 @@ const prepaid = [
 			<p class="note"><a href="/#finder">어떤 요금제가 맞는지 모르겠다면? 내게 맞는 요금제 찾기 →</a></p>
 			<div class="tabs"><a href="#postpaid">알뜰 요금제</a><a href="#prepaid">선불 요금제</a></div>
 
-			<h2 id="postpaid">알뜰 요금제 (KT망 결합·후불)</h2>
-			<p class="note">통화·문자 기본제공 요금제입니다. 제휴처를 골라 확인하세요.</p>
+			<h2 id="postpaid">알뜰 요금제 (후불)</h2>
+			<p class="note">통화·문자 기본제공 요금제입니다. 제휴처를 골라 확인하세요. L망 후불은 아래 "더 보기"에서 볼 수 있어요.</p>
 			<div class="filter" data-scope="post" role="group" aria-label="제휴처 선택">
 				<button type="button" data-f="all" class="on">전체</button>
 				{postpaidPartners.map((p) => <button type="button" data-f={p.key}>{p.name}</button>)}
@@ -66,6 +70,10 @@ const prepaid = [
 					<PlanCards plans={p.plans} compare />
 				</div>
 			))}
+			<details class="more lgpost">
+				<summary>LG(L)망 알뜰(후불) 요금제 더 보기 ({lgPostpaid.length}개)</summary>
+				<PlanCards plans={lgPostpaid} compare />
+			</details>
 			<details class="imgs">
 				<summary>제휴 혜택 상세 이미지 보기</summary>
 				<p class="note">이미지를 누르면 크게 볼 수 있습니다.</p>
@@ -87,10 +95,18 @@ const prepaid = [
 			<div class="group" data-scope="pre" data-key="kt">
 				<h3 class="carrier">KT망 선불 요금제</h3>
 				<PlanCards plans={ktPrepaid} compare />
+				<details class="more">
+					<summary>KT망 선불 요금제 더 보기 ({ktPrepaidMore.length}개)</summary>
+					<PlanCards plans={ktPrepaidMore} compare />
+				</details>
 			</div>
 			<div class="group" data-scope="pre" data-key="lg">
 				<h3 class="carrier">LG(L)망 선불 요금제</h3>
 				<PlanCards plans={lgPrepaid} compare />
+				<details class="more">
+					<summary>LG(L)망 선불 요금제 더 보기 ({lgPrepaidMore.length}개)</summary>
+					<PlanCards plans={lgPrepaidMore} compare />
+				</details>
 			</div>
 
 			<p class="note">※ 요금제 및 제공량은 통신사 사정에 따라 변경될 수 있습니다. 위 요금은 앤텔레콤 공식 요금제 페이지를 기준으로 2026년 10월 1일에 확인한 내용입니다.<br />더 많은 요금제는 <a href="https://info.n-telecom.co.kr/ntelecom-asp/products/all.asp" target="_blank" rel="noopener">앤텔레콤 공식 요금제 페이지</a>에서 확인하실 수 있고, 어떤 요금제가 맞을지는 상담으로 안내해 드립니다.</p>
