@@ -1,0 +1,36 @@
+---
+// 홈 숫자 띠 + 제휴 혜택 띠. 모두 사이트 데이터에서 계산한 사실만 보여줍니다.
+import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
+import { ktPrepaidMore, lgPrepaidMore, lgPostpaid } from '../data/morePlans';
+import { postpaidPartners } from '../data/postpaidPlans';
+
+const prepaidAll = [...ktPrepaid, ...lgPrepaid, ...ktPrepaidMore, ...lgPrepaidMore];
+const planTotal = prepaidAll.length + lgPostpaid.length + postpaidPartners.reduce((n, p) => n + p.plans.length, 0);
+const minPrice = Math.min(...prepaidAll.map((p) => Number(p.price.replace(/[^0-9]/g, '')))).toLocaleString('ko-KR');
+const partners = postpaidPartners.map((p) => p.name);
+---
+
+<ul class="stats">
+	<li><b>0원</b><span>약정 · 위약금 · 유심비</span></li>
+	<li><b>약 10분</b><span>유심 받고 셀프개통</span></li>
+	<li><b>{planTotal}개</b><span>선불 · 알뜰 요금제</span></li>
+	<li><b>{minPrice}원~</b><span>선불 요금제 월 요금</span></li>
+</ul>
+<div class="partners">
+	<span class="plabel">제휴 혜택 요금제</span>
+	{partners.map((n) => <span class="pchip">{n}</span>)}
+</div>
+
+<style>
+	.stats { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; }
+	.stats li { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 0.8rem; text-align: center; }
+	.stats b { display: block; font-size: 1.6rem; line-height: 1.25; background: linear-gradient(90deg, #1b2bd6, #6d3df0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+	.stats span { font-size: 0.82rem; color: rgb(var(--gray)); }
+	.partners { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; align-items: center; margin-top: 1.3rem; }
+	.plabel { font-size: 0.82rem; font-weight: 700; color: rgb(var(--gray)); margin-right: 0.3rem; }
+	.pchip { background: #fff; border: 1px solid rgb(var(--gray-light)); border-radius: 999px; padding: 0.25rem 0.85rem; font-size: 0.85rem; font-weight: 700; }
+	@media (max-width: 720px) {
+		.stats { grid-template-columns: repeat(2, 1fr); }
+		.stats b { font-size: 1.4rem; }
+	}
+</style>

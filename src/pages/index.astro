@@ -2,6 +2,8 @@
 import Icon from '../components/Icon.astro';
 import PlanCards from '../components/PlanCards.astro';
 import PlanFinder from '../components/PlanFinder.astro';
+import HeroArt from '../components/HeroArt.astro';
+import HomeStats from '../components/HomeStats.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { homeFaqs } from '../data/faqs';
@@ -33,7 +35,12 @@ const faqSchema = {
 			jsonLd={[faqSchema]}
 		/>
 		<style>
-			.hero { text-align: center; padding: 3rem 0 2rem; }
+			.hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 1.5rem; align-items: center; text-align: left; padding: 2.5rem 0 1rem; }
+			.hero-text .chips, .hero-text .cta, .hero-text .trust { justify-content: flex-start; }
+			@media (max-width: 720px) {
+				.hero { grid-template-columns: 1fr; text-align: center; padding-top: 1.5rem; }
+				.hero-text .chips, .hero-text .cta, .hero-text .trust { justify-content: center; }
+			}
 			.hero .badge { display: inline-block; background: #eef1ff; color: var(--accent); font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 999px; font-size: 0.85rem; }
 			.hero h1 { font-size: 2.2rem; margin: 0.8rem 0 0.5rem; }
 			.hero p { color: rgb(var(--gray)); margin: 0; }
@@ -91,8 +98,9 @@ const faqSchema = {
 		<Header />
 		<main class="wide">
 			<div class="hero">
+				<div class="hero-text">
 				<span class="badge">KT망 · LG망 알뜰폰 개통</span>
-				<h1>선불·알뜰 개통, 한 번에 끝내세요</h1>
+				<h1>선불·알뜰 개통,<br />한 번에 끝내세요</h1>
 				<p>전국 어디서나 유심 택배 배송, 10분 셀프개통으로 간편하게 시작하세요.</p>
 				<div class="chips">
 					<span>약정 NO</span><span>위약금 NO</span><span>유심비 NO</span><span>10분 셀프개통</span>
@@ -106,7 +114,10 @@ const faqSchema = {
 					<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 				</div>
 					<div class="trust"><span><b>선불</b> 타사 미납도 개통 가능</span><span><b>외국인·미성년자</b> 서류 확인 후 개통</span><span><b>운영</b> {HOURS}</span><span><b>전국</b> 택배 유심 배송</span></div>
+				</div>
+				<HeroArt />
 			</div>
+			<HomeStats />
 
 			<section id="finder">
 				<h2 class="sec">내게 맞는 요금제 찾기</h2>

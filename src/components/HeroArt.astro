@@ -1,0 +1,79 @@
+---
+// 홈 첫 화면 일러스트: 휴대폰 화면에서 개통이 진행되는 모습 (SVG)
+---
+
+<div class="hero-art" aria-hidden="true">
+	<svg viewBox="0 0 320 420" role="img">
+		<defs>
+			<linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+				<stop offset="0" stop-color="#2337ff"></stop>
+				<stop offset="1" stop-color="#7c3aed"></stop>
+			</linearGradient>
+			<linearGradient id="hs" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stop-color="#f4f6ff"></stop>
+				<stop offset="1" stop-color="#e8ecff"></stop>
+			</linearGradient>
+		</defs>
+		<g fill="none" stroke="#2337ff" stroke-width="2">
+			<circle cx="160" cy="210" r="120" opacity="0.18"></circle>
+			<circle cx="160" cy="210" r="165" opacity="0.12"></circle>
+			<circle cx="160" cy="210" r="210" opacity="0.07"></circle>
+		</g>
+		<rect x="76" y="40" width="168" height="340" rx="28" fill="#0f1219"></rect>
+		<rect x="84" y="50" width="152" height="320" rx="22" fill="url(#hs)"></rect>
+		<rect x="130" y="56" width="60" height="9" rx="4.5" fill="#0f1219"></rect>
+
+		<rect x="92" y="78" width="136" height="38" rx="12" fill="url(#hg)"></rect>
+		<circle cx="108" cy="97" r="4" fill="#fff"></circle>
+		<path d="M114 91a8 8 0 0 1 0 12M102 103a8 8 0 0 1 0-12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"></path>
+		<rect x="124" y="91" width="64" height="6" rx="3" fill="#fff" opacity="0.9"></rect>
+		<rect x="124" y="101" width="40" height="5" rx="2.5" fill="#fff" opacity="0.6"></rect>
+
+		<rect x="92" y="128" width="136" height="104" rx="14" fill="#fff"></rect>
+		<rect x="102" y="140" width="70" height="8" rx="4" fill="#0f1219" opacity="0.85"></rect>
+		<rect x="102" y="156" width="104" height="6" rx="3" fill="#60739f" opacity="0.4"></rect>
+		<rect x="102" y="168" width="84" height="6" rx="3" fill="#60739f" opacity="0.4"></rect>
+		<rect x="102" y="182" width="116" height="1.5" fill="#e5e9f0"></rect>
+		<rect x="102" y="196" width="58" height="14" rx="4" fill="#2337ff" opacity="0.12"></rect>
+		<rect x="102" y="214" width="46" height="8" rx="4" fill="#2337ff"></rect>
+
+		<rect x="92" y="244" width="136" height="38" rx="12" fill="#ff3b30"></rect>
+		<rect x="124" y="259" width="72" height="8" rx="4" fill="#fff"></rect>
+
+		<g>
+			<circle cx="104" cy="312" r="9" fill="#2337ff"></circle>
+			<path d="M100 312l3 3 6-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+			<circle cx="132" cy="312" r="9" fill="#2337ff"></circle>
+			<path d="M128 312l3 3 6-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+			<circle cx="160" cy="312" r="9" fill="#2337ff"></circle>
+			<path d="M156 312l3 3 6-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+			<circle cx="188" cy="312" r="9" fill="#d9defa"></circle>
+			<circle cx="216" cy="312" r="3" fill="#d9defa"></circle>
+			<rect x="102" y="328" width="84" height="6" rx="3" fill="#60739f" opacity="0.35"></rect>
+		</g>
+
+		<g class="bubble b1">
+			<rect x="10" y="86" width="86" height="34" rx="17" fill="#fff"></rect>
+			<text x="53" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#1b2bd6">약정 0원</text>
+		</g>
+		<g class="bubble b2">
+			<rect x="226" y="168" width="86" height="34" rx="17" fill="#fff"></rect>
+			<text x="269" y="190" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">약 10분</text>
+		</g>
+		<g class="bubble b3">
+			<rect x="6" y="340" width="98" height="34" rx="17" fill="#fff"></rect>
+			<text x="55" y="362" text-anchor="middle" font-size="14" font-weight="700" fill="#ff3b30">유심 택배</text>
+		</g>
+	</svg>
+</div>
+
+<style>
+	.hero-art svg { width: 100%; max-width: 330px; height: auto; display: block; margin: 0 auto; overflow: visible; }
+	.hero-art text { font-family: 'Pretendard Variable', Pretendard, 'Malgun Gothic', sans-serif; }
+	.bubble { animation: floaty 5s ease-in-out infinite; filter: drop-shadow(0 6px 10px rgba(35, 55, 255, 0.18)); }
+	.b2 { animation-delay: -1.7s; }
+	.b3 { animation-delay: -3.2s; }
+	@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+	@media (prefers-reduced-motion: reduce) { .bubble { animation: none; } }
+	@media (max-width: 720px) { .hero-art svg { max-width: 240px; } }
+</style>
