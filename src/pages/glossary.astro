@@ -1,0 +1,142 @@
+---
+import Icon from '../components/Icon.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { PHONE_LINK, PHONE, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
+
+type Term = { term: string; en?: string; cat: string; desc: string };
+
+const terms: Term[] = [
+	{ cat: '요금제', term: '알뜰폰', en: 'MVNO', desc: 'KT, LG유플러스 같은 통신사의 통신망을 빌려서 서비스하는 사업자를 말합니다. 쓰는 망은 같고, 요금제와 서비스는 알뜰폰 사업자가 따로 구성합니다.' },
+	{ cat: '요금제', term: '선불 요금제', desc: '먼저 요금을 내고 사용하는 방식입니다. 정해진 요금을 미리 내기 때문에 쓴 만큼 나중에 청구되는 부담이 적습니다.' },
+	{ cat: '요금제', term: '알뜰 요금제 (후불)', desc: '사용한 뒤 다음 달에 요금을 내는 방식입니다. 커넥트모바일에서는 네이버페이, 쿠팡캐시, CU 같은 제휴 혜택이 결합된 KT망 요금제를 알뜰 요금제로 안내합니다.' },
+	{ cat: '요금제', term: '결합 요금제', desc: '요금제에 제휴처의 혜택(포인트, 쿠폰 등)이 함께 묶인 상품입니다. 혜택 내용은 제휴처마다 다르니 상담 때 확인하세요.' },
+	{ cat: '요금제', term: '약정', desc: '일정 기간 동안 같은 요금제를 사용하겠다고 약속하는 조건입니다. 커넥트모바일의 요금제는 약정이 없습니다.' },
+	{ cat: '요금제', term: '위약금', desc: '약정 기간 중에 해지하거나 요금제를 바꿀 때 내야 하는 비용입니다. 약정이 없는 요금제는 위약금도 없습니다.' },
+	{ cat: '요금제', term: '일 기본료', desc: '선불 요금제에 표기된 하루 단위 금액입니다. 월 요금을 30일로 나눈 값과 같게 표기돼 있어, 하루에 얼마꼴인지 가늠하는 용도로 보시면 됩니다.' },
+	{ cat: '요금제', term: '기본제공', desc: '요금제에 포함되어 있는 통화·문자를 뜻합니다. 영상·부가 통화처럼 별도 제공량이 표기된 경우가 있으니 요금제 카드의 안내를 함께 확인하세요.' },
+	{ cat: '데이터·속도', term: '속도제어', desc: '기본 데이터를 다 쓰고 나면 데이터가 끊기는 대신 속도만 느려진 채로 계속 쓸 수 있게 하는 방식입니다. 예: "최대 3Mbps 속도제어".' },
+	{ cat: '데이터·속도', term: 'Mbps · Kbps', desc: '데이터 속도 단위입니다. 숫자가 클수록 빠릅니다. 1Mbps는 1,000Kbps로, 메신저와 검색은 무난하고 영상은 낮은 화질이 아니면 끊길 수 있는 정도입니다. 실제 속도는 환경에 따라 달라집니다.' },
+	{ cat: '데이터·속도', term: '일 제공 데이터', desc: '"11GB + 일2GB"처럼 기본 데이터에 더해 매일 제공되는 데이터를 뜻합니다. 구체적인 제공 방식은 요금제 안내를 확인하세요.' },
+	{ cat: '데이터·속도', term: 'LTE · 5G', desc: '이동통신 방식의 세대 이름입니다. 5G는 LTE보다 빠른 방식이며, 5G 속도를 쓰려면 5G를 지원하는 기기가 필요합니다.' },
+	{ cat: '데이터·속도', term: 'KT망 · LG망(L망)', desc: '요금제가 이용하는 통신사의 네트워크입니다. 알뜰폰은 해당 통신사의 망을 빌려 쓰기 때문에 통화·데이터 품질도 그 망을 기준으로 합니다.' },
+	{ cat: '개통·번호', term: '신규 개통', desc: '새 전화번호를 받아서 시작하는 개통입니다.' },
+	{ cat: '개통·번호', term: '번호이동', desc: '지금 쓰는 전화번호를 그대로 유지하면서 통신사를 바꾸는 방법입니다. 기존 통신사의 미납 요금이나 약정 조건을 미리 확인해 두세요.' },
+	{ cat: '개통·번호', term: '셀프개통', desc: '유심을 택배로 받은 뒤 안내에 따라 직접 개통하는 방법입니다. 안내에 따르면 약 10분이 걸립니다.' },
+	{ cat: '개통·번호', term: '비대면 개통', desc: '매장에 가지 않고 전화·카카오톡 상담과 온라인 절차로 개통하는 방식입니다.' },
+	{ cat: '개통·번호', term: '본인 확인(본인 인증)', desc: '개통하는 사람이 본인인지 확인하는 절차입니다. 본인 명의 신분증과 인증 수단이 필요하며, 개통 유형에 따라 다를 수 있습니다.' },
+	{ cat: '개통·번호', term: '미납 · 연체', desc: '통신 요금이 납부되지 않았거나 납부가 늦어진 이력입니다. 커넥트모바일은 미납·연체 이력이 있어도 개통 상담이 가능합니다.' },
+	{ cat: '기기·설정', term: '유심 (USIM)', desc: '가입자 정보가 들어 있는 작은 칩입니다. 휴대폰에 끼워야 통화와 데이터를 쓸 수 있습니다. 내 휴대폰에 맞는 유심인지 확인하세요.' },
+	{ cat: '기기·설정', term: 'eSIM', desc: '칩을 끼우는 대신 기기 안에 내장된 방식으로 가입 정보를 쓰는 기술입니다. eSIM을 지원하는 기기에서만 쓸 수 있습니다.' },
+	{ cat: '기기·설정', term: 'APN', desc: '휴대폰이 모바일 데이터에 연결될 때 쓰는 설정 값입니다. 개통 후 데이터가 안 잡힐 때 확인하는 항목이며, 필요하면 설정 방법을 안내해 드립니다.' },
+];
+
+const cats = ['전체', ...Array.from(new Set(terms.map((t) => t.cat)))];
+
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'DefinedTermSet',
+	name: '알뜰폰·선불폰 용어 설명',
+	hasDefinedTerm: terms.map((t) => ({ '@type': 'DefinedTerm', name: t.term, description: t.desc })),
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead
+			title="알뜰폰·선불폰 용어 설명 | 속도제어, 번호이동, 유심 뜻 | 커넥트모바일"
+			description="속도제어, 일 기본료, 번호이동, 유심과 eSIM, APN까지 알뜰폰·선불폰을 고를 때 헷갈리는 용어를 쉽게 풀어드립니다."
+			jsonLd={[schema]}
+		/>
+		<style>
+			.head { text-align: center; padding: 2rem 0 1rem; }
+			.head h1 { margin-bottom: 0.5rem; }
+			.head p { color: rgb(var(--gray)); margin: 0; }
+			.search { max-width: 520px; margin: 1.5rem auto 0.8rem; }
+			.search input { width: 100%; box-sizing: border-box; border: 2px solid rgb(var(--gray-light)); border-radius: 999px; padding: 0.75rem 1.2rem; font: inherit; font-size: 1rem; background: #fff; }
+			.search input:focus { outline: none; border-color: var(--accent); }
+			.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.8rem; }
+			.chips button { border: 0; padding: 0.45rem 1.1rem; border-radius: 999px; background: rgb(var(--gray-light)); font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+			.chips button.on { background: var(--accent); color: #fff; }
+			.list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 1rem; }
+			.term { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.1rem 1.3rem; scroll-margin-top: 4rem; }
+			.term[hidden] { display: none; }
+			.term h2 { margin: 0 0 0.2rem; font-size: 1.1rem; line-height: 1.35; }
+			.term h2 small { font-weight: 500; color: rgb(var(--gray)); font-size: 0.8rem; margin-left: 0.3rem; }
+			.term .cat { display: inline-block; font-size: 0.72rem; font-weight: 700; color: var(--accent); background: #eef1ff; padding: 0.05rem 0.55rem; border-radius: 999px; margin-bottom: 0.5rem; }
+			.term p { margin: 0; font-size: 0.93rem; color: rgb(var(--gray-dark)); }
+			.empty { text-align: center; color: rgb(var(--gray)); margin: 2rem 0; }
+			.help { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2rem 1rem; margin-top: 3rem; }
+			.help h2 { margin: 0 0 0.4rem; font-size: 1.4rem; }
+			.help p { color: rgb(var(--gray)); margin: 0 0 1rem; font-size: 0.92rem; }
+			.cta { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.self { background: #ff3b30; }
+			.btn.alt { background: #fee500; color: #191919; }
+			@media (max-width: 720px) { .cta { flex-direction: column; } .cta .btn { text-align: center; } }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="wide">
+			<div class="head">
+				<h1>알뜰폰·선불폰 용어 설명</h1>
+				<p>요금제를 고를 때 헷갈리는 말을 쉽게 풀어 드립니다.</p>
+			</div>
+
+			<div class="search">
+				<input id="q" type="search" placeholder="궁금한 용어를 검색해 보세요 (예: 속도제어)" aria-label="용어 검색" />
+			</div>
+			<div class="chips" id="chips">
+				{cats.map((c, i) => <button type="button" data-c={c} class={i === 0 ? 'on' : ''}>{c}</button>)}
+			</div>
+
+			<div class="list" id="list">
+				{terms.map((t) => (
+					<section class="term" data-cat={t.cat} data-text={`${t.term} ${t.en ?? ''} ${t.desc}`.toLowerCase()} id={`t-${t.term.replace(/[^가-힣a-zA-Z0-9]+/g, '-')}`}>
+						<span class="cat">{t.cat}</span>
+						<h2>{t.term}{t.en && <small>{t.en}</small>}</h2>
+						<p>{t.desc}</p>
+					</section>
+				))}
+			</div>
+			<p class="empty" id="empty" hidden>찾는 용어가 없어요. 카카오톡이나 전화로 물어봐 주세요.</p>
+
+			<div class="help">
+				<h2>더 궁금한 점이 있으세요?</h2>
+				<p>용어가 헷갈리거나 나에게 맞는 요금제가 고민이라면 편하게 문의하세요.</p>
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+					<a class="btn" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+		<script>
+			const input = document.getElementById('q') as HTMLInputElement;
+			const chips = document.querySelectorAll<HTMLButtonElement>('#chips button');
+			const items = document.querySelectorAll<HTMLElement>('.term');
+			const empty = document.getElementById('empty')!;
+			let cat = '전체';
+			function apply() {
+				const q = input.value.trim().toLowerCase();
+				let shown = 0;
+				items.forEach((el) => {
+					const ok = (cat === '전체' || el.dataset.cat === cat) && (!q || (el.dataset.text ?? '').includes(q));
+					el.hidden = !ok;
+					if (ok) shown++;
+				});
+				empty.hidden = shown > 0;
+			}
+			input.addEventListener('input', apply);
+			chips.forEach((b) => b.addEventListener('click', () => {
+				cat = b.dataset.c ?? '전체';
+				chips.forEach((x) => x.classList.toggle('on', x === b));
+				apply();
+			}));
+		</script>
+	</body>
+</html>
