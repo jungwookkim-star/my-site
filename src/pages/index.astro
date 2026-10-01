@@ -76,7 +76,13 @@ const faqSchema = {
 			.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; counter-reset: s; padding: 0; list-style: none; }
 			.steps li { background: #fff; border-radius: 12px; padding: 1.2rem; box-shadow: var(--box-shadow); font-size: 0.95rem; position: relative; }
 			.steps li::before { counter-increment: s; content: counter(s); display: block; width: 2rem; height: 2rem; line-height: 2rem; text-align: center; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; margin-bottom: 0.6rem; }
-			.featsub { text-align: center; margin: 2.2rem 0 1rem; font-size: 1.15rem; }
+			.ftabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
+			.ftabs button { border: 0; padding: 0.55rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
+			.ftabs button.on { background: var(--accent); color: #fff; }
+			.fpanel[hidden] { display: none; }
+			.hs { position: relative; }
+			.hs :global(.plan-grid) { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.4rem 0.3rem 1rem; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+			.hs :global(.plan) { flex: 0 0 min(310px, 82%); scroll-snap-align: start; }
 			.go .ic, .btn.ghost .ic { margin: 0 0 0 0.4em; }
 			.feat { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
 			.feat figure { margin: 0; position: relative; }
@@ -154,12 +160,18 @@ const faqSchema = {
 			</section>
 
 			<section id="featured" class="band">
-				<h2 class="sec">인기 요금제</h2>
-				<p class="sub">고객님들이 많이 찾는 요금제입니다.</p>
-				<h3 class="featsub">선불 요금제 인기</h3>
-				<PlanCards plans={popularPrepaid} />
-				<h3 class="featsub">알뜰 요금제 인기</h3>
-				<PlanCards plans={popularPostpaid} />
+				<h2 class="sec">추천 요금제</h2>
+				<p class="sub">먼저 살펴보시기 좋은 요금제입니다. 옆으로 넘겨 보세요.</p>
+				<div class="ftabs" role="tablist" aria-label="요금제 종류">
+					<button type="button" role="tab" aria-selected="true" data-t="pre" class="on">선불 요금제</button>
+					<button type="button" role="tab" aria-selected="false" data-t="post">알뜰 요금제</button>
+				</div>
+				<div class="fpanel" data-p="pre" role="tabpanel">
+					<div class="hs"><PlanCards plans={popularPrepaid} /></div>
+				</div>
+				<div class="fpanel" data-p="post" role="tabpanel" hidden>
+					<div class="hs"><PlanCards plans={popularPostpaid} /></div>
+				</div>
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans">전체 요금제 보기<Icon name="arrow" /></a></p>
 			</section>
 
@@ -221,5 +233,46 @@ const faqSchema = {
 			</section>
 		</main>
 		<Footer />
+		<style is:global>
+			.hs-btn { position: absolute; top: 42%; z-index: 3; width: 2.6rem; height: 2.6rem; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 4px 14px rgba(15, 18, 25, 0.22); font-size: 1.1rem; font-weight: 800; color: var(--accent); cursor: pointer; display: none; }
+			.hs-btn.prev { left: -0.9rem; }
+			.hs-btn.next { right: -0.9rem; }
+			@media (hover: hover) and (min-width: 721px) { .hs-btn { display: block; } }
+		</style>
+		<script>
+			// 선불/알뜰 탭 전환
+			const tabs = document.querySelectorAll<HTMLButtonElement>('.ftabs button');
+			const panels = document.querySelectorAll<HTMLElement>('.fpanel');
+			tabs.forEach((b) =>
+				b.addEventListener('click', () => {
+					tabs.forEach((x) => {
+						const on = x === b;
+						x.classList.toggle('on', on);
+						x.setAttribute('aria-selected', String(on));
+					});
+					panels.forEach((p) => {
+						p.hidden = p.dataset.p !== b.dataset.t;
+						if (!p.hidden) p.querySelector('.plan-grid')?.scrollTo({ left: 0 });
+					});
+				}),
+			);
+
+			// 데스크톱용 좌우 이동 버튼
+			document.querySelectorAll<HTMLElement>('.hs').forEach((hs) => {
+				const grid = hs.querySelector<HTMLElement>('.plan-grid');
+				if (!grid) return;
+				const mk = (cls: string, label: string, dir: number) => {
+					const btn = document.createElement('button');
+					btn.type = 'button';
+					btn.className = `hs-btn ${cls}`;
+					btn.setAttribute('aria-label', dir < 0 ? '이전 요금제' : '다음 요금제');
+					btn.textContent = label;
+					btn.addEventListener('click', () => grid.scrollBy({ left: dir * 330, behavior: 'smooth' }));
+					hs.appendChild(btn);
+				};
+				mk('prev', '‹', -1);
+				mk('next', '›', 1);
+			});
+		</script>
 	</body>
 </html>
