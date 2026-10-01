@@ -1,0 +1,76 @@
+---
+import Icon from '../components/Icon.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { faqGroups } from '../data/faqs';
+import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
+
+const all = faqGroups.flatMap((g) => g.items);
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: all.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead
+			title="알뜰폰·선불폰 자주 묻는 질문 | 개통·충전·해지·번호이동 | 커넥트모바일"
+			description="선불폰 개통 서류, 미납·연체 개통, 외국인·미성년자 개통, 충전, 번호이동, 해지·환불까지 자주 묻는 질문을 한곳에 모았습니다."
+			jsonLd={[schema]}
+		/>
+		<style>
+			.head { text-align: center; padding: 2rem 0 1rem; }
+			.head h1 { margin-bottom: 0.5rem; }
+			.head p { color: rgb(var(--gray)); margin: 0; font-size: 0.92rem; }
+			h2.grp { margin: 2.5rem 0 1rem; font-size: 1.35rem; }
+			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
+			summary { cursor: pointer; font-weight: 700; }
+			details p { margin: 0.6rem 0 0; font-size: 0.93rem; color: rgb(var(--gray-dark)); }
+			.src { margin-top: 2rem; font-size: 0.82rem; color: rgb(var(--gray)); text-align: center; }
+			.help { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2rem 1rem; margin-top: 2.5rem; }
+			.help h2 { margin: 0 0 0.4rem; font-size: 1.4rem; }
+			.help p { color: rgb(var(--gray)); margin: 0 0 1rem; font-size: 0.92rem; }
+			.cta { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.self { background: #ff3b30; }
+			.btn.alt { background: #fee500; color: #191919; }
+			@media (max-width: 720px) { .cta { flex-direction: column; } .cta .btn { text-align: center; } }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="head">
+				<h1>자주 묻는 질문</h1>
+				<p>개통부터 충전, 해지까지 궁금한 점을 눌러 확인하세요.</p>
+			</div>
+
+			{faqGroups.map((g) => (
+				<section>
+					<h2 class="grp">{g.title}</h2>
+					{g.items.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+				</section>
+			))}
+
+			<p class="src">
+				"안내되어 있습니다"로 표기된 내용은 앤텔레콤 공식 안내를 요약한 것으로, 변경될 수 있습니다.
+				정확한 기준은 <a href="/terms">이용·환불·해지 안내</a>와 앤텔레콤 이용약관 원문을 확인해 주세요.
+			</p>
+
+			<div class="help">
+				<h2>원하는 답을 못 찾으셨나요?</h2>
+				<p>편하게 물어보세요. 상황에 맞게 안내해 드립니다.</p>
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+					<a class="btn" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
