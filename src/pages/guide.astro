@@ -1,0 +1,172 @@
+---
+import Icon from '../components/Icon.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
+
+const steps = [
+	{
+		title: '상담 · 요금제 선택',
+		time: '전화·카카오톡으로 진행',
+		desc: '전화나 카카오톡으로 사용 패턴을 알려주시면 맞는 요금제를 골라 드립니다. 홈의 "내게 맞는 요금제 찾기"로 미리 후보를 좁혀 오셔도 좋습니다.',
+		tips: ['선불과 알뜰(후불) 중 어떤 방식이 맞는지 같이 정합니다.', '번호이동인지 신규 개통인지 알려주세요.', '미납·연체 이력, 외국인, 미성년자라면 상담 때 먼저 말씀해 주세요.'],
+	},
+	{
+		title: '유심 택배 수령',
+		time: '지역·택배 사정에 따라 다름',
+		desc: '받으실 주소와 연락처를 알려주시면 유심을 택배로 보내 드립니다. 전국 어디서나 받아보실 수 있고 유심비는 없습니다.',
+		tips: ['유심이 내 휴대폰에 맞는지 상담 때 기종을 알려주세요.', '개통 전에 기존 휴대폰의 유심을 미리 빼지 마세요.', '명절 연휴에는 개통이 일부 제한될 수 있습니다.'],
+	},
+	{
+		title: '셀프개통 진행',
+		time: '약 10분',
+		desc: '유심을 받은 뒤 셀프개통 페이지에서 안내에 따라 본인 확인과 개통 절차를 진행합니다. 처음이어도 화면 안내를 따라가면 됩니다.',
+		tips: ['본인 명의 신분증과 본인 확인에 쓸 수 있는 인증 수단을 준비하세요.', '안정적인 인터넷 환경에서 진행하세요.', '막히면 멈추고 바로 전화나 카카오톡으로 문의하세요.'],
+	},
+	{
+		title: '유심 장착 · 사용 시작',
+		time: '개통 직후',
+		desc: '개통이 끝나면 새 유심을 휴대폰에 끼우고 전원을 다시 켜 사용을 시작합니다. 통화·문자·데이터가 되는지 확인해 보세요.',
+		tips: ['데이터가 안 잡히면 재부팅 후 설정(APN 등)을 확인하세요.', '필요한 설정은 문의하시면 안내해 드립니다.'],
+	},
+];
+
+const checklist = [
+	'본인 명의 신분증',
+	'유심을 지원하는 휴대폰 (기종은 상담 때 확인)',
+	'개통 중 본인 확인에 쓸 수 있는 인증 수단',
+	'번호이동이라면 기존 통신사 정보',
+	'유심을 받을 주소와 연락처',
+];
+
+const cases = [
+	{ t: '번호이동 · 신규 개통', d: '둘 다 상담 가능합니다. 기존 번호를 그대로 쓰고 싶다면 상담 때 알려주세요.' },
+	{ t: '미납·연체가 있어요', d: '미납·연체 이력이 있어도 개통 상담이 가능합니다. 요금제별 조건은 상담 시 정확히 안내합니다.' },
+	{ t: '외국인이에요', d: '외국인도 개통 상담이 가능합니다. 필요한 준비물은 상담 시 안내해 드립니다.' },
+	{ t: '미성년자예요', d: '미성년자도 개통 상담이 가능합니다. 필요한 서류는 상담 시 안내해 드립니다.' },
+];
+
+const howTo = {
+	'@context': 'https://schema.org',
+	'@type': 'HowTo',
+	name: '알뜰폰 유심 택배 셀프개통 방법',
+	description: '상담부터 유심 택배 수령, 셀프개통, 사용 시작까지 4단계로 안내합니다.',
+	step: steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title, text: s.desc })),
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead
+			title="알뜰폰 개통 과정 안내: 상담부터 셀프개통까지 4단계 | 커넥트모바일"
+			description="상담, 유심 택배 수령, 10분 셀프개통, 사용 시작까지 개통 과정을 단계별로 안내합니다. 준비물 체크리스트와 상황별 안내도 확인하세요."
+			jsonLd={[howTo]}
+		/>
+		<style>
+			.head { text-align: center; padding: 2rem 0 1rem; }
+			.head h1 { margin-bottom: 0.5rem; }
+			.head p { color: rgb(var(--gray)); margin: 0; }
+			.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+			.summary li { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.9rem 1rem; font-size: 0.9rem; }
+			.summary strong { display: block; color: var(--accent); font-size: 0.8rem; }
+			h2.sec { text-align: center; margin: 3.5rem 0 1.5rem; }
+			.tl { list-style: none; margin: 0; padding: 0; position: relative; }
+			.tl::before { content: ''; position: absolute; left: 1.15rem; top: 0.5rem; bottom: 0.5rem; width: 2px; background: linear-gradient(#2337ff, #7c3aed); opacity: 0.25; }
+			.tl > li { position: relative; padding-left: 3.4rem; margin-bottom: 1.4rem; }
+			.num { position: absolute; left: 0; top: 0; width: 2.3rem; height: 2.3rem; border-radius: 50%; background: linear-gradient(135deg, #2337ff, #7c3aed); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(35, 55, 255, 0.3); }
+			.step { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+			.step h3 { margin: 0 0 0.2rem; font-size: 1.15rem; }
+			.time { display: inline-block; font-size: 0.78rem; font-weight: 700; color: var(--accent); background: #eef1ff; padding: 0.1rem 0.6rem; border-radius: 999px; margin-bottom: 0.6rem; }
+			.step p { margin: 0 0 0.6rem; font-size: 0.95rem; }
+			.step ul { margin: 0; padding-left: 1.1rem; }
+			.step li { font-size: 0.88rem; color: rgb(var(--gray-dark)); }
+			.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+			.box { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+			.box h3 { margin: 0 0 0.6rem; font-size: 1.1rem; }
+			.check { list-style: none; margin: 0; padding: 0; }
+			.check li { position: relative; padding-left: 1.7rem; margin-bottom: 0.5rem; font-size: 0.93rem; }
+			.check li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #e8f5ee; color: #0d9488; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+			.cases dt { font-weight: 700; margin-top: 0.7rem; font-size: 0.93rem; }
+			.cases dt:first-child { margin-top: 0; }
+			.cases dd { margin: 0.15rem 0 0; font-size: 0.88rem; color: rgb(var(--gray-dark)); }
+			.more { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+			.more a { display: block; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.1rem; text-decoration: none; font-weight: 700; font-size: 0.93rem; color: rgb(var(--black)); }
+			.more a:hover { color: var(--accent); }
+			.help { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2rem 1rem; margin-top: 3rem; }
+			.help h2 { margin: 0 0 0.4rem; font-size: 1.4rem; }
+			.help p { color: rgb(var(--gray)); margin: 0 0 1rem; font-size: 0.92rem; }
+			.cta { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.self { background: #ff3b30; }
+			.btn.alt { background: #fee500; color: #191919; }
+			@media (max-width: 720px) { .cta { flex-direction: column; } .cta .btn { text-align: center; } }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="wide">
+			<div class="head">
+				<h1>알뜰폰 개통 과정 안내</h1>
+				<p>상담부터 사용 시작까지, 어떤 순서로 진행되는지 미리 확인하세요.</p>
+			</div>
+
+			<ul class="summary">
+				<li><strong>STEP 1</strong>상담·요금제 선택</li>
+				<li><strong>STEP 2</strong>유심 택배 수령</li>
+				<li><strong>STEP 3</strong>셀프개통 (약 10분)</li>
+				<li><strong>STEP 4</strong>유심 장착·사용 시작</li>
+			</ul>
+
+			<h2 class="sec">단계별로 자세히 볼게요</h2>
+			<ol class="tl">
+				{steps.map((s, i) => (
+					<li>
+						<span class="num">{i + 1}</span>
+						<div class="step">
+							<h3>{s.title}</h3>
+							<span class="time">{s.time}</span>
+							<p>{s.desc}</p>
+							<ul>{s.tips.map((t) => <li>{t}</li>)}</ul>
+						</div>
+					</li>
+				))}
+			</ol>
+
+			<h2 class="sec">시작 전에 확인하세요</h2>
+			<div class="two">
+				<div class="box">
+					<h3>준비물 체크리스트</h3>
+					<ul class="check">{checklist.map((c) => <li>{c}</li>)}</ul>
+					<p style="font-size:0.82rem;color:rgb(var(--gray));margin:0.8rem 0 0">개통 유형에 따라 필요한 서류나 인증 방식이 다를 수 있어, 상담 때 정확히 안내해 드립니다.</p>
+				</div>
+				<div class="box">
+					<h3>이런 경우에도 상담 가능해요</h3>
+					<dl class="cases">
+						{cases.map((c) => <><dt>{c.t}</dt><dd>{c.d}</dd></>)}
+					</dl>
+				</div>
+			</div>
+
+			<h2 class="sec">함께 보면 좋은 글</h2>
+			<div class="more">
+				<a href="/blog/usim-delivery/">알뜰폰 유심 택배로 받는 방법</a>
+				<a href="/blog/self-activation-10min/">셀프개통 방법: 10분이면 끝</a>
+				<a href="/blog/self-activation-troubleshooting/">셀프개통이 안 될 때 확인할 것 6가지</a>
+				<a href="/blog/after-activation-checklist/">개통 후 꼭 확인할 체크리스트</a>
+			</div>
+
+			<div class="help">
+				<h2>진행하다 막히면 바로 연락 주세요</h2>
+				<p>운영시간 {HOURS} · {HOLIDAY_NOTE}</p>
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+					<a class="btn" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
