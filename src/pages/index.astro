@@ -22,8 +22,8 @@ const allPosts = (await getCollection('blog')).sort(
 const latestPosts = allPosts.slice(0, 3);
 const fmtDate = (d: Date) => d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
-const popularPrepaid = [...ktPrepaid, ...lgPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB', 'L망 5G 선불 20GB+'].includes(p.name));
-const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 11GB+일2GB'].includes(p.name));
+const popularPrepaid = [...ktPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB'].includes(p.name));
+const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 10GB+'].includes(p.name));
 
 const faqs = homeFaqs;
 const faqSchema = {
@@ -38,7 +38,7 @@ const faqSchema = {
 	<head>
 		<BaseHead
 			title="선불폰 개통·알뜰폰 셀프개통 | 커넥트모바일"
-			description="KT망·LG망 선불폰·알뜰 요금제 개통. 유심 택배 배송 후 10분 셀프개통, 미납·연체·외국인·미성년자도 상담 가능. 약정·위약금·유심비 없는 알뜰폰 개통센터입니다."
+			description="KT망·LG망 선불폰·알뜰 요금제 개통. 유심 택배 배송 후 10분 셀프개통, 미납·연체 상담 가능, 외국인·미성년자는 대면 개통. 약정·위약금·유심비 없는 알뜰폰 개통센터입니다."
 			jsonLd={[faqSchema]}
 		/>
 		<style>
@@ -146,7 +146,7 @@ const faqSchema = {
 					<a class="btn sm ghost" href="#finder">요금제 찾기</a>
 					<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 				</div>
-					<div class="trust"><span><b>선불</b> 타사 미납도 개통 가능</span><span><b>외국인·미성년자</b> 서류 확인 후 개통</span><span><b>운영</b> {HOURS}</span><span><b>전국</b> 택배 유심 배송</span></div>
+					<div class="trust"><span><b>선불</b> 타사 미납도 개통 가능</span><span><b>외국인·미성년자</b> 대면 개통(예약)</span><span><b>운영</b> {HOURS}</span><span><b>전국</b> 택배 유심 배송</span></div>
 				</div>
 				<HeroArt />
 			</div>
@@ -187,8 +187,8 @@ const faqSchema = {
 			</section>
 
 			<section id="featured" class="band">
-				<h2 class="sec">추천 요금제</h2>
-				<p class="sub">먼저 살펴보시기 좋은 요금제입니다. 옆으로 넘겨 보세요.</p>
+				<h2 class="sec">인기 요금제</h2>
+				<p class="sub">선불은 396·459 요금제가 가장 인기 있어요. 알뜰 요금제는 제휴처별로 비교해 보세요. 옆으로 넘겨 보세요.</p>
 				<div class="ftabs" role="tablist" aria-label="요금제 종류">
 					<button type="button" role="tab" aria-selected="true" data-t="pre" class="on">선불 요금제</button>
 					<button type="button" role="tab" aria-selected="false" data-t="post">알뜰 요금제</button>
@@ -207,8 +207,8 @@ const faqSchema = {
 				<p class="sub">상황이 달라도 먼저 편하게 문의해 주세요.</p>
 				<div class="who">
 					<div><strong><Icon name="wallet" />미납·연체가 있어요</strong><p>선불 요금제는 다른 통신사 미납이 있어도 개통할 수 있는 것으로 안내됩니다. 알뜰(후불)은 조건이 달라 상담이 필요합니다.</p></div>
-					<div><strong><Icon name="globe" />외국인이에요</strong><p>외국인도 개통할 수 있습니다. 구비서류 확인이 필요하고 온라인 접수는 제한돼, 상담에서 절차를 안내해 드립니다.</p></div>
-					<div><strong><Icon name="user" />미성년자예요</strong><p>미성년자도 개통할 수 있습니다. 법정대리인 서류 등 구비서류가 필요해, 상담에서 절차를 안내해 드립니다.</p></div>
+					<div><strong><Icon name="globe" />외국인이에요</strong><p>외국인은 대면 개통만 가능해요. 가산 사업장은 방문 전에 꼭 예약해야 하고, 전국 대면 사업장은 상담으로 안내해 드려요.</p></div>
+					<div><strong><Icon name="user" />미성년자예요</strong><p>미성년자는 대면 개통만 가능해요. 법정대리인 서류가 필요하고, 방문 전에 꼭 예약해 주세요.</p></div>
 					<div><strong><Icon name="badge" />약정이 부담돼요</strong><p>약정·위약금·유심비 없이 필요한 기간만 사용할 수 있습니다.</p></div>
 				</div>
 			</section>

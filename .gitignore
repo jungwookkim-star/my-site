@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# 네이버 블로그 초안(사이트에 올리지 않음)
+naver-drafts/

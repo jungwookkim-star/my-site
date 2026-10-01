@@ -1,5 +1,5 @@
 // 알뜰(후불) 요금제 정보입니다. 요금이 바뀌면 여기만 고치면 요금제 페이지에 반영됩니다.
-// 통화·문자는 모두 기본제공 상품만 싣습니다. 기준: 앤텔레콤 공식 요금제 페이지 (2026-10-01 확인).
+// 통화·문자는 모두 기본제공 상품만 싣습니다. 기준: 앤텔레콤 공식 요금제 페이지 (2026-10-01 확인). 공식 페이지에 없는 100GB, 제휴처별 11GB+일2GB는 싣지 않습니다.
 import type { PrepaidPlan } from './prepaidPlans';
 
 export interface Partner {
@@ -28,7 +28,6 @@ const D7 = '7GB + 최대 1Mbps';
 const D10 = '10GB + 최대 1Mbps';
 const D15 = '15GB + 최대 1Mbps';
 const D11 = '11GB + 일2GB + 최대 3Mbps';
-const D100 = '100GB + 최대 5Mbps';
 const LOW = { badge: '제휴 최저' };
 
 export const postpaidPartners: Partner[] = [
@@ -40,7 +39,6 @@ export const postpaidPartners: Partner[] = [
 			plan('밀리의서재', '10GB+', '22,300', D10),
 			plan('밀리의서재', '15GB+', '23,500', D15),
 			plan('밀리의서재', '11GB+일2GB', '37,500', D11),
-			plan('밀리의서재', '100GB', '43,200', D100),
 		],
 	},
 	{
@@ -50,8 +48,6 @@ export const postpaidPartners: Partner[] = [
 			plan('CU', '7GB+', '19,500', D7, { ...LOW, extra: true }),
 			plan('CU', '10GB+', '22,300', D10),
 			plan('CU', '15GB+', '24,000', D15),
-			plan('CU', '11GB+일2GB', '37,500', D11),
-			plan('CU', '100GB', '43,200', D100),
 		],
 	},
 	{
@@ -61,8 +57,6 @@ export const postpaidPartners: Partner[] = [
 			plan('다이소', '7GB+', '21,100', D7),
 			plan('다이소', '10GB+', '23,800', D10),
 			plan('다이소', '15GB+', '25,800', D15),
-			plan('다이소', '11GB+일2GB', '39,900', D11),
-			plan('다이소', '100GB', '45,500', D100),
 		],
 	},
 	{
@@ -72,8 +66,6 @@ export const postpaidPartners: Partner[] = [
 			plan('올리브영', '7GB+', '21,100', D7),
 			plan('올리브영', '10GB+', '23,800', D10),
 			plan('올리브영', '15GB+', '25,800', D15),
-			plan('올리브영', '11GB+일2GB', '39,900', D11),
-			plan('올리브영', '100GB', '45,500', D100),
 		],
 	},
 	{
@@ -83,8 +75,6 @@ export const postpaidPartners: Partner[] = [
 			plan('네이버페이', '7GB+', '21,100', D7, { extra: true }),
 			plan('네이버페이', '10GB+', '23,800', D10, { extra: true }),
 			plan('네이버페이', '15GB+', '25,800', D15, { extra: true }),
-			plan('네이버페이', '11GB+일2GB', '39,900', D11),
-			plan('네이버페이', '100GB', '45,500', D100),
 		],
 	},
 	{
@@ -94,8 +84,6 @@ export const postpaidPartners: Partner[] = [
 			plan('쿠팡캐시', '7GB+', '21,100', D7, { extra: true }),
 			plan('쿠팡캐시', '10GB+', '23,800', D10, { extra: true }),
 			plan('쿠팡캐시', '15GB+', '25,800', D15, { extra: true }),
-			plan('쿠팡캐시', '11GB+일2GB', '39,900', D11),
-			plan('쿠팡캐시', '100GB', '45,500', D100),
 		],
 	},
 ];
