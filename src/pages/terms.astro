@@ -1,0 +1,89 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { PHONE, PHONE_LINK, KAKAO_URL, HOURS, EMAIL, BIZ_ADDRESS, REPRESENTATIVE } from '../consts';
+
+const ntelecom = 'https://info.n-telecom.co.kr';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="이용·환불·해지 안내 | 커넥트모바일" description="커넥트모바일 사업자 정보와 개통 후 해지·환불에 대한 안내입니다. 해지·환불은 서비스 제공 사업자(앤텔레콤) 이용약관을 기준으로 합니다." />
+		<style>
+			h1 { text-align: center; }
+			h2 { font-size: 1.2rem; margin-top: 2rem; }
+			li, p { font-size: 0.95rem; }
+			table { border-collapse: collapse; margin: 0.5rem 0; }
+			th, td { border-bottom: 1px solid rgb(var(--gray-light)); padding: 0.55rem 0.6rem; text-align: left; font-size: 0.92rem; }
+			th { width: 8rem; color: rgb(var(--gray)); font-weight: 700; white-space: nowrap; }
+			.notice { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem; font-size: 0.9rem; margin-top: 1.5rem; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>이용·환불·해지 안내</h1>
+			<p>커넥트모바일 이용 전에 확인하시면 좋은 내용을 정리했습니다. 기준일: 2026년 10월 1일</p>
+
+			<h2>1. 사업자 정보</h2>
+			<table>
+				<tbody>
+					<tr><th>상호</th><td>커넥트모바일</td></tr>
+					<tr><th>대표자</th><td>{REPRESENTATIVE}</td></tr>
+					<tr><th>사업자등록번호</th><td>499-37-01511</td></tr>
+					<tr><th>사업장 주소</th><td>{BIZ_ADDRESS}</td></tr>
+					<tr><th>전화</th><td><a href={PHONE_LINK}>{PHONE}</a> (운영시간 {HOURS})</td></tr>
+					<tr><th>이메일</th><td><a href={`mailto:${EMAIL}`}>{EMAIL}</a></td></tr>
+					<tr><th>카카오톡</th><td><a href={KAKAO_URL} target="_blank" rel="noopener">채널 바로가기</a></td></tr>
+				</tbody>
+			</table>
+
+			<h2>2. 서비스 안내</h2>
+			<p>
+				커넥트모바일은 알뜰폰 요금제의 개통 상담과 안내를 도와드립니다. 통신 서비스의 제공, 이용약관, 요금 청구, 해지 처리는
+				서비스 제공 사업자인 앤텔레콤의 기준을 따르며, 개통하시는 요금제에 따라 달라질 수 있습니다.
+			</p>
+
+			<h2>3. 해지·환불 안내</h2>
+			<p>아래는 앤텔레콤이 안내하는 내용을 참고용으로 요약한 것입니다. 정확한 기준은 반드시 약관 원문을 확인해 주세요.</p>
+			<ul>
+				<li>
+					<strong>선불 잔액:</strong> 선불 요금제를 해지하면 남은 잔액은 소멸되며 환불되지 않는 것으로 안내되어 있습니다.
+					환불이 필요한 사정이 있다면 해지를 신청하기 전에 먼저 문의해 주세요.
+				</li>
+				<li>
+					<strong>개통 후 14일 이내 해지:</strong> 온라인 해지 화면에서는 처리되지 않고, 개통처에 문의해야 하는 것으로
+					안내되어 있습니다. 개통하신 곳(커넥트모바일)으로 먼저 연락해 주세요.
+				</li>
+				<li>
+					<strong>청약철회·환급:</strong> 철회 가능 기간과 공제 비용 등 세부 조건은 앤텔레콤의 이용약관 및 청약철회
+					약관에 따릅니다.
+				</li>
+				<li>
+					<strong>요금 정산:</strong> 해지를 신청하는 날까지의 요금은 납부·정산이 필요합니다.
+				</li>
+			</ul>
+			<p>
+				약관 원문:
+				<a href={`${ntelecom}/ntelecom-asp/Mpolicy/userguide.asp`} target="_blank" rel="noopener">앤텔레콤 이용약관</a>
+				·
+				<a href="https://www.n-telecom.co.kr/view/service/change_can.aspx" target="_blank" rel="noopener">앤텔레콤 회선 해지 안내</a>
+			</p>
+
+			<h2>4. 요금제 안내 기준</h2>
+			<ul>
+				<li>이 사이트에 표시된 요금과 제공량은 기준일 현재 안내 내용이며, 통신사 사정에 따라 변경될 수 있습니다.</li>
+				<li>일부 요금제는 변경에 제한이 있습니다. 각 요금제 카드의 유의사항을 확인해 주세요.</li>
+				<li>개통 전 최신 요금과 조건은 상담으로 한 번 더 확인해 드립니다.</li>
+			</ul>
+
+			<div class="notice">
+				이 안내는 이해를 돕기 위한 요약이며 법적 효력이 있는 약관이 아닙니다. 궁금한 점은 개통 전에 전화
+				<a href={PHONE_LINK}>{PHONE}</a> 또는 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>으로 문의해 주세요.
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

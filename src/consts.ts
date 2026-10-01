@@ -11,7 +11,10 @@ export const SELF_ACTIVATION_URL = 'https://www.n-telecom.co.kr/connect';
 export const ADDRESS = '전국 어디서나 비대면 개통 가능';
 export const HOURS = '오전 9:00 ~ 오후 10:00';
 export const HOLIDAY_NOTE = '명절 연휴에는 개통이 일부 제한될 수 있습니다.';
-export const BUSINESS_INFO = '상호: 커넥트모바일 | 사업자등록번호: 499-37-01511';
+export const BUSINESS_INFO = '상호: 커넥트모바일 | 대표자: 김정욱 | 사업자등록번호: 499-37-01511';
+export const REPRESENTATIVE = '김정욱';
+export const EMAIL = 'jungwook.kim01@gmail.com';
+export const BIZ_ADDRESS = '서울특별시 금천구 가산동 234-34';
 
 export const GA_ID = 'G-ESSXNKWHDS';
 export const NAVER_WA_ID = '12264ddd1f1df90';

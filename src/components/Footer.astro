@@ -1,15 +1,15 @@
 ---
 import Icon from './Icon.astro';
-import { SITE_TITLE, PHONE, PHONE_LINK, ADDRESS, HOURS, BUSINESS_INFO, SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
+import { SITE_TITLE, PHONE, PHONE_LINK, HOURS, BUSINESS_INFO, BIZ_ADDRESS, EMAIL, SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
 const today = new Date();
 ---
 
 <footer>
 	<p><strong>{SITE_TITLE}</strong></p>
-	<p>전화 <a href={PHONE_LINK}>{PHONE}</a> · {HOURS}</p>
-	<p>{ADDRESS}</p>
 	<p>{BUSINESS_INFO}</p>
-	<p><a href="/region/">전국 지역별 개통 안내</a> · <a href="/privacy">개인정보·방문 통계 안내</a> · <a href="https://blog.naver.com/juadsl01" target="_blank" rel="noopener">네이버 블로그</a></p>
+	<p>사업장 주소: {BIZ_ADDRESS}</p>
+	<p>전화 <a href={PHONE_LINK}>{PHONE}</a> · 이메일 <a href={`mailto:${EMAIL}`}>{EMAIL}</a> · {HOURS}</p>
+	<p><a href="/terms">이용·환불·해지 안내</a> · <a href="/privacy">개인정보·방문 통계 안내</a> · <a href="/region/">전국 지역별 개통 안내</a> · <a href="https://blog.naver.com/juadsl01" target="_blank" rel="noopener">네이버 블로그</a></p>
 	<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 </footer>
 <div class="sticky-cta">

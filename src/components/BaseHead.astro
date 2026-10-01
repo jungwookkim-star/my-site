@@ -4,7 +4,7 @@
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE, PHONE, KAKAO_URL, GA_ID, NAVER_WA_ID } from '../consts';
+import { SITE_TITLE, PHONE, KAKAO_URL, GA_ID, NAVER_WA_ID, EMAIL } from '../consts';
 import { Font } from 'astro:assets';
 
 interface Props {
@@ -25,6 +25,8 @@ const business = {
 	alternateName: '커넥트모바일',
 	url: site,
 	telephone: PHONE,
+	email: EMAIL,
+	address: { '@type': 'PostalAddress', addressCountry: 'KR', addressRegion: '서울특별시', addressLocality: '금천구', streetAddress: '가산동 234-34' },
 	areaServed: { '@type': 'Country', name: '대한민국' },
 	sameAs: [KAKAO_URL, 'https://blog.naver.com/juadsl01'],
 	contactPoint: { '@type': 'ContactPoint', telephone: PHONE, contactType: 'customer service', availableLanguage: 'Korean' },

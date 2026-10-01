@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { PHONE, PHONE_LINK, KAKAO_URL, HOURS } from '../consts';
+import { PHONE, PHONE_LINK, KAKAO_URL, HOURS, EMAIL, REPRESENTATIVE } from '../consts';
 ---
 
 <!doctype html>
@@ -38,7 +38,7 @@ import { PHONE, PHONE_LINK, KAKAO_URL, HOURS } from '../consts';
 
 			<h2>4. 문의</h2>
 			<p>
-				개인정보와 관련한 문의는 전화 <a href={PHONE_LINK}>{PHONE}</a> 또는 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡 채널</a>로 연락해 주세요. (운영시간 {HOURS})
+				개인정보와 관련한 문의는 대표 {REPRESENTATIVE}에게 전화 <a href={PHONE_LINK}>{PHONE}</a>, 이메일 <a href={`mailto:${EMAIL}`}>{EMAIL}</a> 또는 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡 채널</a>로 연락해 주세요. (운영시간 {HOURS})
 			</p>
 		</main>
 		<Footer />
