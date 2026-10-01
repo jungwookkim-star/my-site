@@ -4,8 +4,8 @@ import { ACTIVATION_CODE } from '../consts';
 
 <div class="acode">
 	<div>
-		<strong>멤버십 앱으로 개통하신다면</strong>
-		<p>앱에서 개통할 때 <b>개통번호</b>를 입력해야 합니다. 커넥트모바일 개통번호는 아래와 같습니다.</p>
+		<strong>멤버십 앱으로 개통하신다면 (태블릿 소유자 회원번호)</strong>
+		<p>앱에서 개통할 때 <b>태블릿 소유자 회원번호</b>를 입력합니다. 커넥트모바일의 회원번호는 아래와 같습니다. <b>셀프개통에는 필요하지 않습니다.</b></p>
 	</div>
 	<div class="row">
 		<span class="num" id="acode-num">{ACTIVATION_CODE}</span>
@@ -31,9 +31,9 @@ import { ACTIVATION_CODE } from '../consts';
 		const code = btn.dataset.code ?? '';
 		try {
 			await navigator.clipboard.writeText(code);
-			if (msg) msg.textContent = '개통번호가 복사되었습니다.';
+			if (msg) msg.textContent = '회원번호가 복사되었습니다.';
 		} catch {
-			if (msg) msg.textContent = `개통번호: ${code} (직접 입력해 주세요)`;
+			if (msg) msg.textContent = `회원번호: ${code} (직접 입력해 주세요)`;
 		}
 		setTimeout(() => { if (msg) msg.textContent = ''; }, 3500);
 	});
