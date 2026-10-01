@@ -1,0 +1,26 @@
+---
+// 헤더용 로고: 심볼(SVG) + 글자. 글자는 HTML이라 사이트 폰트를 그대로 씁니다.
+---
+
+<span class="logo">
+	<svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+		<defs>
+			<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+				<stop offset="0" stop-color="#2337ff"></stop>
+				<stop offset="1" stop-color="#7c3aed"></stop>
+			</linearGradient>
+		</defs>
+		<rect width="64" height="64" rx="15" fill="url(#lg)"></rect>
+		<circle cx="32" cy="32" r="4.8" fill="#fff"></circle>
+		<path d="M40.43 24.93A11 11 0 0 1 40.43 39.07M23.57 39.07A11 11 0 0 1 23.57 24.93M48.85 17.86A22 22 0 0 1 48.85 46.14M15.15 46.14A22 22 0 0 1 15.15 17.86" fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round"></path>
+	</svg>
+	<span class="txt"><strong>커넥트모바일</strong><small>선후불개통센터</small></span>
+</span>
+
+<style>
+	.logo { display: inline-flex; align-items: center; gap: 0.55rem; }
+	.mark { width: 2rem; height: 2rem; flex-shrink: 0; }
+	.txt { display: flex; flex-direction: column; line-height: 1.15; }
+	.txt strong { font-size: 1.05rem; color: rgb(var(--black)); letter-spacing: -0.02em; }
+	.txt small { font-size: 0.68rem; color: rgb(var(--gray)); letter-spacing: 0; font-weight: 500; }
+</style>
