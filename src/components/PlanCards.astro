@@ -5,14 +5,15 @@ import { KAKAO_URL } from '../consts';
 
 interface Props {
 	plans: PrepaidPlan[];
+	compare?: boolean;
 }
-const { plans } = Astro.props;
+const { plans, compare = false } = Astro.props;
 ---
 
 <div class="plan-grid">
 	{
 		plans.map((p) => (
-			<article class="plan">
+			<article class="plan" data-name={p.name} data-price={p.price} data-voice={p.voice} data-sms={p.sms} data-data={p.data} data-datanote={p.dataNote ?? ""} data-daily={p.daily ?? ""} data-note={p.note ?? ""} data-kakao={KAKAO_URL}>
 				<header>
 					<h3>{p.name}</h3>
 					{p.badge && <span class="pbadge">{p.badge}</span>}
@@ -34,6 +35,7 @@ const { plans } = Astro.props;
 					{p.daily && <span>{p.daily}</span>}
 				</footer>
 				<button type="button" class="ask" data-plan={p.name} data-kakao={KAKAO_URL}><Icon name="chat" />이 요금제로 문의하기</button>
+				{compare && <label class="cmp-l"><input type="checkbox" class="cmp" />비교에 담기</label>}
 			</article>
 		))
 	}
@@ -56,6 +58,8 @@ const { plans } = Astro.props;
 	.plan footer span { font-size: 0.8rem; color: rgb(var(--gray)); }
 	.ask { margin-top: 0.8rem; padding: 0.65rem 1rem; border: 0; border-radius: 999px; background: #fee500; color: #191919; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
 	.ask:hover { transform: translateY(-2px); }
+	.cmp-l { display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.6rem; font-size: 0.85rem; font-weight: 700; color: rgb(var(--gray-dark)); cursor: pointer; }
+	.cmp-l input { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); }
 </style>
 
 <style is:global>
@@ -86,5 +90,192 @@ const { plans } = Astro.props;
 		} catch {
 			showToast(`카카오톡에 "${btn.dataset.plan}" 요금제라고 남겨주세요.`);
 		}
+	});
+</script>
+
+<style is:global>
+	.cmp-tray { position: fixed; left: 50%; bottom: 1rem; translate: -50% 0; z-index: 60; display: flex; align-items: center; gap: 0.7rem; background: #0f1219; color: #fff; padding: 0.7rem 0.9rem 0.7rem 1.2rem; border-radius: 999px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); font-size: 0.9rem; max-width: calc(100% - 1.5rem); }
+	.cmp-tray b { color: #9fb0ff; }
+	.cmp-tray button { border: 0; font: inherit; font-weight: 700; cursor: pointer; border-radius: 999px; padding: 0.45rem 1rem; }
+	.cmp-tray .go { background: #fff; color: #0f1219; }
+	.cmp-tray .go:disabled { opacity: 0.4; cursor: not-allowed; }
+	.cmp-tray .clr { background: transparent; color: #cbd2e6; padding: 0.45rem 0.4rem; }
+	@media (max-width: 720px) { .cmp-tray { bottom: 4.6rem; } }
+	.cmp-dialog { border: 0; border-radius: 18px; padding: 0; width: min(920px, calc(100% - 1.5rem)); max-height: 88vh; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
+	.cmp-dialog::backdrop { background: rgba(15, 18, 25, 0.55); }
+	.cmp-head { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.3rem; border-bottom: 1px solid rgb(var(--gray-light)); position: sticky; top: 0; background: #fff; z-index: 2; }
+	.cmp-head h3 { margin: 0; font-size: 1.15rem; }
+	.cmp-head button { border: 0; background: rgb(var(--gray-light)); border-radius: 999px; padding: 0.4rem 1rem; font: inherit; font-weight: 700; cursor: pointer; }
+	.cmp-scroll { overflow-x: auto; padding: 0.5rem 1rem 1.2rem; }
+	.cmp-table { border-collapse: collapse; width: 100%; min-width: 540px; table-layout: fixed; }
+	.cmp-table th, .cmp-table td { padding: 0.7rem 0.6rem; text-align: left; vertical-align: top; font-size: 0.9rem; border-bottom: 1px solid rgb(var(--gray-light)); }
+	.cmp-table thead th { font-size: 1rem; line-height: 1.35; }
+	.cmp-table tbody th { width: 5.5rem; color: rgb(var(--gray)); font-weight: 700; white-space: nowrap; }
+	.cmp-table td small { display: block; color: rgb(var(--gray)); font-size: 0.78rem; margin-top: 0.15rem; }
+	.cmp-table td.price { font-size: 1.15rem; font-weight: 800; color: var(--accent); }
+	.cmp-table td.best { background: #f1f4ff; }
+	.cmp-table .tag { display: inline-block; margin-left: 0.4rem; background: #ff3b30; color: #fff; font-size: 0.68rem; padding: 0.05rem 0.5rem; border-radius: 999px; vertical-align: middle; }
+	.cmp-table td.note { color: #c2410c; font-size: 0.82rem; }
+	.cmp-table .ask { margin-top: 0; width: 100%; }
+</style>
+
+<script>
+	type Plan = { name: string; price: string; voice: string; sms: string; data: string; datanote: string; daily: string; note: string; kakao: string };
+	const MAX = 3;
+	const picked = new Map<string, Plan>();
+	let tray: HTMLElement | null = null;
+	let dialog: HTMLDialogElement | null = null;
+
+	const gtag = (...a: unknown[]) => {
+		const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+		if (g) g(...a);
+	};
+	const toast = (msg: string) => {
+		document.querySelector('.ask-toast')?.remove();
+		const t = document.createElement('div');
+		t.className = 'ask-toast';
+		t.textContent = msg;
+		document.body.appendChild(t);
+		setTimeout(() => t.remove(), 3000);
+	};
+	const num = (s: string) => Number(s.replace(/[^0-9]/g, ''));
+
+	function readPlan(card: HTMLElement): Plan {
+		const d = card.dataset;
+		return { name: d.name ?? '', price: d.price ?? '', voice: d.voice ?? '', sms: d.sms ?? '', data: d.data ?? '', datanote: d.datanote ?? '', daily: d.daily ?? '', note: d.note ?? '', kakao: d.kakao ?? '' };
+	}
+
+	function renderTray() {
+		if (picked.size === 0) {
+			tray?.remove();
+			tray = null;
+			return;
+		}
+		if (!tray) {
+			tray = document.createElement('div');
+			tray.className = 'cmp-tray';
+			document.body.appendChild(tray);
+		}
+		tray.innerHTML = '';
+		const label = document.createElement('span');
+		label.innerHTML = `비교함 <b>${picked.size}/${MAX}</b>`;
+		const go = document.createElement('button');
+		go.className = 'go';
+		go.textContent = picked.size < 2 ? '2개 이상 담아주세요' : '비교하기';
+		go.disabled = picked.size < 2;
+		go.addEventListener('click', openDialog);
+		const clr = document.createElement('button');
+		clr.className = 'clr';
+		clr.textContent = '비우기';
+		clr.addEventListener('click', () => {
+			picked.clear();
+			document.querySelectorAll<HTMLInputElement>('.cmp:checked').forEach((c) => (c.checked = false));
+			renderTray();
+		});
+		tray.append(label, go, clr);
+	}
+
+	function openDialog() {
+		const plans = [...picked.values()];
+		if (plans.length < 2) return;
+		dialog?.remove();
+		dialog = document.createElement('dialog');
+		dialog.className = 'cmp-dialog';
+		const prices = plans.map((p) => num(p.price));
+		const min = Math.min(...prices);
+		const rows: [string, (p: Plan) => string, string?][] = [
+			['월 요금', (p) => `월 ${p.price}`, 'price'],
+			['일 기본료', (p) => p.daily],
+			['음성', (p) => p.voice],
+			['문자', (p) => p.sms],
+			['데이터', (p) => p.data],
+			['유의사항', (p) => p.note, 'note'],
+		];
+		const table = document.createElement('table');
+		table.className = 'cmp-table';
+		const thead = table.createTHead().insertRow();
+		thead.appendChild(document.createElement('th'));
+		plans.forEach((p) => {
+			const th = document.createElement('th');
+			th.scope = 'col';
+			th.textContent = p.name;
+			thead.appendChild(th);
+		});
+		const tbody = table.createTBody();
+		rows.forEach(([label, get, cls]) => {
+			const vals = plans.map(get);
+			if (vals.every((v) => !v)) return;
+			const tr = tbody.insertRow();
+			const th = document.createElement('th');
+			th.scope = 'row';
+			th.textContent = label;
+			tr.appendChild(th);
+			plans.forEach((p, i) => {
+				const td = tr.insertCell();
+				if (cls) td.className = cls;
+				td.textContent = vals[i] || '-';
+				if (label === '데이터' && p.datanote) {
+					const s = document.createElement('small');
+					s.textContent = p.datanote;
+					td.appendChild(s);
+				}
+				if (label === '월 요금' && prices[i] === min && new Set(prices).size > 1) {
+					td.classList.add('best');
+					const tag = document.createElement('span');
+					tag.className = 'tag';
+					tag.textContent = '최저';
+					td.appendChild(tag);
+				}
+			});
+		});
+		const last = tbody.insertRow();
+		last.appendChild(document.createElement('th'));
+		plans.forEach((p) => {
+			const td = last.insertCell();
+			const b = document.createElement('button');
+			b.type = 'button';
+			b.className = 'ask';
+			b.dataset.plan = p.name;
+			b.dataset.kakao = p.kakao;
+			b.textContent = '이 요금제로 문의하기';
+			td.appendChild(b);
+		});
+
+		const head = document.createElement('div');
+		head.className = 'cmp-head';
+		head.innerHTML = '<h3>요금제 비교</h3>';
+		const close = document.createElement('button');
+		close.type = 'button';
+		close.textContent = '닫기';
+		close.addEventListener('click', () => dialog?.close());
+		head.appendChild(close);
+		const wrap = document.createElement('div');
+		wrap.className = 'cmp-scroll';
+		wrap.appendChild(table);
+		dialog.append(head, wrap);
+		dialog.addEventListener('click', (e) => {
+			if (e.target === dialog) dialog?.close();
+		});
+		dialog.addEventListener('close', () => dialog?.remove());
+		document.body.appendChild(dialog);
+		dialog.showModal();
+		gtag('event', 'compare_open', { page_path: location.pathname, plans: plans.map((p) => p.name).join(' | ') });
+	}
+
+	document.addEventListener('change', (e) => {
+		const box = e.target as HTMLInputElement;
+		if (!box.classList?.contains('cmp')) return;
+		const card = box.closest<HTMLElement>('.plan');
+		if (!card) return;
+		const plan = readPlan(card);
+		if (box.checked) {
+			if (picked.size >= MAX) {
+				box.checked = false;
+				toast(`비교는 최대 ${MAX}개까지 가능해요.`);
+				return;
+			}
+			picked.set(plan.name, plan);
+		} else picked.delete(plan.name);
+		renderTray();
 	});
 </script>

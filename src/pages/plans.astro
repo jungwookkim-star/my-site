@@ -63,7 +63,7 @@ const prepaid = [
 			{postpaidPartners.map((p) => (
 				<div class="group" data-scope="post" data-key={p.key}>
 					<h3 class="carrier">{p.name} 제휴 요금제</h3>
-					<PlanCards plans={p.plans} />
+					<PlanCards plans={p.plans} compare />
 				</div>
 			))}
 			<details class="imgs">
@@ -86,11 +86,11 @@ const prepaid = [
 			</div>
 			<div class="group" data-scope="pre" data-key="kt">
 				<h3 class="carrier">KT망 선불 요금제</h3>
-				<PlanCards plans={ktPrepaid} />
+				<PlanCards plans={ktPrepaid} compare />
 			</div>
 			<div class="group" data-scope="pre" data-key="lg">
 				<h3 class="carrier">LG(L)망 선불 요금제</h3>
-				<PlanCards plans={lgPrepaid} />
+				<PlanCards plans={lgPrepaid} compare />
 			</div>
 
 			<p class="note">※ 요금제 및 제공량은 통신사 사정에 따라 변경될 수 있습니다.</p>
