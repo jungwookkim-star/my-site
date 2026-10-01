@@ -12,8 +12,15 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
 
+import { getCollection } from 'astro:content';
 import { getNaverPosts, NAVER_BLOG_URL } from '../lib/naverBlog';
 const naverPosts = await getNaverPosts(10);
+
+const allPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.id.localeCompare(b.id),
+);
+const latestPosts = allPosts.slice(0, 3);
+const fmtDate = (d: Date) => d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
 const popularPrepaid = [...ktPrepaid, ...lgPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB', 'L망 5G 선불 20GB+'].includes(p.name));
 const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 11GB+일2GB'].includes(p.name));
@@ -88,6 +95,14 @@ const faqSchema = {
 				.fi { position: absolute; left: 0; top: 0; margin: 0; width: 56px; height: 56px; font-size: 1.5rem; }
 				.flow li:not(:last-child)::after { top: 62px; bottom: -1.4rem; left: 27px; right: auto; border-top: 0; border-left: 2px dashed #aab6ff; }
 			}
+			.posts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 1rem; }
+			.post { display: flex; flex-direction: column; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.1rem 1.25rem; text-decoration: none; color: inherit; transition: transform 0.15s; }
+			.post:hover { transform: translateY(-3px); }
+			.post .pd { font-size: 0.78rem; color: rgb(var(--gray)); }
+			.post strong { display: block; margin: 0.3rem 0 0.4rem; font-size: 1.02rem; line-height: 1.4; color: rgb(var(--black)); }
+			.post p { margin: 0 0 0.8rem; font-size: 0.86rem; color: rgb(var(--gray-dark)); line-height: 1.55; flex: 1; }
+			.post .more { font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+			.post .more :global(.ic) { margin: 0 0 0 0.35em; }
 			.ftabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
 			.ftabs button { border: 0; padding: 0.55rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
 			.ftabs button.on { background: var(--accent); color: #fff; }
@@ -241,6 +256,22 @@ const faqSchema = {
 					<details><summary>{f.q}</summary><p>{f.a}</p></details>
 				))}
 				<p style="text-align:center;margin-top:1.2rem"><a class="btn ghost" href="/faq">질문 전체 보기<Icon name="arrow" /></a></p>
+			</section>
+
+			<section id="guides">
+				<h2 class="sec">개통 전에 읽어보세요</h2>
+				<p class="sub">알뜰폰·선불폰 개통에 도움이 되는 최신 글입니다.</p>
+				<div class="posts">
+					{latestPosts.map((p) => (
+						<a class="post" href={`/blog/${p.id}/`}>
+							<span class="pd">{fmtDate(p.data.pubDate)}</span>
+							<strong>{p.data.title}</strong>
+							<p>{p.data.description}</p>
+							<span class="more">읽어보기<Icon name="arrow" /></span>
+						</a>
+					))}
+				</div>
+				<p style="text-align:center;margin-top:1.4rem"><a class="btn ghost" href="/blog">블로그 글 {allPosts.length}편 전체 보기<Icon name="arrow" /></a></p>
 			</section>
 
 			{naverPosts.length > 0 && (
