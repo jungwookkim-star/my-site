@@ -14,9 +14,9 @@ const steps = [
 		tips: ['선불과 알뜰(후불) 중 어떤 방식이 맞는지 같이 정합니다.', '번호이동인지 신규 개통인지 알려주세요.', '미납·연체 이력이 있다면 상담 때 먼저 말씀해 주세요. 외국인·미성년자는 셀프개통이 아니라 대면 개통(예약)으로 진행합니다.'],
 	},
 	{
-		title: '유심 택배 수령',
-		time: '대부분 2시간 이내(지역별 상이)',
-		desc: '받으실 주소와 연락처를 알려주시면 유심을 택배로 보내 드립니다. 전국 어디서나 받아보실 수 있고, 택배비는 없으며 유심비는 8,800원입니다. 대부분 2시간 이내에 도착합니다.',
+		title: '유심 준비 (퀵 배송·편의점)',
+		time: '퀵 배송은 대부분 2시간 이내',
+		desc: '서울·수도권·광역시·제주는 주소와 연락처를 알려주시면 퀵 배송(주문 10:00~22:00, 배송비 무료)으로 보내 드리고, 그 외 지역은 편의점에서 유심을 구매하시면 됩니다. 유심비는 8,800원입니다.',
 		tips: ['유심이 내 휴대폰에 맞는지 상담 때 기종을 알려주세요.', '개통 전에 기존 휴대폰의 유심을 미리 빼지 마세요.', '명절 연휴에는 개통이 일부 제한될 수 있습니다.'],
 	},
 	{
@@ -53,8 +53,8 @@ const selfSteps = [	'셀프개통 페이지에 접속해서 "개통하기" 선�
 const howTo = {
 	'@context': 'https://schema.org',
 	'@type': 'HowTo',
-	name: '알뜰폰 유심 택배 셀프개통 방법',
-	description: '상담부터 유심 택배 수령, 셀프개통, 사용 시작까지 4단계로 안내합니다.',
+	name: '알뜰폰 유심 준비부터 셀프개통까지',
+	description: '상담부터 유심 준비, 셀프개통, 사용 시작까지 4단계로 안내합니다.',
 	step: steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title, text: s.desc })),
 };
 ---
@@ -64,7 +64,7 @@ const howTo = {
 	<head>
 		<BaseHead
 			title="알뜰폰 개통 과정 안내: 상담부터 셀프개통까지 4단계 | 커넥트모바일"
-			description="상담, 유심 택배 수령, 10분 셀프개통, 사용 시작까지 개통 과정을 단계별로 안내합니다. 준비물 체크리스트와 상황별 안내도 확인하세요."
+			description="상담, 유심 준비, 10분 셀프개통, 사용 시작까지 개통 과정을 단계별로 안내합니다. 준비물 체크리스트와 상황별 안내도 확인하세요."
 			jsonLd={[howTo]}
 		/>
 		<style>
@@ -122,7 +122,7 @@ const howTo = {
 
 			<ul class="summary">
 				<li><strong>STEP 1</strong>상담·요금제 선택</li>
-				<li><strong>STEP 2</strong>유심 택배 수령</li>
+				<li><strong>STEP 2</strong>유심 준비</li>
 				<li><strong>STEP 3</strong>셀프개통 (약 10분)</li>
 				<li><strong>STEP 4</strong>유심 장착·사용 시작</li>
 			</ul>
@@ -167,7 +167,7 @@ const howTo = {
 
 			<h2 class="sec">함께 보면 좋은 글</h2>
 			<div class="more">
-				<a href="/blog/usim-delivery/">알뜰폰 유심 택배로 받는 방법</a>
+				<a href="/blog/usim-delivery/">알뜰폰 유심 받는 방법 (퀵 배송·편의점)</a>
 				<a href="/blog/self-activation-10min/">셀프개통 방법: 10분이면 끝</a>
 				<a href="/blog/self-activation-troubleshooting/">셀프개통이 안 될 때 확인할 것 6가지</a>
 				<a href="/blog/after-activation-checklist/">개통 후 꼭 확인할 체크리스트</a>
