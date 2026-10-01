@@ -2,6 +2,7 @@
 import Icon from '../components/Icon.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import ActivationCode from '../components/ActivationCode.astro';
 import Header from '../components/Header.astro';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
 
@@ -22,7 +23,7 @@ const steps = [
 		title: '셀프개통 진행',
 		time: '약 10분',
 		desc: '유심을 받은 뒤 셀프개통 페이지에서 안내에 따라 본인 확인과 개통 절차를 진행합니다. 처음이어도 화면 안내를 따라가면 됩니다.',
-		tips: ['본인 명의 신분증과 본인 확인에 쓸 수 있는 인증 수단을 준비하세요.', '안정적인 인터넷 환경에서 진행하세요.', '막히면 멈추고 바로 전화나 카카오톡으로 문의하세요.'],
+		tips: ['본인 명의 신분증과 본인 확인에 쓸 수 있는 인증 수단을 준비하세요.', '멤버십 앱에서 개통한다면 개통번호 2936849를 입력합니다.', '안정적인 인터넷 환경에서 진행하세요.', '막히면 멈추고 바로 전화나 카카오톡으로 문의하세요.'],
 	},
 	{
 		title: '유심 장착 · 사용 시작',
@@ -133,6 +134,8 @@ const howTo = {
 					</li>
 				))}
 			</ol>
+
+			<div style="margin-top:2rem"><ActivationCode /></div>
 
 			<h2 class="sec">시작 전에 확인하세요</h2>
 			<div class="two">

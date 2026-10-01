@@ -18,3 +18,4 @@ export const BIZ_ADDRESS = '서울특별시 금천구 가산동 234-34';
 
 export const GA_ID = 'G-ESSXNKWHDS';
 export const NAVER_WA_ID = '12264ddd1f1df90';
+export const ACTIVATION_CODE = '2936849';

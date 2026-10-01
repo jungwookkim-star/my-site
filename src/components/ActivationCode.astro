@@ -1,0 +1,40 @@
+---
+import { ACTIVATION_CODE } from '../consts';
+---
+
+<div class="acode">
+	<div>
+		<strong>멤버십 앱으로 개통하신다면</strong>
+		<p>앱에서 개통할 때 <b>개통번호</b>를 입력해야 합니다. 커넥트모바일 개통번호는 아래와 같습니다.</p>
+	</div>
+	<div class="row">
+		<span class="num" id="acode-num">{ACTIVATION_CODE}</span>
+		<button type="button" id="acode-copy" data-code={ACTIVATION_CODE}>번호 복사</button>
+	</div>
+	<small id="acode-msg" aria-live="polite"></small>
+</div>
+
+<style>
+	.acode { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; border-left: 5px solid var(--accent); display: grid; gap: 0.8rem; }
+	.acode strong { font-size: 1.05rem; }
+	.acode p { margin: 0.25rem 0 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
+	.row { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+	.num { font-size: 1.8rem; font-weight: 800; letter-spacing: 0.08em; color: var(--accent); font-variant-numeric: tabular-nums; }
+	#acode-copy { border: 0; background: var(--accent); color: #fff; border-radius: 999px; padding: 0.55rem 1.2rem; font: inherit; font-weight: 700; cursor: pointer; }
+	#acode-msg { color: #0d9488; font-weight: 700; min-height: 1.2em; }
+</style>
+
+<script>
+	const btn = document.getElementById('acode-copy') as HTMLButtonElement | null;
+	const msg = document.getElementById('acode-msg');
+	btn?.addEventListener('click', async () => {
+		const code = btn.dataset.code ?? '';
+		try {
+			await navigator.clipboard.writeText(code);
+			if (msg) msg.textContent = '개통번호가 복사되었습니다.';
+		} catch {
+			if (msg) msg.textContent = `개통번호: ${code} (직접 입력해 주세요)`;
+		}
+		setTimeout(() => { if (msg) msg.textContent = ''; }, 3500);
+	});
+</script>
