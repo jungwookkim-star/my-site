@@ -3,6 +3,7 @@
 ---
 
 <div class="hero-art" aria-hidden="true">
+	<img class="mascot" src="/brand/mascot.webp" alt="" width="209" height="360" loading="eager" />
 	<svg viewBox="0 0 320 420" role="img">
 		<defs>
 			<linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
@@ -68,6 +69,10 @@
 </div>
 
 <style>
+	.hero-art { position: relative; max-width: 330px; margin: 0 auto; }
+	.mascot { position: absolute; left: -14%; bottom: -3%; width: 36%; height: auto; z-index: 2; filter: drop-shadow(0 8px 14px rgba(20, 40, 120, 0.22)); margin: 0; animation: wave 4s ease-in-out infinite; transform-origin: 50% 90%; }
+	@keyframes wave { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(2deg); } }
+	@media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
 	.hero-art svg { width: 100%; max-width: 330px; height: auto; display: block; margin: 0 auto; overflow: visible; }
 	.hero-art text { font-family: 'Pretendard Variable', Pretendard, 'Malgun Gothic', sans-serif; }
 	.bubble { animation: floaty 5s ease-in-out infinite; filter: drop-shadow(0 6px 10px rgba(35, 55, 255, 0.18)); }
@@ -75,5 +80,5 @@
 	.b3 { animation-delay: -3.2s; }
 	@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 	@media (prefers-reduced-motion: reduce) { .bubble { animation: none; } }
-	@media (max-width: 720px) { .hero-art svg { max-width: 240px; } }
+	@media (max-width: 720px) { .hero-art { max-width: 240px; } .hero-art svg { max-width: 240px; } .mascot { left: -10%; } }
 </style>
