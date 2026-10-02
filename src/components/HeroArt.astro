@@ -1,10 +1,14 @@
 ---
+import { KAKAO_URL } from '../consts';
 // 홈 첫 화면 일러스트: 휴대폰 화면에서 개통이 진행되는 모습 (SVG)
 ---
 
-<div class="hero-art" aria-hidden="true">
-	<img class="mascot" src="/brand/mascot.webp" alt="" width="209" height="360" loading="eager" />
-	<svg viewBox="0 0 320 420" role="img">
+<div class="hero-art">
+	<a class="mascot-link" href={KAKAO_URL} target="_blank" rel="noopener" aria-label="카카오톡으로 상담하기">
+		<span class="speech">궁금한 사항이 있으시면<br />절 눌러서 상담 받아보세요!</span>
+		<img class="mascot" src="/brand/mascot.webp" alt="" width="209" height="360" loading="eager" />
+	</a>
+	<svg viewBox="0 0 320 420" role="img" aria-hidden="true">
 		<defs>
 			<linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
 				<stop offset="0" stop-color="#2337ff"></stop>
@@ -58,8 +62,8 @@
 			<text x="53" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#1b2bd6">약정 0원</text>
 		</g>
 		<g class="bubble b2">
-			<rect x="226" y="168" width="86" height="34" rx="17" fill="#fff"></rect>
-			<text x="269" y="190" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">약 10분</text>
+			<rect x="226" y="96" width="86" height="34" rx="17" fill="#fff"></rect>
+			<text x="269" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#0d9488">약 10분</text>
 		</g>
 		<g class="bubble b3">
 			<rect x="6" y="340" width="98" height="34" rx="17" fill="#fff"></rect>
@@ -70,9 +74,14 @@
 
 <style>
 	.hero-art { position: relative; max-width: 330px; margin: 0 auto; }
-	.mascot { position: absolute; left: -14%; bottom: -3%; width: 36%; height: auto; z-index: 2; filter: drop-shadow(0 8px 14px rgba(20, 40, 120, 0.22)); margin: 0; animation: wave 4s ease-in-out infinite; transform-origin: 50% 90%; }
+	.mascot-link { position: absolute; right: -14%; bottom: -3%; width: 31%; z-index: 2; display: block; text-decoration: none; }
+	.mascot { width: 100%; height: auto; display: block; margin: 0; filter: drop-shadow(0 8px 14px rgba(20, 40, 120, 0.22)); animation: wave 4s ease-in-out infinite; transform-origin: 50% 90%; transition: transform 0.2s; }
+	.mascot-link:hover .mascot { transform: scale(1.05) rotate(-2deg); animation: none; }
+	.speech { position: absolute; bottom: calc(100% - 6px); right: -4px; width: 168px; background: #fff; color: #0e2150; font-size: 0.78rem; font-weight: 700; line-height: 1.4; text-align: center; padding: 0.55rem 0.7rem; border-radius: 14px; box-shadow: 0 6px 18px rgba(20, 40, 120, 0.18); animation: pop 0.5s 1s both cubic-bezier(0.34, 1.56, 0.64, 1); }
+	.speech::after { content: ''; position: absolute; bottom: -7px; right: 38px; width: 14px; height: 14px; background: #fff; transform: rotate(45deg); border-radius: 0 0 4px 0; }
+	@keyframes pop { from { opacity: 0; transform: scale(0.6); transform-origin: 80% 100%; } to { opacity: 1; transform: scale(1); transform-origin: 80% 100%; } }
 	@keyframes wave { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(2deg); } }
-	@media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
+	@media (prefers-reduced-motion: reduce) { .mascot, .speech { animation: none; } }
 	.hero-art svg { width: 100%; max-width: 330px; height: auto; display: block; margin: 0 auto; overflow: visible; }
 	.hero-art text { font-family: 'Pretendard Variable', Pretendard, 'Malgun Gothic', sans-serif; }
 	.bubble { animation: floaty 5s ease-in-out infinite; filter: drop-shadow(0 6px 10px rgba(35, 55, 255, 0.18)); }
@@ -80,5 +89,5 @@
 	.b3 { animation-delay: -3.2s; }
 	@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 	@media (prefers-reduced-motion: reduce) { .bubble { animation: none; } }
-	@media (max-width: 720px) { .hero-art { max-width: 240px; } .hero-art svg { max-width: 240px; } .mascot { left: -10%; } }
+	@media (max-width: 720px) { .hero-art { max-width: 240px; } .hero-art svg { max-width: 240px; } .mascot-link { right: -10%; } .speech { width: 150px; font-size: 0.72rem; } }
 </style>

@@ -82,7 +82,7 @@ const today = new Date();
 		const a = el.closest<HTMLAnchorElement>('a[href]');
 		if (!a) return;
 		const href = a.getAttribute('href') ?? '';
-		const where = a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
+		const where = a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.mascot-link') ? 'mascot' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
 		if (href.startsWith(SELF_ACTIVATION_URL)) track('self_activation_click', { where });
 		else if (href.startsWith(KAKAO_URL)) track('kakao_click', { where });
 		else if (href.startsWith('tel:')) track('phone_click', { where });
