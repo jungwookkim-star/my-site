@@ -1,6 +1,6 @@
 // 네이버 블로그 RSS에서 최신 글 목록을 가져옵니다. (사이트를 빌드할 때 한 번 실행됩니다)
-export const NAVER_BLOG_URL = 'https://blog.naver.com/juadsl01';
-const RSS_URL = 'https://rss.blog.naver.com/juadsl01.xml';
+export const NAVER_BLOG_URL = 'https://blog.naver.com/connect_mobile';
+const RSS_URL = 'https://rss.blog.naver.com/connect_mobile.xml';
 
 export type NaverPost = { title: string; link: string; date: Date };
 

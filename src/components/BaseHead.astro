@@ -29,7 +29,7 @@ const business = {
 	email: EMAIL,
 	address: { '@type': 'PostalAddress', addressCountry: 'KR', addressRegion: '서울특별시', addressLocality: '금천구', streetAddress: '가산동 234-34' },
 	areaServed: { '@type': 'Country', name: '대한민국' },
-	sameAs: [KAKAO_URL, 'https://blog.naver.com/juadsl01'],
+	sameAs: [KAKAO_URL, 'https://blog.naver.com/connect_mobile'],
 	contactPoint: { '@type': 'ContactPoint', telephone: PHONE, contactType: 'customer service', availableLanguage: 'Korean' },
 };
 const schemas = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
