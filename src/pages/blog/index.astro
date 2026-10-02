@@ -4,10 +4,12 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import { CATEGORIES, categoryOf } from '../../data/blogCategories';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+const counts = Object.fromEntries(CATEGORIES.map((c) => [c, posts.filter((p) => categoryOf(p.id, p.data.category) === c).length]));
 ---
 
 <!doctype html>
@@ -17,15 +19,25 @@ const posts = (await getCollection('blog')).sort(
 		<style>
 			main { width: 960px; }
 			h1 { text-align: center; margin-bottom: 0.3rem; }
-			.lead { text-align: center; color: rgb(var(--gray)); margin: 0 0 2rem; font-size: 0.95rem; }
+			.lead { text-align: center; color: rgb(var(--gray)); margin: 0 0 1.5rem; font-size: 0.95rem; }
+			.tools { max-width: 640px; margin: 0 auto 1.6rem; }
+			#bq { width: 100%; padding: 0.7rem 1.1rem; border: 2px solid #dfe3f0; border-radius: 999px; font-size: 1rem; background: #fff; }
+			#bq:focus { outline: none; border-color: var(--accent); }
+			.cats { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.9rem; }
+			.cats button { border: 0; padding: 0.45rem 1rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; color: rgb(var(--gray-dark)); }
+			.cats button.on { background: var(--accent); color: #fff; }
+			.cats small { opacity: 0.7; margin-left: 0.25em; }
 			ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; list-style: none; margin: 0; padding: 0; }
 			li { display: flex; }
+			li[hidden] { display: none; }
 			li a { display: flex; flex-direction: column; flex: 1; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; text-decoration: none; transition: transform 0.15s; }
 			li a:hover { transform: translateY(-3px); }
+			.tag { align-self: flex-start; margin: 0 0 0.6rem; padding: 0.15rem 0.65rem; border-radius: 999px; background: #eef1ff; color: var(--accent); font-size: 0.72rem; font-weight: 800; }
 			.title { margin: 0 0 0.6rem; color: rgb(var(--black)); font-size: 1.1rem; line-height: 1.4; }
 			.desc { margin: 0 0 0.8rem; color: rgb(var(--gray-dark)); font-size: 0.88rem; line-height: 1.55; flex: 1; }
 			.date { margin: 0; color: rgb(var(--gray)); font-size: 0.8rem; }
 			li a:hover .title { color: var(--accent); }
+			#none { text-align: center; color: rgb(var(--gray)); margin: 2rem 0; }
 		</style>
 	</head>
 	<body>
@@ -33,11 +45,19 @@ const posts = (await getCollection('blog')).sort(
 		<main>
 			<h1>블로그</h1>
 			<p class="lead">알뜰폰 개통 전에 알아두면 좋은 정보를 모았습니다.</p>
-			<ul>
+			<div class="tools">
+				<input id="bq" type="search" placeholder="글 검색 (예: 충전, 번호이동, 396)" autocomplete="off" aria-label="블로그 글 검색" />
+				<div class="cats" role="group" aria-label="분류">
+					<button type="button" data-c="" class="on">전체<small>{posts.length}</small></button>
+					{CATEGORIES.map((c) => <button type="button" data-c={c}>{c}<small>{counts[c]}</small></button>)}
+				</div>
+			</div>
+			<ul id="plist">
 				{
 					posts.map((post) => (
-						<li>
+						<li data-cat={categoryOf(post.id, post.data.category)} data-q={(post.data.title + ' ' + post.data.description).toLowerCase()}>
 							<a href={`/blog/${post.id}/`}>
+								<span class="tag">{categoryOf(post.id, post.data.category)}</span>
 								<h2 class="title">{post.data.title}</h2>
 								<p class="desc">{post.data.description}</p>
 								<p class="date">
@@ -48,7 +68,37 @@ const posts = (await getCollection('blog')).sort(
 					))
 				}
 			</ul>
+			<p id="none" hidden>찾는 글이 없어요. 다른 단어로 검색하거나 전화·카카오톡으로 문의해 주세요.</p>
 		</main>
 		<Footer />
+		<script>
+			const q = document.getElementById('bq') as HTMLInputElement;
+			const items = [...document.querySelectorAll<HTMLElement>('#plist li')];
+			const btns = [...document.querySelectorAll<HTMLButtonElement>('.cats button')];
+			const none = document.getElementById('none') as HTMLElement;
+			let cat = '';
+			function apply() {
+				const k = q.value.trim().toLowerCase();
+				let n = 0;
+				items.forEach((li) => {
+					const ok = (!cat || li.dataset.cat === cat) && (!k || (li.dataset.q ?? '').includes(k));
+					li.hidden = !ok;
+					if (ok) n++;
+				});
+				none.hidden = n > 0;
+				btns.forEach((b) => b.classList.toggle('on', (b.dataset.c ?? '') === cat));
+			}
+			btns.forEach((b) =>
+				b.addEventListener('click', () => {
+					cat = b.dataset.c ?? '';
+					history.replaceState(null, '', cat ? '#' + encodeURIComponent(cat) : location.pathname);
+					apply();
+				}),
+			);
+			q.addEventListener('input', apply);
+			const h = decodeURIComponent(location.hash.slice(1));
+			if (h && btns.some((b) => b.dataset.c === h)) cat = h;
+			apply();
+		</script>
 	</body>
 </html>
