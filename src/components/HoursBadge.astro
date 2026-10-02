@@ -1,0 +1,46 @@
+---
+// 셀프개통 접수 가능 시간 안내. 한국 시간 기준으로 현재 접수 가능 여부를 보여줍니다.
+---
+
+<div class="hours" id="hours-badge">
+	<p class="row"><b>신규가입</b> <span data-kind="new">08:00~21:50</span></p>
+	<p class="row"><b>번호이동</b> <span data-kind="port">10:00~19:50</span></p>
+</div>
+
+<style>
+	.hours { display: inline-flex; flex-direction: column; gap: 0.3rem; margin-top: 0.9rem; padding: 0.6rem 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); font-size: 0.88rem; text-align: left; }
+	.row { margin: 0; display: flex; gap: 0.6rem; align-items: center; }
+	.row b { min-width: 4.6em; }
+	.row span::before { content: ''; display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; margin-right: 0.4em; background: #aaa; }
+	.row span.open { color: #12805c; font-weight: 700; }
+	.row span.open::before { background: #12b76a; }
+	.row span.closed { color: rgb(var(--gray)); }
+</style>
+
+<script>
+	const RULES = { new: { open: 8 * 60, close: 21 * 60 + 50 }, port: { open: 10 * 60, close: 19 * 60 + 50 } } as const;
+	const fmt = (m: number) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+	function nowKst() {
+		const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+		const h = Number(p.find((x) => x.type === 'hour')?.value ?? 0) % 24;
+		return h * 60 + Number(p.find((x) => x.type === 'minute')?.value ?? 0);
+	}
+	function render() {
+		const now = nowKst();
+		document.querySelectorAll<HTMLElement>('#hours-badge span[data-kind]').forEach((el) => {
+			const r = RULES[el.dataset.kind as 'new' | 'port'];
+			if (now >= r.open && now <= r.close) {
+				el.className = 'open';
+				el.textContent = `지금 접수 가능 (${fmt(r.close)}까지)`;
+			} else if (now < r.open) {
+				el.className = 'closed';
+				el.textContent = `오늘 ${fmt(r.open)}부터 접수`;
+			} else {
+				el.className = 'closed';
+				el.textContent = `오늘 마감 · 내일 ${fmt(r.open)}부터`;
+			}
+		});
+	}
+	render();
+	setInterval(render, 60000);
+</script>

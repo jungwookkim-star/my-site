@@ -4,6 +4,7 @@ import PlanCards from '../components/PlanCards.astro';
 import PlanFinder from '../components/PlanFinder.astro';
 import HeroArt from '../components/HeroArt.astro';
 import HomeStats from '../components/HomeStats.astro';
+import HoursBadge from '../components/HoursBadge.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { homeFaqs } from '../data/faqs';
@@ -23,6 +24,13 @@ const allPosts = (await getCollection('blog')).sort(
 const latestPosts = allPosts.slice(0, 3);
 const fmtDate = (d: Date) => d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
+const ALIASES: Record<string, string[]> = { seoul: ['가산', '가산동', '가산디지털단지', '구로디지털단지', '신도림'], gyeonggi: ['판교', '일산', '분당', '광교'], busan: ['서면', '센텀'] };
+const regionIndex = REGIONS.flatMap((r) => [
+	{ t: r.name, label: r.name, slug: r.slug },
+	{ t: r.full, label: r.name, slug: r.slug },
+	...r.cities.map((c) => ({ t: c.replace(/\(.*\)/, ''), label: `${r.name} ${c}`, slug: r.slug })),
+	...(ALIASES[r.slug] ?? []).map((a) => ({ t: a, label: `${r.name} ${a}`, slug: r.slug })),
+]);
 const popularPrepaid = [...ktPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB'].includes(p.name));
 const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 10GB+'].includes(p.name));
 
@@ -96,6 +104,13 @@ const faqSchema = {
 				.fi { position: absolute; left: 0; top: 0; margin: 0; width: 56px; height: 56px; font-size: 1.5rem; }
 				.flow li:not(:last-child)::after { top: 62px; bottom: -1.4rem; left: 27px; right: auto; border-top: 0; border-left: 2px dashed #aab6ff; }
 			}
+			.rsearch { position: relative; max-width: 420px; margin: 0 auto 1.1rem; }
+			.rsearch input { width: 100%; padding: 0.7rem 1rem; border: 2px solid #dfe3f0; border-radius: 999px; font-size: 1rem; background: #fff; }
+			.rsearch input:focus { outline: none; border-color: var(--accent); }
+			.rsearch ul { list-style: none; margin: 0.4rem 0 0; padding: 0.3rem; position: absolute; left: 0; right: 0; z-index: 5; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); }
+			.rsearch li a { display: block; padding: 0.55rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--black); }
+			.rsearch li a:hover, .rsearch li a.on { background: #eef1ff; }
+			.rsearch li.none { padding: 0.55rem 0.8rem; color: rgb(var(--gray)); font-size: 0.9rem; }
 			.rbtns { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(120px, 45%), 1fr)); gap: 0.6rem; }
 			.rbtns a { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; padding: 0.75rem 0.4rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); text-decoration: none; color: var(--black); transition: transform 0.15s, background 0.15s; }
 			.rbtns a:hover { transform: translateY(-2px); background: #eef1ff; }
@@ -152,6 +167,7 @@ const faqSchema = {
 					<a class="btn sm ghost" href="#finder">요금제 찾기</a>
 					<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 				</div>
+				<HoursBadge />
 					<div class="trust"><span><b>선불</b> 타사 미납도 개통 가능</span><span><b>외국인·미성년자</b> 대면 개통(예약)</span><span><b>운영</b> {HOURS}</span><span><b>유심</b> 퀵 배송·편의점</span></div>
 				</div>
 				<HeroArt />
@@ -258,6 +274,11 @@ const faqSchema = {
 			<section id="regions">
 				<h2 class="sec">지역별 선불폰 개통 안내</h2>
 				<p class="sub">우리 동네 선불폰, 지역을 선택해 유심 준비 방법과 개통 안내를 확인하세요.</p>
+				<div class="rsearch">
+					<input id="rq" type="search" placeholder="동네·구·시 이름 검색 (예: 가산, 김해, 해운대)" autocomplete="off" aria-label="지역 검색" />
+					<ul id="rres" hidden></ul>
+				</div>
+				<script type="application/json" id="regidx" set:html={JSON.stringify(regionIndex)} />
 				<div class="rbtns">
 					{REGIONS.map((r) => <a href={`/region/${r.slug}/`}><strong>{r.name}</strong><span>{r.name} 선불폰</span></a>)}
 				</div>
@@ -355,6 +376,41 @@ const faqSchema = {
 				mk('prev', '‹', -1);
 				mk('next', '›', 1);
 			});
+		</script>
+		<script>
+			const q = document.getElementById('rq') as HTMLInputElement | null;
+			const res = document.getElementById('rres') as HTMLUListElement | null;
+			const idx: { t: string; label: string; slug: string }[] = JSON.parse(document.getElementById('regidx')?.textContent ?? '[]');
+			function find(v: string) {
+				const k = v.trim().replace(/\s+/g, '');
+				if (!k) return [];
+				const seen = new Set<string>();
+				const out: typeof idx = [];
+				for (const e of idx) {
+					const stem = e.t.replace(/(특별자치도|특별자치시|특별시|광역시|시|군|구)$/, '');
+					if ((e.t.includes(k) || (stem && k.includes(stem) && stem.length > 1)) && !seen.has(e.label)) { seen.add(e.label); out.push(e); }
+					if (out.length >= 6) break;
+				}
+				return out;
+			}
+			function show() {
+				if (!q || !res) return;
+				const v = q.value;
+				if (!v.trim()) { res.hidden = true; return; }
+				const m = find(v);
+				res.innerHTML = m.length
+					? m.map((e, i) => `<li><a href="/region/${e.slug}/" class="${i === 0 ? 'on' : ''}">${e.label} 선불폰 개통</a></li>`).join('')
+					: '<li class="none">찾는 지역이 없어요. 아래에서 시·도를 눌러 보세요.</li>';
+				res.hidden = false;
+			}
+			q?.addEventListener('input', show);
+			q?.addEventListener('keydown', (ev) => {
+				if (ev.key !== 'Enter') return;
+				ev.preventDefault();
+				const a = res?.querySelector<HTMLAnchorElement>('a');
+				if (a) location.href = a.href;
+			});
+			document.addEventListener('click', (ev) => { if (res && !(ev.target as HTMLElement).closest('.rsearch')) res.hidden = true; });
 		</script>
 	</body>
 </html>
