@@ -86,6 +86,14 @@ const faqSchema = {
 			.card ul { padding-left: 1.1rem; margin: 0.5rem 0 0; }
 			.card.pre { border-top: 5px solid #0d9488; }
 			.card.post { border-top: 5px solid var(--accent); }
+			.ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem; max-width: 860px; margin: 0 auto; }
+			.way { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; border-top: 5px solid var(--accent); display: flex; flex-direction: column; align-items: flex-start; }
+			.way.visit { border-top-color: #0b9a8d; }
+			.wtag { font-size: 0.78rem; font-weight: 800; color: var(--accent); background: #eef1ff; padding: 0.2rem 0.7rem; border-radius: 999px; }
+			.way.visit .wtag { color: #0b7a70; background: #e3f6f3; }
+			.way h3 { margin: 0.7rem 0 0.5rem; font-size: 1.2rem; }
+			.way ul { margin: 0 0 1rem; padding-left: 1.1rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); flex: 1; }
+			.way li { margin-bottom: 0.3rem; }
 			.who { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
 			.who div { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 1.1rem 1.2rem; }
 			.who p { margin: 0.4rem 0 0; font-size: 0.88rem; color: rgb(var(--gray-dark)); }
@@ -234,6 +242,35 @@ const faqSchema = {
 					<div><strong><Icon name="globe" />외국인이에요</strong><p>외국인은 대면 개통만 가능해요. 가산 사업장은 방문 전에 꼭 예약해야 하고, 전국 대면 사업장은 지역별 안내에서 확인하고 예약해 주세요.</p></div>
 					<div><strong><Icon name="user" />미성년자예요</strong><p>미성년자는 대면 개통만 가능해요. 법정대리인 서류가 필요하고, 방문 전에 꼭 예약해 주세요.</p></div>
 					<div><strong><Icon name="badge" />약정이 부담돼요</strong><p>약정·위약금 없이 필요한 기간만 사용할 수 있습니다.</p></div>
+				</div>
+			</section>
+
+			<section id="ways">
+				<h2 class="sec">나에게 맞는 개통 방법</h2>
+				<p class="sub">대부분은 셀프개통으로 끝나고, 일부는 방문 개통이 필요해요.</p>
+				<div class="ways">
+					<div class="way self">
+						<span class="wtag">셀프개통 · 비대면</span>
+						<h3>휴대폰으로 약 10분</h3>
+						<ul>
+							<li>만 19세 이상 내국인</li>
+							<li>간편인증 수단과 신분증 필요</li>
+							<li>신규가입 08:00~21:50 · 번호이동 10:00~19:50</li>
+							<li>유심은 편의점 구매 또는 퀵 배송 (유심비 8,800원)</li>
+						</ul>
+						<a class="btn self sm" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					</div>
+					<div class="way visit">
+						<span class="wtag">방문 개통 · 사전 예약</span>
+						<h3>외국인·미성년자 등</h3>
+						<ul>
+							<li>외국인 · 미성년자는 대면 개통만 가능</li>
+							<li>간편인증 수단이 없거나 앤텔레콤 회선을 이미 쓰는 경우</li>
+							<li>준비물: 신분증 · 유심비 1만원 · 충전비 · 휴대폰</li>
+							<li>방문 전 반드시 예약 (유심은 지점에서 준비)</li>
+						</ul>
+						<a class="btn ghost sm" href="/region/">지역별 방문 개통 확인<Icon name="arrow" /></a>
+					</div>
 				</div>
 			</section>
 
