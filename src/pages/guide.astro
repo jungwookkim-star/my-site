@@ -93,6 +93,9 @@ const howTo = {
 			.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
 			.box { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
 			.box h3 { margin: 0 0 0.6rem; font-size: 1.1rem; }
+			.simphoto { margin: 0 auto; max-width: 720px; }
+			.simphoto img { width: 100%; height: auto; border-radius: 14px; box-shadow: var(--box-shadow); margin: 0; }
+			.simphoto figcaption { text-align: center; font-size: 0.88rem; color: rgb(var(--gray)); margin-top: 0.6rem; }
 			.cardgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1rem; }
 			.cardgrid img { width: 100%; height: auto; border-radius: 14px; box-shadow: var(--box-shadow); margin: 0; }
 			.check { list-style: none; margin: 0; padding: 0; }
@@ -166,6 +169,12 @@ const howTo = {
 					</dl>
 				</div>
 			</div>
+
+			<h2 class="sec">편의점 유심은 이렇게 생겼어요</h2>
+			<figure class="simphoto">
+				<img src="/cards/sim-photo.webp" alt="편의점 유심 진열대: KT 바로유심 카드 8,800원, LGU+ 모두의 ONE 유심 원칩 8,800원" width="1100" height="825" loading="lazy" />
+				<figcaption>KT 바로유심(왼쪽)과 LG 모두의 유심 원칩(오른쪽). 구매 전에 포장에 적힌 상품명으로 통신망을 꼭 확인하세요.</figcaption>
+			</figure>
 
 			<h2 class="sec">한눈에 보는 준비물 카드</h2>
 			<div class="cardgrid">
