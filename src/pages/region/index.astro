@@ -19,7 +19,7 @@ import { REGIONS } from '../../data/regions';
 		<Header />
 		<main class="wide">
 			<h1 style="text-align:center">전국 지역별 개통 안내</h1>
-			<p style="text-align:center">전국 어디서나 비대면으로 개통 상담이 가능합니다. 지역을 선택해 보세요.</p>
+			<p style="text-align:center">전국 어디서나 비대면으로 개통 상담이 가능하고, 외국인·미성년자 대면 개통 사업장(사전 예약 필수)도 지역별로 확인할 수 있습니다. 지역을 선택해 보세요.</p>
 			<div class="grid">
 				{REGIONS.map((r) => <a href={`/region/${r.slug}/`}>{r.name}</a>)}
 			</div>
