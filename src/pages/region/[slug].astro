@@ -33,7 +33,7 @@ const faqSchema = {	'@context': 'https://schema.org',	'@type': 'FAQPage',	mainEn
 <!doctype html>
 <html lang="ko">
 	<head>
-		<BaseHead title={title} description={description} jsonLd={[faqSchema]} />
+		<BaseHead title={title} description={description} jsonLd={[faqSchema, { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: '지역별 안내', item: 'https://connectmobile.kr/region/' }, { '@type': 'ListItem', position: 2, name: region.name, item: `https://connectmobile.kr/region/${region.slug}/` }] }]} />
 		<style>
 			.hero { text-align: center; padding: 2.5rem 0 1.5rem; }
 			.hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
