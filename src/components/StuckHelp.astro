@@ -1,0 +1,35 @@
+---
+// "개통하다 막혔어요" 바로가기. 홈과 가이드에서 같이 씁니다.
+import Icon from './Icon.astro';
+const items = [
+	{ href: '/blog/self-activation-face-auth/', t: '안면인증이 안 돼요', d: '링크 3분·3회, 촬영 요령' },
+	{ href: '/blog/usim-number-input/', t: '유심번호 입력이 헷갈려요', d: '모델코드와 번호 위치' },
+	{ href: '/blog/self-activation-troubleshooting/', t: '개통이 진행되지 않아요', d: '확인할 것 6가지' },
+	{ href: '/faq/', t: '접수 시간이 지났어요', d: '신규 08:00~21:50 · 번호이동 10:00~19:50' },
+	{ href: '/blog/visit-activation-reservation/', t: '셀프개통이 안 되는 경우', d: '방문 개통 예약 방법' },
+];
+---
+
+<div class="stuck">
+	{
+		items.map((i) => (
+			<a href={i.href}>
+				<strong>{i.t}</strong>
+				<span>{i.d}</span>
+				<em>
+					확인하기
+					<Icon name="arrow" />
+				</em>
+			</a>
+		))
+	}
+</div>
+
+<style>
+	.stuck { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 0.8rem; }
+	.stuck a { display: flex; flex-direction: column; gap: 0.25rem; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.1rem; text-decoration: none; border-top: 4px solid #ff8a3d; transition: transform 0.15s; }
+	.stuck a:hover { transform: translateY(-3px); }
+	.stuck strong { color: rgb(var(--black)); font-size: 1rem; line-height: 1.35; }
+	.stuck span { color: rgb(var(--gray)); font-size: 0.82rem; line-height: 1.45; flex: 1; }
+	.stuck em { font-style: normal; color: var(--accent); font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.2rem; margin-top: 0.3rem; }
+</style>

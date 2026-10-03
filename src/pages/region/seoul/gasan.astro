@@ -1,0 +1,164 @@
+---
+import Icon from '../../../components/Icon.astro';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import { getNaverPosts } from '../../../lib/naverBlog';
+import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS } from '../../../consts';
+
+const localPosts = (await getNaverPosts(60)).filter((p) => /가산|금천/.test(p.title)).slice(0, 4);
+
+const title = '가산동 선불폰 개통 | 가산디지털단지 셀프개통·방문 예약 | 커넥트모바일';
+const description =
+	'가산동·가산디지털단지에서 선불폰을 개통하는 방법입니다. 점심시간·퇴근 후 휴대폰으로 하는 셀프개통(신규 08:00~21:50, 번호이동 10:00~19:50)과 외국인·미성년자를 위한 가산아스크타워 방문 개통 예약을 안내합니다.';
+
+const plans = [
+	['인증·문자 수신용', '선불 기본1', '12,100원', '통화 50분 · 문자 30건 · 300MB'],
+	['통화가 많은 업무용', 'L망 선불 300분', '20,800원', '통화 300분 · 문자 300건 · 300MB'],
+	['메신저 위주', 'L망 선불 데이터 2.5GB', '17,000원', '통화 100분 · 문자 50건 · 2.5GB'],
+	['스마트폰처럼 쓰기', '선불 396 10.3GB', '39,600원', '통화·문자 기본제공 · 10.3GB'],
+];
+
+const faqs = [
+	{ q: '가산동에서 매장에 가지 않고 개통할 수 있나요?', a: '네. 만 19세 이상 내국인은 간편인증 수단과 신분증만 있으면 휴대폰으로 셀프개통할 수 있습니다. 신규가입은 08:00~21:50, 번호이동은 10:00~19:50에 접수할 수 있어 점심시간이나 퇴근 후에도 가능합니다.' },
+	{ q: '가산동에서 유심은 어떻게 준비하나요?', a: '서울은 퀵 배송(주문 10:00~22:00, 배송비 무료, 지역에 따라 다르지만 대부분 2시간 이내)을 이용할 수 있고, 가까운 편의점에서 KT 바로유심이나 LG 모두의 유심 원칩을 구매할 수도 있습니다. 유심비는 8,800원입니다.' },
+	{ q: '외국인이나 미성년자는 가산에서 개통할 수 있나요?', a: '외국인과 미성년자는 셀프개통이 안 되고 대면 개통만 가능합니다. 가산아스크타워 사업장에서 개통할 수 있으며, 방문 전에 반드시 예약해야 합니다. 준비물은 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰입니다.' },
+	{ q: '가산아스크타워에는 예약 없이 가도 되나요?', a: '아니요. 방문 개통은 반드시 사전에 예약해야 합니다. 전화나 카카오톡으로 성함, 연락처, 방문 희망 날짜와 시간, 선택한 요금제를 알려 주세요.' },
+	{ q: '업무용·인증용으로 쓸 번호는 어떤 요금제가 좋나요?', a: '인증이나 문자 수신 정도만 필요하면 기본1(12,100원), 통화가 잦은 업무용이면 L망 선불 300분(20,800원), 메신저와 가벼운 인터넷이면 데이터 2.5GB(17,000원), 스마트폰처럼 쓰려면 396(39,600원)을 비교해 보세요. 선불은 개통 당일 충전이 필요합니다.' },
+];
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const crumbs = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: '지역별 안내', item: 'https://connectmobile.kr/region/' },
+		{ '@type': 'ListItem', position: 2, name: '서울', item: 'https://connectmobile.kr/region/seoul/' },
+		{ '@type': 'ListItem', position: 3, name: '가산동', item: 'https://connectmobile.kr/region/seoul/gasan/' },
+	],
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={title} description={description} jsonLd={[faqSchema, crumbs]} />
+		<style>
+			.crumb { font-size: 0.85rem; color: rgb(var(--gray)); margin: 1rem 0 0; }
+			.crumb a { color: inherit; }
+			.hero { text-align: center; padding: 1.5rem 0 1rem; }
+			.hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+			.hero p { color: rgb(var(--gray)); margin: 0; }
+			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.alt { background: #fee500; color: #191919; }
+			.btn.self { background: #ff3b30; color: #fff; }
+			.btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			section { margin-top: 3rem; }
+			h2.sec { text-align: center; }
+			.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem; }
+			.box { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; }
+			.box h3 { margin: 0 0 0.5rem; }
+			.box ul { margin: 0; padding-left: 1.1rem; font-size: 0.93rem; color: rgb(var(--gray-dark)); }
+			.box li { margin-bottom: 0.3rem; }
+			table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--box-shadow); font-size: 0.93rem; }
+			th, td { padding: 0.7rem 0.8rem; text-align: left; border-bottom: 1px solid rgb(var(--gray-light)); }
+			th { background: #eef1ff; color: var(--accent-dark); white-space: nowrap; }
+			.tw { overflow-x: auto; }
+			.note { text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); margin-top: 0.8rem; }
+			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
+			summary { cursor: pointer; font-weight: 700; }
+			details p { margin: 0.6rem 0 0; font-size: 0.92rem; }
+			.lposts { list-style: none; margin: 1rem 0 0; padding: 0; }
+			.lposts li { display: flex; justify-content: space-between; gap: 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.8rem 1.2rem; margin-bottom: 0.6rem; font-size: 0.95rem; }
+			.lposts a { color: var(--black); text-decoration: none; font-weight: 700; }
+			.lposts a:hover { color: var(--accent); }
+			.lposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
+			.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+			.chips a { background: #fff; box-shadow: var(--box-shadow); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.9rem; text-decoration: none; color: var(--black); }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main id="main" class="wide">
+			<p class="crumb"><a href="/region/">지역별 안내</a> › <a href="/region/seoul/">서울</a> › 가산동</p>
+			<div class="hero">
+				<h1>가산동 선불폰 개통</h1>
+				<p>가산디지털단지에서 점심시간·퇴근 후에 휴대폰으로 끝내거나, 예약 후 방문해서 개통하세요.</p>
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+				</div>
+			</div>
+
+			<section>
+				<h2 class="sec">나에게 맞는 개통 방법</h2>
+				<div class="two">
+					<div class="box">
+						<h3>셀프개통 (비대면)</h3>
+						<ul>
+							<li>만 19세 이상 내국인, 간편인증 수단과 신분증 필요</li>
+							<li>신규가입 08:00~21:50, 번호이동 10:00~19:50</li>
+							<li>번호이동은 마감이 빨라 점심시간에 미리 접수하면 편해요</li>
+							<li>유심은 서울 퀵 배송(주문 10:00~22:00) 또는 편의점에서 준비, 유심비 8,800원</li>
+						</ul>
+					</div>
+					<div class="box">
+						<h3>방문 개통 (가산아스크타워, 예약 필수)</h3>
+						<ul>
+							<li>외국인·미성년자는 대면 개통만 가능해요</li>
+							<li>간편인증 수단이 없거나 앤텔레콤 회선을 이미 쓰는 경우도 방문 개통</li>
+							<li>준비물: 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰</li>
+							<li>예약 없이 방문하면 개통이 어려워요. 전화나 카카오톡으로 먼저 예약해 주세요</li>
+						</ul>
+					</div>
+				</div>
+				<p class="note">방문 개통 예약 방법은 <a href="/blog/visit-activation-reservation/">방문 개통 예약 안내</a>를 확인하세요.</p>
+			</section>
+
+			<section>
+				<h2 class="sec">업무용·인증용, 이렇게 고르세요</h2>
+				<div class="tw">
+					<table>
+						<thead><tr><th>용도</th><th>요금제</th><th>월 요금</th><th>제공량</th></tr></thead>
+						<tbody>
+							{plans.map((p) => <tr><td>{p[0]}</td><td>{p[1]}</td><td>{p[2]}</td><td>{p[3]}</td></tr>)}
+						</tbody>
+					</table>
+				</div>
+				<p class="note">앤텔레콤 공식 요금제 기준이며 바뀔 수 있어요. 선불은 개통 당일 충전이 필요합니다. <a href="/plans/">요금제 전체 보기</a></p>
+			</section>
+
+			{localPosts.length > 0 && (
+				<section>
+					<h2 class="sec">가산 지역 블로그 글</h2>
+					<ul class="lposts">
+						{localPosts.map((p) => <li><a href={p.link} target="_blank" rel="noopener">{p.title}</a><time>{p.date.toISOString().slice(0, 10)}</time></li>)}
+					</ul>
+				</section>
+			)}
+
+			<section>
+				<h2 class="sec">가산동 개통 자주 묻는 질문</h2>
+				{faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+				<p class="note">상담 운영시간 {HOURS}</p>
+			</section>
+
+			<section>
+				<h2 class="sec">다른 안내도 확인하세요</h2>
+				<div class="chips">
+					<a href="/region/seoul/">서울 전체</a>
+					<a href="/guide/">개통 과정 안내</a>
+					<a href="/blog/self-activation-face-auth/">안면인증 요령</a>
+					<a href="/blog/usim-number-input/">유심번호 입력</a>
+					<a href="/blog/foreigner-minor-activation/">외국인·미성년자 개통</a>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

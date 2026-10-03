@@ -103,6 +103,13 @@ const faqSchema = {	'@context': 'https://schema.org',	'@type': 'FAQPage',	mainEn
 				<p style="text-align:center;font-size:0.88rem;color:rgb(var(--gray))">상세 주소와 방문 시간은 예약 시 안내해 드립니다. 전화 {PHONE} 또는 카카오톡으로 예약해 주세요.</p>
 			</section>
 
+			{region.slug === 'seoul' && (
+				<section>
+					<h2 class="sec">동네별 안내</h2>
+					<div class="chips"><a href="/region/seoul/gasan/">가산동 선불폰 개통 안내</a></div>
+				</section>
+			)}
+
 			<section>
 				<h2 class="sec">{region.name} 고객이 선택하는 이유</h2>
 				<ul class="pts">

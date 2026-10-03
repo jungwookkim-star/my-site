@@ -5,6 +5,7 @@ import PlanFinder from '../components/PlanFinder.astro';
 import HeroArt from '../components/HeroArt.astro';
 import HomeStats from '../components/HomeStats.astro';
 import HoursBadge from '../components/HoursBadge.astro';
+import StuckHelp from '../components/StuckHelp.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { homeFaqs } from '../data/faqs';
@@ -25,12 +26,12 @@ const latestPosts = allPosts.slice(0, 3);
 const fmtDate = (d: Date) => d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 
 const ALIASES: Record<string, string[]> = { seoul: ['가산', '가산동', '가산디지털단지', '구로디지털단지', '신도림'], gyeonggi: ['판교', '일산', '분당', '광교'], busan: ['서면', '센텀'] };
-const regionIndex = REGIONS.flatMap((r) => [
+const regionIndex = [{ t: '가산', label: '서울 가산동', slug: 'seoul/gasan' }, { t: '가산동', label: '서울 가산동', slug: 'seoul/gasan' }, { t: '가산디지털단지', label: '서울 가산동', slug: 'seoul/gasan' }].concat(REGIONS.flatMap((r) => [
 	{ t: r.name, label: r.name, slug: r.slug },
 	{ t: r.full, label: r.name, slug: r.slug },
 	...r.cities.map((c) => ({ t: c.replace(/\(.*\)/, ''), label: `${r.name} ${c}`, slug: r.slug })),
-	...(ALIASES[r.slug] ?? []).map((a) => ({ t: a, label: `${r.name} ${a}`, slug: r.slug })),
-]);
+	...(ALIASES[r.slug] ?? []).filter((a) => !['가산', '가산동', '가산디지털단지'].includes(a)).map((a) => ({ t: a, label: `${r.name} ${a}`, slug: r.slug })),
+]));
 const popularPrepaid = [...ktPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB'].includes(p.name));
 const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 10GB+'].includes(p.name));
 
@@ -272,6 +273,12 @@ const faqSchema = {
 						<a class="btn ghost sm" href="/region/">지역별 방문 개통 확인<Icon name="arrow" /></a>
 					</div>
 				</div>
+			</section>
+
+			<section id="stuck">
+				<h2 class="sec">개통하다 막히셨나요?</h2>
+				<p class="sub">자주 막히는 부분을 바로 확인하세요.</p>
+				<StuckHelp />
 			</section>
 
 			<section id="steps">

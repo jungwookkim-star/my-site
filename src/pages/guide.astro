@@ -2,6 +2,7 @@
 import Icon from '../components/Icon.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import StuckHelp from '../components/StuckHelp.astro';
 import ActivationCode from '../components/ActivationCode.astro';
 import Header from '../components/Header.astro';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
@@ -164,6 +165,9 @@ const howTo = {
 			</div>
 
 			<div style="margin-top:2rem"><ActivationCode /></div>
+
+			<h2 class="sec">개통하다 막히셨나요?</h2>
+			<StuckHelp />
 
 			<h2 class="sec">시작 전에 확인하세요</h2>
 			<div class="two">
