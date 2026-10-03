@@ -8,6 +8,9 @@ const MAP: Record<string, Category> = {
 	'self-activation-10min': '개통 방법',
 	'self-activation-troubleshooting': '개통 방법',
 	'usim-delivery': '개통 방법',
+	'self-activation-face-auth': '개통 방법',
+	'usim-number-input': '개통 방법',
+	'visit-activation-reservation': '개통 방법',
 	'after-activation-checklist': '개통 방법',
 	'after-activation-account': '개통 방법',
 
