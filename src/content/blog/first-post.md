@@ -1,6 +1,6 @@
 ---
 title: '공지: 홈페이지를 오픈했습니다'
-description: '커넥트모바일 선후불개통센터 홈페이지 오픈 안내'
+description: '커넥트모바일 선후불개통센터 홈페이지 오픈 안내입니다. 공지사항과 개통 관련 정보를 블로그에서 확인하실 수 있습니다.'
 pubDate: 'Sep 29 2026'
 heroImage: '../../assets/blog-placeholder-3.jpg'
 ---

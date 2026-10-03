@@ -10,10 +10,11 @@ import { getCollection } from 'astro:content';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
 import { categoryOf } from '../data/blogCategories';
 
-type Props = CollectionEntry<'blog'>['data'] & { id: string; headings?: { depth: number; slug: string; text: string }[] };
+type Props = CollectionEntry<'blog'>['data'] & { id?: string; seoTitle?: string; headings?: { depth: number; slug: string; text: string }[] };
 
-const { title, description, pubDate, updatedDate, heroImage, id: currentId, headings = [], category: explicitCat } = Astro.props;
-const category = categoryOf(currentId, explicitCat);
+const { title, description, pubDate, updatedDate, heroImage, id: currentId, headings = [], category: explicitCat, seoTitle } = Astro.props;
+const isPost = !!currentId;
+const category = categoryOf(currentId ?? '', explicitCat);
 const toc = headings.filter((h) => h.depth === 2);
 const all = (await getCollection('blog'))
 	.filter((p) => p.id !== currentId)
@@ -26,7 +27,7 @@ const related = [...same, ...others].slice(0, 3);
 <html lang="ko">
 	<head>
 		<BaseHead
-			title={title}
+			title={seoTitle ?? title}
 			description={description}
 			jsonLd={{
 				'@context': 'https://schema.org',
@@ -118,7 +119,7 @@ const related = [...same, ...others].slice(0, 3);
 		<main>
 			<article>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
 				</div>
 				<div class="prose">
 					<div class="title">
@@ -132,7 +133,7 @@ const related = [...same, ...others].slice(0, 3);
 								)
 							}
 						</div>
-						<a class="cat" href={`/blog/#${encodeURIComponent(category)}`}>{category}</a>
+						{isPost && <a class="cat" href={`/blog/#${encodeURIComponent(category)}`}>{category}</a>}
 						<h1>{title}</h1>
 						<hr />
 					</div>
@@ -143,7 +144,7 @@ const related = [...same, ...others].slice(0, 3);
 						</nav>
 					)}
 					<slot />
-					<section class="related">
+					{isPost && <section class="related">
 						<h3>같이 읽으면 좋은 글</h3>
 						<div class="rel-grid">
 							{related.map((p) => (
@@ -153,7 +154,7 @@ const related = [...same, ...others].slice(0, 3);
 								</a>
 							))}
 						</div>
-					</section>
+					</section>}
 					<div class="post-cta">
 						<h3>개통이 궁금하세요?</h3>
 						<p>바로 셀프개통을 진행하거나, 전화·카카오톡으로 편하게 문의하세요.</p>
