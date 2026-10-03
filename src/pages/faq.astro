@@ -26,6 +26,14 @@ const schema = {
 			.head { text-align: center; padding: 2rem 0 1rem; }
 			.head h1 { margin-bottom: 0.5rem; }
 			.head p { color: rgb(var(--gray)); margin: 0; font-size: 0.92rem; }
+			.fsearch { max-width: 620px; margin: 0.5rem auto 0; }
+			#fq { width: 100%; padding: 0.7rem 1.1rem; border: 2px solid #dfe3f0; border-radius: 999px; font-size: 1rem; background: #fff; }
+			#fq:focus { outline: none; border-color: var(--accent); }
+			.fchips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
+			.fchips a { padding: 0.45rem 1rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); text-decoration: none; font-size: 0.88rem; font-weight: 700; color: rgb(var(--gray-dark)); }
+			.fg { scroll-margin-top: 4.5rem; }
+			.fg[hidden], details[hidden] { display: none; }
+			#fnone { text-align: center; color: rgb(var(--gray)); margin: 2rem 0; }
 			h2.grp { margin: 2.5rem 0 1rem; font-size: 1.35rem; }
 			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
 			summary { cursor: pointer; font-weight: 700; }
@@ -49,12 +57,20 @@ const schema = {
 				<p>개통부터 충전, 해지까지 궁금한 점을 눌러 확인하세요.</p>
 			</div>
 
-			{faqGroups.map((g) => (
-				<section>
+			<div class="fsearch">
+				<input id="fq" type="search" placeholder="질문 검색 (예: 미납, 충전, 외국인, 유심비)" autocomplete="off" aria-label="질문 검색" />
+				<div class="fchips">
+					{faqGroups.map((g, i) => <a href={`#g${i}`}>{g.title}</a>)}
+				</div>
+			</div>
+
+			{faqGroups.map((g, i) => (
+				<section class="fg" id={`g${i}`}>
 					<h2 class="grp">{g.title}</h2>
-					{g.items.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+					{g.items.map((f) => <details data-q={(f.q + ' ' + f.a).toLowerCase()}><summary>{f.q}</summary><p>{f.a}</p></details>)}
 				</section>
 			))}
+			<p id="fnone" hidden>찾는 질문이 없어요. 아래 버튼으로 편하게 문의해 주세요.</p>
 
 			<p class="src">
 				"안내되어 있습니다"로 표기된 내용은 앤텔레콤 공식 안내를 요약한 것으로, 변경될 수 있습니다.
@@ -72,5 +88,27 @@ const schema = {
 			</div>
 		</main>
 		<Footer />
+		<script>
+			const q = document.getElementById('fq') as HTMLInputElement;
+			const groups = [...document.querySelectorAll<HTMLElement>('.fg')];
+			const none = document.getElementById('fnone') as HTMLElement;
+			function apply() {
+				const k = q.value.trim().toLowerCase();
+				let total = 0;
+				groups.forEach((g) => {
+					let n = 0;
+					g.querySelectorAll<HTMLDetailsElement>('details').forEach((d) => {
+						const ok = !k || (d.dataset.q ?? '').includes(k);
+						d.hidden = !ok;
+						d.open = !!k && ok;
+						if (ok) n++;
+					});
+					g.hidden = n === 0;
+					total += n;
+				});
+				none.hidden = total > 0;
+			}
+			q.addEventListener('input', apply);
+		</script>
 	</body>
 </html>
