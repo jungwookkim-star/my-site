@@ -95,6 +95,7 @@ const faqSchema = {
 			.way h3 { margin: 0.7rem 0 0.5rem; font-size: 1.2rem; }
 			.way ul { margin: 0 0 1rem; padding-left: 1.1rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); flex: 1; }
 			.way li { margin-bottom: 0.3rem; }
+			.way li a { color: var(--accent); font-weight: 700; }
 			.who { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
 			.who div { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 1.1rem 1.2rem; }
 			.who p { margin: 0.4rem 0 0; font-size: 0.88rem; color: rgb(var(--gray-dark)); }
@@ -258,6 +259,7 @@ const faqSchema = {
 							<li>간편인증 수단과 신분증 필요</li>
 							<li>신규가입 08:00~21:50 · 번호이동 10:00~19:50</li>
 							<li>유심은 편의점 구매 또는 퀵 배송 (유심비 8,800원)</li>
+							<li>eSIM 개통도 가능 (LG망, 발급비 2,750원) · <a href="/blog/esim-vs-usim/">eSIM과 유심 비교</a></li>
 						</ul>
 						<a class="btn self sm" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
 					</div>
