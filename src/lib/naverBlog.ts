@@ -15,11 +15,14 @@ const pick = (xml: string, tag: string) => {
 	return m ? m[1].trim() : '';
 };
 
-export async function getNaverPosts(limit = 6): Promise<NaverPost[]> {
+// 빌드 중 여러 페이지가 부르므로 RSS는 한 번만 받아 둡니다.
+let cache: Promise<string> | null = null;
+const loadXml = () => (cache ??= fetch(RSS_URL).then((r) => (r.ok ? r.text() : '')).catch(() => ''));
+
+export async function getNaverPosts(limit = 6, filter = true): Promise<NaverPost[]> {
 	try {
-		const res = await fetch(RSS_URL);
-		if (!res.ok) return [];
-		const xml = await res.text();
+		const xml = await loadXml();
+		if (!xml) return [];
 		return xml
 			.split('<item>')
 			.slice(1)
@@ -30,7 +33,7 @@ export async function getNaverPosts(limit = 6): Promise<NaverPost[]> {
 				category: pick(item, 'category'),
 			}))
 			.filter((p) => p.title && p.link)
-			.filter((p) => !EXCLUDE_CATEGORIES.includes(p.category) && TELECOM.test(p.title))
+			.filter((p) => !filter || (!EXCLUDE_CATEGORIES.includes(p.category) && TELECOM.test(p.title)))
 			.slice(0, limit)
 			.map(({ title, link, date }) => ({ title, link, date }));
 	} catch {

@@ -4,12 +4,18 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { REGIONS } from '../../data/regions';
+import { getNaverPosts } from '../../lib/naverBlog';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS } from '../../consts';
 
 export function getStaticPaths() {
 	return REGIONS.map((region) => ({ params: { slug: region.slug }, props: { region } }));
 }
 const { region } = Astro.props;
+// 이 지역 이름이 제목에 들어간 네이버 블로그 글을 보여 줍니다. (중구·동구처럼 여러 지역에 있는 이름은 제외)
+const GENERIC = new Set(['중구', '동구', '서구', '남구', '북구', '시', '군', '구']);
+const ALIASES: Record<string, string[]> = { seoul: ['가산', '구로디지털'] };
+const stems = [region.name, ...(ALIASES[region.slug] ?? []), ...region.cities.map((c) => c.replace(/\(.*\)/, '').replace(/(시|군|구)$/, ''))].filter((s) => s.length >= 2 && !GENERIC.has(s));
+const localPosts = (await getNaverPosts(60)).filter((p) => stems.some((s) => p.title.includes(s))).slice(0, 4);
 const title = `${region.name} 알뜰폰 선불·알뜰 요금제 개통 | 커넥트모바일`;
 const description = `${region.full} 어디서나 비대면으로 선불·알뜰 요금제 휴대폰 개통 상담. ${region.cities.slice(0, 3).join(', ')} 등 ${region.name} 지역 고객도 전화·카카오톡으로 간편하게 문의하세요.`;
 const faqs = [
@@ -46,6 +52,11 @@ const faqSchema = {	'@context': 'https://schema.org',	'@type': 'FAQPage',	mainEn
 			summary { cursor: pointer; font-weight: 700; }
 			details p { margin: 0.6rem 0 0; font-size: 0.92rem; }
 			ul.pts { padding-left: 1.2rem; }
+			.lposts { list-style: none; margin: 1rem 0 0; padding: 0; }
+			.lposts li { display: flex; justify-content: space-between; gap: 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.8rem 1.2rem; margin-bottom: 0.6rem; font-size: 0.95rem; }
+			.lposts a { color: var(--black); text-decoration: none; font-weight: 700; }
+			.lposts a:hover { color: var(--accent); }
+			.lposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
 			.local { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
 			.local div { background: #fff; box-shadow: var(--box-shadow); border-radius: 12px; padding: 1rem 1.1rem; }
 			.local p { margin: 0.4rem 0 0; font-size: 0.9rem; color: rgb(var(--gray)); }
@@ -104,6 +115,15 @@ const faqSchema = {	'@context': 'https://schema.org',	'@type': 'FAQPage',	mainEn
 				</ul>
 				<p style="text-align:center"><a class="btn ghost" href="/plans">요금제 전체 보기 →</a></p>
 			</section>
+
+			{localPosts.length > 0 && (
+				<section>
+					<h2 class="sec">{region.name} 지역 블로그 글</h2>
+					<ul class="lposts">
+						{localPosts.map((p) => <li><a href={p.link} target="_blank" rel="noopener">{p.title}</a><time>{p.date.toISOString().slice(0, 10)}</time></li>)}
+					</ul>
+				</section>
+			)}
 
 			<section>
 				<h2 class="sec">{region.name} 개통 자주 묻는 질문</h2>
