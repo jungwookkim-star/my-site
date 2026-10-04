@@ -34,7 +34,23 @@ import { SITE_TITLE, ADDRESS, HOURS, PHONE, PHONE_LINK, KAKAO_URL, BUSINESS_INFO
 		<li>개통 지역: {ADDRESS}</li>
 	</ul>
 
+	<h2 id="verified">앤텔레콤 사전승낙 판매점</h2>
+	<p>
+		커넥트모바일은 이동통신사업자 <strong>앤텔레콤(㈜앤알커뮤니케이션)</strong>으로부터 「이동통신단말장치 유통구조 개선에 관한 법률」 제8조에 따른
+		<strong>판매점 사전승낙</strong>을 받은 온라인 판매점입니다. (승낙일 2026년 9월 29일)
+	</p>
+	<figure class="cert">
+		<img src="/trust/sajeon-seungnak.webp" alt="앤텔레콤 이동통신서비스 판매점 사전승낙서: 승인판매점 커넥트 모바일(대표 김정욱), 승인 이동통신 사업자 앤텔레콤, 2026년 9월 29일" width="900" height="1262" loading="lazy" />
+		<figcaption>이동통신서비스 판매점 사전승낙서</figcaption>
+	</figure>
+
 	<h2>사업자 정보</h2>
 	<p>{BUSINESS_INFO}<br />사업장 주소: {BIZ_ADDRESS}<br />이메일: <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
 	<p><a href="/terms">이용·환불·해지 안내</a> · <a href="/privacy">개인정보·방문 통계 안내</a></p>
 </Layout>
+
+<style is:global>
+	.cert { margin: 1rem auto 1.5rem; max-width: 420px; text-align: center; }
+	.cert img { width: 100%; height: auto; border-radius: 10px; box-shadow: var(--box-shadow); }
+	.cert figcaption { font-size: 0.85rem; color: rgb(var(--gray)); margin-top: 0.5rem; }
+</style>
