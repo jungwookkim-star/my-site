@@ -14,7 +14,7 @@ export const HOLIDAY_NOTE = '명절 연휴에는 개통이 일부 제한될 수 
 export const BUSINESS_INFO = '상호: 커넥트모바일 | 대표자: 김정욱 | 사업자등록번호: 499-37-01511';
 export const REPRESENTATIVE = '김정욱';
 export const EMAIL = 'jungwook.kim01@gmail.com';
-export const BIZ_ADDRESS = '서울특별시 금천구 가산동 234-34';
+export const BIZ_ADDRESS = '서울특별시 금천구 가산동 234-34 (두산로9길 66)';
 
 export const GA_ID = 'G-ESSXNKWHDS';
 export const NAVER_WA_ID = '12264ddd1f1df90';
