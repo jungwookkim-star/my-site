@@ -6,7 +6,7 @@ import Header from '../components/Header.astro';
 import PlanCards from '../components/PlanCards.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
-import { ktPrepaidMore, lgPrepaidMore, lgPostpaid } from '../data/morePlans';
+import { ktPrepaidMore, lgPrepaidMore, lgPostpaid, ktPostpaid } from '../data/morePlans';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
 
 const postpaid = [
@@ -71,6 +71,11 @@ const prepaid = [
 				</div>
 			))}
 			<details class="more lgpost">
+				<summary>KT망 알뜰(후불) 일반 요금제 더 보기 ({ktPostpaid.length}개)</summary>
+				<PlanCards plans={ktPostpaid} compare />
+			</details>
+
+			<details class="more">
 				<summary>LG(L)망 알뜰(후불) 요금제 더 보기 ({lgPostpaid.length}개)</summary>
 				<PlanCards plans={lgPostpaid} compare />
 			</details>

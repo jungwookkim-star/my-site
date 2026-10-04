@@ -2,7 +2,7 @@
 // 사용법: node scripts/check-prices.mjs          → 콘솔 보고
 //        node scripts/check-prices.mjs --json    → JSON 보고
 import { ktPrepaid, lgPrepaid } from '../src/data/prepaidPlans.ts';
-import { ktPrepaidMore, lgPrepaidMore, lgPostpaid } from '../src/data/morePlans.ts';
+import { ktPrepaidMore, lgPrepaidMore, lgPostpaid, ktPostpaid } from '../src/data/morePlans.ts';
 import { postpaidPartners } from '../src/data/postpaidPlans.ts';
 
 const PAGES = [
@@ -43,6 +43,7 @@ const site = [
 	...lgPrepaid.map((p) => ['L망 선불', p]),
 	...lgPrepaidMore.map((p) => ['L망 선불', p]),
 	...lgPostpaid.map((p) => ['L망 후불', p]),
+	...ktPostpaid.map((p) => ['K망 후불', p]),
 	...postpaidPartners.flatMap((pt) => pt.plans.map((p) => [`K망 제휴(${pt.name})`, { ...p, lookup: `K망 ${p.name.replace(pt.name, '').trim()}(${pt.name})` }])),
 ];
 

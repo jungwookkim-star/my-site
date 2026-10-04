@@ -1,11 +1,11 @@
 ---
 // 홈 숫자 띠 + 제휴 혜택 띠. 모두 사이트 데이터에서 계산한 사실만 보여줍니다.
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
-import { ktPrepaidMore, lgPrepaidMore, lgPostpaid } from '../data/morePlans';
+import { ktPrepaidMore, lgPrepaidMore, lgPostpaid, ktPostpaid } from '../data/morePlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 
 const prepaidAll = [...ktPrepaid, ...lgPrepaid, ...ktPrepaidMore, ...lgPrepaidMore];
-const planTotal = prepaidAll.length + lgPostpaid.length + postpaidPartners.reduce((n, p) => n + p.plans.length, 0);
+const planTotal = prepaidAll.length + lgPostpaid.length + ktPostpaid.length + postpaidPartners.reduce((n, p) => n + p.plans.length, 0);
 const minPrice = Math.min(...prepaidAll.map((p) => Number(p.price.replace(/[^0-9]/g, '')))).toLocaleString('ko-KR');
 const partners = postpaidPartners.map((p) => p.name);
 ---

@@ -38,6 +38,29 @@ export const lgPrepaidMore: PrepaidPlan[] = [
 	{ name: 'L망 선불 매일5GB', voice: '기본제공 (+영상/부가 300분)', sms: '기본제공', data: '매일 5GB', dataNote: '최대 5Mbps 속도제어', note: '단기간 대용량 데이터 이용 시 속도가 제한되거나 차단될 수 있음', price: '85,900원' },
 ];
 
+// KT망 알뜰(후불) 일반 요금제. 기준: 앤텔레콤 공식 요금제 페이지 K망 후불 LTE 요금제 (2026-10-04 확인).
+// 스마트디바이스·시니어·패드·복지 요금제는 대상이 달라서 싣지 않았습니다.
+const UV30 = '유무선 기본제공 (+영상/부가 30분)';
+const UV200 = '유무선 기본제공 (+영상/부가 200분)';
+const CARRY = '미사용 데이터 이월';
+export const ktPostpaid: PrepaidPlan[] = [
+	{ name: 'LTE 기본', voice: '50분', sms: '30건', data: '300MB', price: '9,000원', daily: '일 300원' },
+	{ name: 'LTE 실속데이터1', voice: '50분', sms: '30건', data: '1GB', price: '16,400원', daily: '일 547원' },
+	{ name: 'LTE 222', voice: '160분', sms: '200건', data: '750MB', price: '22,200원', daily: '일 740원' },
+	{ name: 'LTE 망내231', voice: '망내 무선 기본제공 / 망외 130분', sms: '기본제공', data: '750MB', note: CARRY, price: '23,100원', daily: '일 770원' },
+	{ name: 'LTE 실속데이터2', voice: '50분', sms: '30건', data: '2GB', price: '24,600원', daily: '일 820원' },
+	{ name: 'LTE 선택 246', voice: UV30, sms: '기본제공', data: '300MB', price: '24,600원', daily: '일 820원' },
+	{ name: 'LTE 실속데이터(QoS)', voice: '160분', sms: '200건', data: '750MB + 최대 400Kbps', dataNote: '가입월은 일할 제공, 익월부터 데이터 소진 시 400Kbps 속도로 기본제공', price: '25,300원', daily: '일 843원' },
+	{ name: 'LTE 망내 280', voice: '망내 무선 기본제공 / 망외 185분', sms: '기본제공', data: '1.5GB', note: CARRY, price: '28,000원', daily: '일 933원' },
+	{ name: 'LTE 망내 338', voice: '망내 무선 기본제공 / 망외 250분', sms: '기본제공', data: '2.5GB', note: CARRY, price: '33,800원', daily: '일 1,127원' },
+	{ name: 'LTE 후불데이터10G', voice: '100분', sms: '100건', data: '10GB', price: '34,200원', daily: '일 1,140원' },
+	{ name: 'LTE 선택 370', voice: UV30, sms: '기본제공', data: '3GB', price: '37,000원', daily: '일 1,233원' },
+	{ name: 'LTE 379', voice: '350분', sms: '350건', data: '6GB', price: '37,900원', daily: '일 1,263원' },
+	{ name: 'LTE 선택 411', voice: UV30, sms: '기본제공', data: '6GB', note: CARRY, price: '41,100원', daily: '일 1,370원' },
+	{ name: 'LTE 선택 494', voice: UV200, sms: '기본제공', data: '10GB + 일 2GB + 최대 3Mbps', dataNote: speed('3Mbps'), price: '49,400원', daily: '일 1,647원' },
+	{ name: 'LTE 선택 824', voice: UV200, sms: '기본제공', data: '30GB + 일 2GB + 최대 5Mbps', dataNote: speed('5Mbps'), price: '82,400원', daily: '일 2,747원' },
+];
+
 export const lgPostpaid: PrepaidPlan[] = [
 	{ name: 'L망 데이터10G+', voice: '100분', sms: '100건', data: '10GB + 최대 1Mbps', dataNote: speed('1Mbps'), price: '17,600원' },
 	{ name: 'L망 플랫폼 7GB+', voice: '기본제공 (+영상/부가 300분)', sms: '기본제공', data: '7GB + 최대 1Mbps', dataNote: speed('1Mbps'), price: '17,900원' },
