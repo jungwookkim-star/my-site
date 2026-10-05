@@ -3,6 +3,7 @@ import Icon from '../../components/Icon.astro';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import ShareButton from '../../components/ShareButton.astro';
 import { REGIONS } from '../../data/regions';
 import { getNaverPosts } from '../../lib/naverBlog';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS } from '../../consts';
@@ -140,6 +141,7 @@ const faqSchema = {	'@context': 'https://schema.org',	'@type': 'FAQPage',	mainEn
 			</section>
 
 			<section>
+				<p style="text-align:center;margin-bottom:1.5rem"><ShareButton title={`${region.name} 선불폰 개통 안내 | 커넥트모바일`} /></p>
 				<h2 class="sec">다른 지역도 확인하세요</h2>
 				<div class="chips">
 					{REGIONS.filter((r) => r.slug !== region.slug).map((r) => <a href={`/region/${r.slug}/`}>{r.name}</a>)}
