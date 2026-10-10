@@ -1,0 +1,33 @@
+---
+// 개통 후기 섹션. 후기가 없으면 아무것도 그리지 않습니다. (후기는 src/data/reviews.ts 에 추가)
+import { visibleReviews } from '../data/reviews';
+const reviews = visibleReviews(6);
+---
+
+{
+	reviews.length > 0 && (
+		<section id="reviews">
+			<h2 class="sec">개통 후기</h2>
+			<p class="sub">고객님들이 남겨 주신 후기입니다.</p>
+			<div class="reviews">
+				{reviews.map((r) => (
+					<figure>
+						<blockquote>{r.text}</blockquote>
+						<figcaption>
+							{r.who && <strong>{r.who}</strong>}
+							<span>{[r.type, r.date.replace('-', '.'), r.source].filter(Boolean).join(' · ')}</span>
+						</figcaption>
+					</figure>
+				))}
+			</div>
+		</section>
+	)
+}
+
+<style>
+	.reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 0.9rem; }
+	figure { margin: 0; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.1rem 1.2rem; border-top: 4px solid var(--accent); display: flex; flex-direction: column; gap: 0.7rem; }
+	blockquote { margin: 0; font-size: 0.95rem; line-height: 1.7; }
+	figcaption { display: flex; flex-direction: column; font-size: 0.8rem; color: rgb(var(--gray)); }
+	figcaption strong { color: var(--black); font-size: 0.85rem; }
+</style>
