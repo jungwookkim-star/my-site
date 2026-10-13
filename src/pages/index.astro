@@ -159,6 +159,24 @@ const faqSchema = {
 			.nposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
 			.final { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2.5rem 1rem; }
 			.final h2 { margin-top: 0; }
+			.fold { max-width: 860px; margin: 2.2rem auto 0; padding: 0.4rem 1.2rem; }
+			.fold > summary { padding: 0.8rem 0; font-size: 1.02rem; list-style: none; display: flex; align-items: center; gap: 0.2rem; }
+			.fold > summary::-webkit-details-marker { display: none; }
+			.fold > summary::after { content: '+'; margin-left: auto; font-size: 1.4rem; font-weight: 400; color: var(--accent); }
+			.fold[open] > summary::after { content: '–'; }
+			.fold[open] { padding-bottom: 1.2rem; }
+			.fold > summary .ic { color: var(--accent); }
+			@media (max-width: 720px) {
+				.who, .posts { display: flex; gap: 0.8rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.3rem 0.2rem 0.9rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+				.who > div { flex: 0 0 80%; scroll-snap-align: start; }
+				.posts > .post { flex: 0 0 78%; scroll-snap-align: start; }
+				.nposts li:nth-child(n + 6) { display: none; }
+				.nposts li { flex-direction: column; gap: 0.2rem; }
+				.rbtns { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+				.rbtns a { padding: 0.6rem 0.2rem; }
+				.rbtns span { display: none; }
+				section { margin-top: 3rem; }
+			}
 		</style>
 	</head>
 	<body>
@@ -193,34 +211,6 @@ const faqSchema = {
 				<PlanFinder />
 			</section>
 
-			<section id="types">
-				<h2 class="sec">어떤 요금제가 필요하세요?</h2>
-				<p class="sub">아래에서 골라 바로 요금제를 확인하세요.</p>
-				<div class="cards">
-					<a class="card pre" href="/plans#prepaid">
-						<span class="tag">먼저 내고 쓰는 방식</span>
-						<h3>선불 요금제</h3>
-						<ul>
-							<li>약정·위약금 없이 원하는 기간만 사용</li>
-							<li>본인 명의로 간편하게 개통</li>
-							<li>KT망 · LG망(5G 포함) 선택 가능</li>
-						</ul>
-						<span class="go">선불 요금제 보기<Icon name="arrow" /></span>
-					</a>
-					<a class="card post" href="/plans#postpaid">
-						<span class="tag">후불 · 쓰고 다음 달에 내는 방식</span>
-						<h3>알뜰 요금제</h3>
-						<ul>
-							<li>월 19,500원부터, 음성·문자 기본제공 요금제</li>
-							<li>네이버페이·쿠팡캐시·CU·다이소·올리브영·밀리의 서재 혜택 결합</li>
-							<li>KT망 기반 요금제</li>
-						</ul>
-						<span class="go">알뜰 요금제 보기<Icon name="arrow" /></span>
-					</a>
-				</div>
-				<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
-			</section>
-
 			<section id="featured" class="band">
 				<h2 class="sec">인기 요금제</h2>
 				<p class="sub">선불은 396·459 요금제가 가장 인기 있어요. 알뜰 요금제는 제휴처별로 비교해 보세요. 옆으로 넘겨 보세요.</p>
@@ -235,6 +225,7 @@ const faqSchema = {
 					<div class="hs"><PlanCards plans={popularPostpaid} /></div>
 				</div>
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans">전체 요금제 보기<Icon name="arrow" /></a></p>
+					<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
 			</section>
 
 			<section id="who">
@@ -280,11 +271,10 @@ const faqSchema = {
 				</div>
 			</section>
 
-			<section id="stuck">
-				<h2 class="sec">개통하다 막히셨나요?</h2>
-				<p class="sub">자주 막히는 부분을 바로 확인하세요.</p>
+			<details class="fold" id="stuck">
+				<summary><Icon name="chat" />개통하다 막히셨나요?</summary>
 				<StuckHelp />
-			</section>
+			</details>
 
 			<section id="steps">
 				<h2 class="sec">개통 절차</h2>
@@ -320,15 +310,14 @@ const faqSchema = {
 					</li>
 				</ol>
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a> <a class="btn ghost" href="/guide">개통 과정 자세히 보기<Icon name="arrow" /></a></p>
-			</section>
-
-			<section id="prep">
-				<h2 class="sec">개통 전에 이것만 준비하세요</h2>
-				<p class="sub">셀프개통은 준비물만 갖추면 약 10분이면 끝납니다.</p>
-				<div class="prepcards">
+				<details class="fold" id="prep">
+					<summary><Icon name="check" />개통 전 준비물 · 유심 구매처</summary>
+					<p class="sub" style="margin-top:0.8rem">셀프개통은 준비물만 갖추면 약 10분이면 끝납니다.</p>
+					<div class="prepcards">
 					<a href="/guide/"><img src="/cards/self-prep.webp" alt="셀프개통 전 준비물 체크: 간편인증, 신분증, 사용 휴대폰, 유심" width="900" height="900" loading="lazy" /></a>
 					<a href="/blog/usim-delivery/"><img src="/cards/sim-prep.webp" alt="KT 바로유심, LG 모두의 유심 원칩 구매처와 유심비 안내" width="900" height="900" loading="lazy" /></a>
 				</div>
+				</details>
 			</section>
 
 			<section id="regions">
