@@ -177,33 +177,62 @@ const faqSchema = {
 				.rbtns span { display: none; }
 				section { margin-top: 3rem; }
 			}
+			/* 첫 화면(압축형 + 마스코트) */
+			.hb .hero-text { position: relative; }
+			.hb-cta { margin-top: 1.1rem; display: grid; gap: 0.6rem; max-width: 460px; }
+			.hb-cta .btn.lg { text-align: center; }
+			.hb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+			.hb-row .btn { text-align: center; box-shadow: none; }
+			.hb-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: rgb(var(--gray)); }
+			.hb :global(.hours) { margin-top: 0.8rem; }
+			.mini-mascot { display: none; }
+			.statswrap :global(.stats) { margin-top: 1.2rem; }
+			@media (max-width: 720px) {
+				.hb { padding: 1.1rem 0 0.4rem; gap: 0; }
+				.hb h1 { font-size: 1.85rem; margin: 0.6rem 0 0.4rem; }
+				.hb :global(.hero-art) { display: none; }
+				.hb-cta { max-width: none; }
+				.hb :global(.hours) { display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.2rem 1rem; justify-content: flex-start; padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+				.hb :global(.hours .row b) { min-width: 0; }
+				.statswrap :global(.stats) { grid-template-columns: repeat(4, 1fr); gap: 0.4rem; margin-top: 0.9rem; }
+				.statswrap :global(.stats li) { padding: 0.55rem 0.15rem; border-radius: 12px; }
+				.statswrap :global(.stats b) { font-size: 0.98rem; }
+				.statswrap :global(.stats span) { font-size: 0.66rem; display: block; line-height: 1.3; }
+				.statswrap :global(.partners) { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 0.3rem; margin-top: 0.8rem; }
+				.statswrap :global(.pchip), .statswrap :global(.plabel) { white-space: nowrap; }
+				.hc .hero-text { text-align: left; }
+				.hc h1 { padding-right: 92px; }
+				.hc .badge { margin-top: 0.2rem; }
+				.hc p { padding-right: 92px; font-size: 0.92rem; }
+				.mini-mascot { display: block; position: absolute; right: 0; top: 1.9rem; width: 84px; text-decoration: none; }
+				.mini-mascot img { width: 100%; height: auto; margin: 0; display: block; filter: drop-shadow(0 6px 10px rgba(20, 40, 120, 0.22)); }
+				.mini-mascot span { position: absolute; right: 2px; top: -1.7rem; background: #fff; color: #0e2150; font-size: 0.66rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(20, 40, 120, 0.18); white-space: nowrap; }
+				.hc .hb-note { text-align: left; }
+			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main id="main" class="wide">
-			<div class="hero">
+			<div class="hero hb hc">
 				<div class="hero-text">
-				<span class="badge">KT망 · LG망 알뜰폰 개통</span>
-				<h1>선불·알뜰 개통,<br />한 번에 끝내세요</h1>
-				<p>전국 어디서나 비대면 상담, 10분 셀프개통으로 간편하게 시작하세요.</p>
-				<div class="chips">
-					<span>약정 NO</span><span>위약금 NO</span><span>10분 셀프개통</span>
-				</div>
-				<div class="cta">
-					<a class="btn self lg" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
-				</div>
-				<div class="cta sub-cta">
-					<a class="btn sm alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
-					<a class="btn sm ghost" href="#finder">요금제 찾기</a>
-					<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
-				</div>
-				<HoursBadge />
-					<div class="trust"><span><b>인증</b> <a href="/about/#verified">앤텔레콤 사전승낙 판매점</a></span><span><b>선불</b> 타사 미납도 개통 가능</span><span><b>외국인·미성년자</b> 대면 개통(예약)</span><span><b>운영</b> {HOURS}</span><span><b>유심</b> 퀵 배송·편의점</span></div>
+					<a class="mini-mascot" href={KAKAO_URL} target="_blank" rel="noopener" aria-label="카카오톡으로 상담하기"><span>궁금하면 눌러요!</span><img src="/brand/mascot.webp" alt="" width="209" height="360" /></a>
+					<span class="badge">KT망 · LG망 알뜰폰 개통</span>
+					<h1>선불·알뜰 개통,<br />한 번에 끝내세요</h1>
+					<p>전국 어디서나 비대면 상담, 10분 셀프개통으로 간편하게 시작하세요.</p>
+					<div class="hb-cta">
+						<a class="btn self lg" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+						<div class="hb-row">
+							<a class="btn sm alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+							<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 상담</a>
+						</div>
+					</div>
+					<HoursBadge />
+					<p class="hb-note"><a href="/about/#verified">앤텔레콤 사전승낙 판매점</a> · 외국인·미성년자는 대면 개통(예약)</p>
 				</div>
 				<HeroArt />
 			</div>
-			<HomeStats />
+			<div class="statswrap"><HomeStats /></div>
 
 			<section id="finder">
 				<h2 class="sec">내게 맞는 요금제 찾기</h2>
