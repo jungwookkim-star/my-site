@@ -1,0 +1,224 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import { items } from '../../lib/planItems';
+import { REGIONS } from '../../data/regions';
+import { PHONE, PHONE_LINK, KAKAO_URL, REPRESENTATIVE, BIZ_ADDRESS } from '../../consts';
+
+// 요금은 사이트의 요금제 데이터에서 읽어 옵니다. (요금이 바뀌면 이 페이지도 같이 바뀝니다)
+const priceOf = (name: string) => items.find((i) => i.plan.name === name)?.plan.price.replace('원', '') ?? null;
+const planRows = [
+	{ net: 'KT network', name: '선불 LTE 기본1', en: 'Basic: 50 min calls, 30 texts, 300MB data' },
+	{ net: 'KT network', name: '선불 300MB 라이트', en: 'Calls & texts included, 300MB data (then up to 1Mbps)' },
+	{ net: 'KT network', name: 'LTE 선불 396 10.3GB', en: 'Calls & texts included, 10.3GB data (then up to 3Mbps)' },
+	{ net: 'KT network', name: 'LTE 선불 459 20.3GB', en: 'Calls & texts included, 20.3GB data (then up to 3Mbps)' },
+	{ net: 'LG network', name: 'L망 선불 기본1', en: 'Basic: 50 min calls, 30 texts, 300MB data' },
+	{ net: 'LG network', name: 'L망 선불 데이터 2.5GB', en: '100 min calls, 50 texts, 2.5GB data' },
+	{ net: 'LG network', name: 'L망 선불 396 10.3GB', en: 'Calls & texts included, 10.3GB data' },
+	{ net: 'LG network', name: 'L망 5G 선불 20GB+', en: 'Calls & texts included, 20GB data + 3Mbps (5G)' },
+]
+	.map((r) => ({ ...r, price: priceOf(r.name) }))
+	.filter((r) => r.price);
+
+const regionEn: Record<string, string> = {
+	seoul: 'Seoul', busan: 'Busan', daegu: 'Daegu', incheon: 'Incheon', gwangju: 'Gwangju', daejeon: 'Daejeon', ulsan: 'Ulsan', sejong: 'Sejong',
+	gyeonggi: 'Gyeonggi', gangwon: 'Gangwon', chungbuk: 'North Chungcheong', chungnam: 'South Chungcheong', jeonbuk: 'North Jeolla',
+	jeonnam: 'South Jeolla', gyeongbuk: 'North Gyeongsang', gyeongnam: 'South Gyeongsang', jeju: 'Jeju',
+};
+const withCenter = REGIONS.filter((r) => r.centers.length > 0);
+
+const faqs = [
+	{ q: 'Can a foreigner get a prepaid phone plan from you?', a: 'Yes. Foreign residents can open a prepaid line, but only in person. Online self-activation is not available for foreigners because your documents must be checked at the counter.' },
+	{ q: 'Do I need to make a reservation?', a: 'Yes. Every in-person location requires a reservation in advance. Walk-ins may not be possible. Contact us on KakaoTalk or by phone with your name, phone number, preferred area, date and time, and the plan you want.' },
+	{ q: 'What should I bring?', a: 'Bring your ID, the SIM fee (10,000 KRW), money for the first top-up, and the phone you will use. The SIM is prepared at the location. The exact documents depend on your situation, so we tell you when you reserve.' },
+	{ q: 'How many lines can I open?', a: 'A foreign resident can open one line.' },
+	{ q: 'Is there a contract or a cancellation fee?', a: 'No. There is no contract commitment and no cancellation penalty.' },
+	{ q: 'Do I have to top up on the day I activate?', a: 'Yes. Prepaid plans need a top-up on the activation day. If you do not top up, the number may be suspended or cancelled the next day. When a line is cancelled, any remaining balance expires and is not refunded.' },
+	{ q: 'Which language do you use?', a: 'Our service is in Korean. Please use the Korean message template on this page, or ask a Korean-speaking friend to help you with the reservation.' },
+];
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	inLanguage: 'en',
+	mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const site = 'https://connectmobile.kr';
+const msgLines = ['외국인 방문 개통 예약 문의드립니다.', '성함:', '연락처:', '방문 희망 지역:', '방문 희망 날짜와 시간:', '선택한 요금제:'];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title="Prepaid SIM & Phone Plans for Foreigners in Korea | Connect Mobile"
+			description="Foreign residents in Korea: open a prepaid phone line in person with no contract and no cancellation fee. KT and LG network plans, reservation required. Connect Mobile (커넥트모바일)."
+			locale="en_US"
+			alternates={[
+				{ hreflang: 'ko', href: `${site}/` },
+				{ hreflang: 'en', href: `${site}/en/` },
+				{ hreflang: 'x-default', href: `${site}/` },
+			]}
+			jsonLd={[faqSchema]}
+		/>
+		<style is:global>
+			.en-top { background: #fff; box-shadow: 0 2px 8px rgba(var(--black), 5%); }
+			.en-top > div { max-width: 960px; margin: 0 auto; padding: 0.7rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+			.en-top a.brand { display: inline-flex; align-items: center; gap: 0.55rem; text-decoration: none; color: rgb(var(--black)); font-weight: 800; letter-spacing: -0.01em; }
+			.en-top a.brand img { width: 2.2rem; height: 2.2rem; margin: 0; border-radius: 10px; }
+			.en-top a.ko { font-weight: 700; font-size: 0.9rem; text-decoration: none; padding: 0.4rem 0.9rem; border-radius: 999px; box-shadow: inset 0 0 0 2px var(--accent); }
+			.en { width: auto; max-width: 860px; margin: 0 auto; padding: 1rem 1rem 3rem; font-size: 1rem; line-height: 1.65; word-break: normal; }
+			.en h1, .en h2, .en h3 { word-break: normal; text-wrap: balance; }
+			.en-hero { text-align: center; padding: 2.2rem 0 1rem; }
+			.en-hero .tag { display: inline-block; background: #eef1ff; color: var(--accent); font-weight: 800; font-size: 0.82rem; padding: 0.3rem 0.9rem; border-radius: 999px; }
+			.en-hero h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0.8rem 0 0.6rem; background: linear-gradient(90deg, #1b2bd6, #6d3df0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+			.en-hero p { color: rgb(var(--gray-dark)); margin: 0 auto; max-width: 560px; }
+			.en-cta { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 1.4rem; }
+			.en-cta .btn { display: inline-block; padding: 0.75rem 1.4rem; border-radius: 999px; font-weight: 800; text-decoration: none; background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(35, 55, 255, 0.25); }
+			.en-cta .btn.alt { background: #fee500; color: #191919; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.45); }
+			.en-cta .btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.en-sec { margin-top: 3rem; }
+			.en-sec h2 { font-size: 1.5rem; text-align: center; margin-bottom: 1rem; }
+			.en-card { background: #fff; border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; border: 1px solid rgba(var(--gray), 0.1); }
+			.en-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; }
+			.en-facts .en-card strong { display: block; font-size: 1.05rem; margin-bottom: 0.25rem; }
+			.en-facts .en-card p { margin: 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
+			.en-steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
+			.en-steps li { counter-increment: s; position: relative; padding: 1rem 1.2rem 1rem 3.6rem; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); }
+			.en-steps li::before { content: counter(s); position: absolute; left: 1rem; top: 1rem; width: 2rem; height: 2rem; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; }
+			.en-steps b { display: block; }
+			.en-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: var(--box-shadow); font-size: 0.92rem; }
+			.en-table th, .en-table td { text-align: left; padding: 0.7rem 0.9rem; border-bottom: 1px solid rgb(var(--gray-light)); vertical-align: top; }
+			.en-table th { background: #f3f5ff; font-size: 0.82rem; }
+			.en-table td.price { font-weight: 800; color: var(--accent); white-space: nowrap; }
+			.en-note { font-size: 0.85rem; color: rgb(var(--gray)); margin: 0.8rem 0 0; }
+			.en-msg { background: #f6f8ff; border: 1px dashed #b9c4ff; border-radius: 14px; padding: 1rem 1.2rem; font-size: 0.95rem; white-space: pre-line; margin: 0 0 0.8rem; }
+			.en-copy { font: inherit; font-weight: 800; border: 0; border-radius: 999px; padding: 0.55rem 1.2rem; background: var(--accent); color: #fff; cursor: pointer; }
+			.en-regions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
+			.en-regions a { padding: 0.35rem 0.9rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font-size: 0.88rem; font-weight: 700; text-decoration: none; color: rgb(var(--gray-dark)); }
+			.en details { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.85rem 1.2rem; margin-bottom: 0.7rem; }
+			.en summary { cursor: pointer; font-weight: 700; }
+			.en details p { margin: 0.6rem 0 0; font-size: 0.93rem; }
+			.en-foot { background: linear-gradient(rgba(var(--gray-light), 50%), #fff); padding: 2rem 1rem 3rem; text-align: center; color: rgb(var(--gray)); font-size: 0.85rem; }
+			.en-foot p { margin: 0.2rem 0; }
+			@media (max-width: 720px) {
+				.en-table th, .en-table td { padding: 0.6rem 0.6rem; font-size: 0.86rem; }
+				.en-cta .btn { flex: 1 1 100%; text-align: center; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="en-top">
+			<div>
+				<a class="brand" href="/en/"><img src="/brand/mark.png" alt="" width="36" height="36" />Connect Mobile</a>
+				<a class="ko" href="/" hreflang="ko" lang="ko">한국어</a>
+			</div>
+		</div>
+
+		<main class="en" id="main">
+			<section class="en-hero">
+				<span class="tag">For foreign residents in Korea</span>
+				<h1>Prepaid phone plans in Korea, no contract</h1>
+				<p>Open a prepaid line in person on the KT or LG network. No contract, no cancellation fee. Reserve first, then visit.</p>
+				<div class="en-cta">
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener">Reserve on KakaoTalk</a>
+					<a class="btn ghost" href={PHONE_LINK}>Call {PHONE}</a>
+				</div>
+			</section>
+
+			<section class="en-sec">
+				<h2>What you need to know</h2>
+				<div class="en-facts">
+					<div class="en-card"><strong>In person only</strong><p>Foreigners activate at a counter, not online. Your documents are checked on site.</p></div>
+					<div class="en-card"><strong>Reservation required</strong><p>Book first by KakaoTalk or phone. Walk-ins may not be possible.</p></div>
+					<div class="en-card"><strong>One line</strong><p>A foreign resident can open one line.</p></div>
+					<div class="en-card"><strong>No contract</strong><p>No contract commitment and no cancellation penalty.</p></div>
+				</div>
+			</section>
+
+			<section class="en-sec">
+				<h2>How it works</h2>
+				<ol class="en-steps">
+					<li><b>Send us a message</b>Use KakaoTalk or call. Tell us your area, date, time and plan. A Korean message template is below.</li>
+					<li><b>We confirm your reservation</b>We tell you the location and which documents to bring.</li>
+					<li><b>Visit and activate</b>Bring your ID, the SIM fee (10,000 KRW), money for the first top-up, and your phone. The SIM is prepared at the location.</li>
+					<li><b>Top up on the same day</b>Prepaid lines need a top-up on the activation day to keep the number active.</li>
+				</ol>
+			</section>
+
+			<section class="en-sec">
+				<h2>Message template (Korean)</h2>
+				<p class="en-note" style="text-align:center;margin:0 0 0.8rem">Our service is in Korean. Copy this message, fill in the blanks and send it on KakaoTalk.</p>
+				<div class="en-msg" id="en-msg">{msgLines.map((l, i) => <Fragment>{l}{i < msgLines.length - 1 && <br />}</Fragment>)}</div>
+				<div class="en-cta" style="margin-top:0">
+					<button type="button" class="en-copy" id="en-copy">Copy message</button>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener" style="padding:0.55rem 1.2rem">Open KakaoTalk</a>
+				</div>
+			</section>
+
+			<section class="en-sec">
+				<h2>Prepaid plans</h2>
+				<table class="en-table">
+					<thead><tr><th>Network</th><th>Plan</th><th>Price / month</th></tr></thead>
+					<tbody>
+						{planRows.map((r) => <tr><td>{r.net}</td><td>{r.en}</td><td class="price">{r.price} KRW</td></tr>)}
+					</tbody>
+				</table>
+				<p class="en-note">"Included" calls and texts follow each plan's usage conditions. Prices and allowances can change, so we confirm the latest details when you reserve. You can also see all plans (in Korean) on the <a href="/plans/">plans page</a>.</p>
+			</section>
+
+			<section class="en-sec">
+				<h2>Where can I activate?</h2>
+				<div class="en-card">
+					<p style="margin:0"><b>Seoul, Gasan:</b> Gasan Ask Tower, Gasan-dong, Geumcheon-gu. A reservation is required before you visit.</p>
+					<p style="margin:0.7rem 0 0">We also have in-person locations in the regions below (not Sejong). Every location requires a reservation, and we give you the exact address when you book.</p>
+					<div class="en-regions">
+						{withCenter.map((r) => <a href={`/region/${r.slug}/`} hreflang="ko">{regionEn[r.slug] ?? r.name}</a>)}
+					</div>
+					<p class="en-note" style="text-align:center">Region pages are in Korean.</p>
+				</div>
+			</section>
+
+			<section class="en-sec">
+				<h2>FAQ</h2>
+				{faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+			</section>
+		</main>
+
+		<footer class="en-foot">
+			<p><strong>Connect Mobile (커넥트모바일)</strong> · N-Telecom (앤텔레콤) pre-approved sales agent</p>
+			<p>Business registration no. 499-37-01511 · Representative: {REPRESENTATIVE}</p>
+			<p>{BIZ_ADDRESS}</p>
+			<p>Phone <a href={PHONE_LINK}>{PHONE}</a> · Hours 09:00-22:00 (some activations are limited during major holidays)</p>
+			<p><a href="/">한국어 사이트</a> · <a href="/privacy/">개인정보 안내 (Korean)</a></p>
+		</footer>
+
+		<script>
+			const btn = document.getElementById('en-copy');
+			const msg = document.getElementById('en-msg');
+			btn?.addEventListener('click', async () => {
+				const text = (msg?.innerText ?? '').trim();
+				try {
+					await navigator.clipboard.writeText(text);
+					btn.textContent = 'Copied!';
+				} catch {
+					const r = document.createRange();
+					if (msg) { r.selectNodeContents(msg); const s = getSelection(); s?.removeAllRanges(); s?.addRange(r); }
+					btn.textContent = 'Press Ctrl+C to copy';
+				}
+				setTimeout(() => { btn.textContent = 'Copy message'; }, 2500);
+			});
+
+			// 영어 페이지의 문의 클릭도 기록합니다.
+			const track = (name: string) => {
+				const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+				if (gtag) gtag('event', name, { page_path: location.pathname, where: 'english' });
+			};
+			document.addEventListener('click', (e) => {
+				const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href]');
+				if (!a) return;
+				const h = a.getAttribute('href') ?? '';
+				if (h.startsWith('tel:')) track('phone_click');
+				else if (h.includes('pf.kakao.com')) track('kakao_click');
+			});
+		</script>
+	</body>
+</html>
