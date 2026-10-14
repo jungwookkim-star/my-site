@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # 네이버 블로그 초안(사이트에 올리지 않음)
 naver-drafts/
+
+# 응대 도구 결과물(로컬 전용, ops/build-reply-tool.mts 로 다시 만듭니다)
+ops/응대도구.html
