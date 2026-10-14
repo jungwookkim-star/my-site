@@ -1,0 +1,253 @@
+---
+// 개통 가능 여부 진단: 4문항으로 셀프개통인지, 방문(대면) 개통인지 안내합니다.
+// 기준은 사이트의 FAQ·개통 안내에 적힌 내용만 씁니다. (src/data/faqs.ts 와 같은 기준)
+import Icon from './Icon.astro';
+import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
+---
+
+<div class="elig" id="elig">
+	<div class="e-head">
+		<span class="e-step" aria-live="polite"></span>
+		<button type="button" class="e-back" hidden>← 이전</button>
+	</div>
+
+	<div class="e-quiz">
+		<h3 class="e-q"></h3>
+		<p class="e-hint"></p>
+		<div class="e-opts"></div>
+	</div>
+
+	<div class="e-result" hidden>
+		<!-- 셀프개통 -->
+		<div class="e-card self" data-res="self" hidden>
+			<span class="e-tag">셀프개통 가능</span>
+			<h3>휴대폰으로 약 10분, 셀프개통으로 진행하세요</h3>
+			<ul>
+				<li><b>접수 시간</b> 신규가입 08:00~21:50 · 번호이동 10:00~19:50 (번호이동은 일요일과 설·추석·신정 당일 제외)</li>
+				<li><b>준비물</b> 신분증, 간편인증 수단 1가지, 안면인증이 되는 휴대폰, 셀프개통이 가능한 유심</li>
+				<li><b>유심</b> 퀵 배송(서울·수도권·광역시·제주) 또는 편의점 구매, 유심비 8,800원</li>
+			</ul>
+			<div class="e-actions">
+				<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+				<a class="btn ghost" href="/blog/usim-delivery/">유심 준비 방법<Icon name="arrow" /></a>
+			</div>
+		</div>
+
+		<!-- 방문(대면) 개통 -->
+		<div class="e-card visit" data-res="visit" hidden>
+			<span class="e-tag">방문 개통 · 사전 예약</span>
+			<h3>방문(대면) 개통으로 진행하세요</h3>
+			<p class="e-why"></p>
+			<ul>
+				<li><b>예약</b> 전화나 카카오톡으로 성함, 연락처, 방문 희망 지역·날짜·시간, 선택한 요금제를 알려 주세요. 예약 없이 방문하면 개통이 어려울 수 있어요.</li>
+				<li><b>준비물</b> 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰 (유심은 지점에서 준비)</li>
+				<li><b>서류</b> 외국인·미성년자는 필요한 서류가 달라서 예약할 때 안내해 드려요.</li>
+			</ul>
+			<div class="e-actions">
+				<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡으로 예약 문의</a>
+				<a class="btn ghost" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
+				<a class="btn ghost" href="/region/">지역별 방문 개통 확인<Icon name="arrow" /></a>
+			</div>
+		</div>
+
+		<!-- 상담 -->
+		<div class="e-card consult" data-res="ask" hidden>
+			<span class="e-tag">상담으로 확인</span>
+			<h3>간편인증 수단을 확인하고 안내받으세요</h3>
+			<p>셀프개통은 간편인증 수단과 안면인증이 되는 휴대폰이 있어야 해요. 본인 확인이 안 되면 방문 개통으로 진행합니다. 가지고 계신 수단을 알려 주시면 맞는 방법을 안내해 드려요.</p>
+			<div class="e-actions">
+				<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+				<a class="btn ghost" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
+				<a class="btn ghost" href="/guide/">셀프개통 준비물 보기<Icon name="arrow" /></a>
+			</div>
+		</div>
+
+		<!-- 미납 안내 -->
+		<p class="e-note" data-note="yes" hidden>
+			<b>미납·연체가 있으시네요.</b> 선불 요금제는 다른 통신사에 미납이 있어도 개통할 수 있는 것으로 안내돼요. 다만 알뜰(후불) 요금제는 다른 통신사에 체납이 있으면 개통할 수 없고, 앤텔레콤 자체 미납이 있으면 개통이 어려워요.
+		</p>
+		<p class="e-note" data-note="unsure" hidden>
+			<b>미납 여부가 헷갈리시면</b> 선불 요금제를 먼저 보세요. 선불은 다른 통신사 미납과 상관없이 개통할 수 있고, 알뜰(후불)은 체납이 있으면 개통할 수 없어요.
+		</p>
+
+		<p class="e-foot">이 진단은 안내용입니다. 최종 개통 가능 여부는 접수 단계에서 확정돼요.</p>
+		<button type="button" class="e-retry">다시 진단하기</button>
+	</div>
+</div>
+
+<style is:global>
+	.elig { background: #fff; border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.5rem 1.4rem; max-width: 680px; margin: 0 auto; border: 1px solid rgba(var(--gray), 0.1); }
+	.e-head { display: flex; align-items: center; justify-content: space-between; min-height: 1.8rem; }
+	.e-step { font-size: 0.8rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
+	.e-back, .e-retry { background: none; border: 0; font: inherit; font-size: 0.88rem; font-weight: 700; color: rgb(var(--gray)); cursor: pointer; padding: 0.3rem 0.2rem; }
+	.e-back:hover, .e-retry:hover { color: var(--accent); }
+	.e-q { margin: 0.4rem 0 0.3rem; font-size: 1.2rem; text-align: center; }
+	.e-hint { margin: 0 0 1rem; text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); min-height: 1.2em; }
+	.e-opts { display: grid; gap: 0.6rem; }
+	.e-opts button { text-align: left; background: #fff; border: 2px solid #e3e7f5; border-radius: 14px; padding: 0.9rem 1rem; font: inherit; font-weight: 700; cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.15s; }
+	.e-opts button:hover { border-color: var(--accent); background: #f3f5ff; transform: translateY(-1px); }
+	.e-opts button small { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: 500; color: rgb(var(--gray)); }
+	.e-card { border-radius: 16px; padding: 1.2rem 1.2rem 1.3rem; margin-top: 0.6rem; border: 2px solid transparent; }
+	.e-card[hidden], .e-note[hidden], .e-result[hidden], .e-back[hidden] { display: none; }
+	.e-card.self { background: #fff4f2; border-color: #ffd6d1; }
+	.e-card.visit { background: #eefbf8; border-color: #bfeee6; }
+	.e-card.consult { background: #fffbe6; border-color: #ffec99; }
+	.e-tag { display: inline-block; font-size: 0.78rem; font-weight: 800; padding: 0.15rem 0.7rem; border-radius: 999px; background: #fff; color: var(--accent); }
+	.e-card.self .e-tag { color: #d92d20; }
+	.e-card.visit .e-tag { color: #0b7a70; }
+	.e-card h3 { margin: 0.6rem 0 0.5rem; font-size: 1.15rem; }
+	.e-card p { margin: 0 0 0.6rem; font-size: 0.92rem; }
+	.e-why { font-weight: 700; }
+	.e-card ul { margin: 0.4rem 0 1rem; padding-left: 1.1rem; font-size: 0.9rem; }
+	.e-card li { margin-bottom: 0.45rem; }
+	.e-card li b { display: inline-block; min-width: 4.2em; color: rgb(var(--black)); }
+	.e-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	.e-actions .btn { display: inline-block; font-size: 0.92rem; font-weight: 700; padding: 0.65rem 1.15rem; border-radius: 999px; text-decoration: none; text-align: center; background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(35, 55, 255, 0.22); }
+	.e-actions .btn .ic { margin-right: 0.35em; }
+	.e-actions .btn.alt { background: #fee500; color: #191919; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.45); }
+	.e-actions .btn.self { background: #ff3b30; color: #fff; box-shadow: 0 4px 12px rgba(255, 59, 48, 0.32); }
+	.e-actions .btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+	.e-actions .btn.ghost .ic { margin: 0 0 0 0.35em; }
+	.e-actions .btn.ghost:has(.ic:first-child) .ic { margin: 0 0.35em 0 0; }
+	.e-note { margin: 0.8rem 0 0; padding: 0.8rem 1rem; background: #f3f5ff; border-radius: 12px; font-size: 0.88rem; line-height: 1.6; }
+	.e-foot { margin: 0.9rem 0 0.3rem; text-align: center; font-size: 0.78rem; color: rgb(var(--gray)); }
+	.e-retry { display: block; margin: 0 auto; }
+	@media (max-width: 720px) {
+		.elig { padding: 1.2rem 1rem; }
+		.e-actions .btn { flex: 1 1 100%; text-align: center; }
+		.e-card li b { display: block; min-width: 0; margin-bottom: 0.1rem; }
+	}
+</style>
+
+<script>
+	type Who = 'adult' | 'foreign' | 'minor';
+	type Yn = 'yes' | 'no' | 'unsure';
+	interface Opt<T> { v: T; label: string; sub?: string }
+	interface Q { q: string; hint: string; key: string; opts: Opt<string>[] }
+
+	const QUESTIONS: Q[] = [
+		{
+			key: 'who',
+			q: '어떤 분이 개통하시나요?',
+			hint: '셀프개통은 만 19세 이상 내국인만 가능해요.',
+			opts: [
+				{ v: 'adult', label: '만 19세 이상 내국인' },
+				{ v: 'foreign', label: '외국인' },
+				{ v: 'minor', label: '만 19세 미만 미성년자' },
+			],
+		},
+		{
+			key: 'auth',
+			q: '간편인증 수단과, 안면인증이 되는 휴대폰이 있으세요?',
+			hint: '셀프개통에는 신분증과 간편인증 수단 1가지, 안면인증이 되는 휴대폰이 필요해요.',
+			opts: [
+				{ v: 'yes', label: '네, 있어요' },
+				{ v: 'no', label: '아니요, 없어요' },
+				{ v: 'unsure', label: '잘 모르겠어요' },
+			],
+		},
+		{
+			key: 'line',
+			q: '지금 앤텔레콤 회선을 이미 쓰고 계세요?',
+			hint: '앤텔레콤 회선을 이미 쓰는 경우에는 방문 개통으로 진행해요.',
+			opts: [
+				{ v: 'no', label: '아니요' },
+				{ v: 'yes', label: '네, 이미 쓰고 있어요' },
+			],
+		},
+		{
+			key: 'unpaid',
+			q: '다른 통신사에 미납·연체가 있으세요?',
+			hint: '선불과 알뜰(후불)은 미납에 대한 기준이 달라요.',
+			opts: [
+				{ v: 'no', label: '없어요' },
+				{ v: 'yes', label: '있어요' },
+				{ v: 'unsure', label: '잘 모르겠어요' },
+			],
+		},
+	];
+
+	const root = document.getElementById('elig');
+	if (root) {
+		const $ = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
+		const quiz = $('.e-quiz');
+		const result = $('.e-result');
+		const stepEl = $('.e-step');
+		const back = $<HTMLButtonElement>('.e-back');
+		const qEl = $('.e-q');
+		const hintEl = $('.e-hint');
+		const optsEl = $('.e-opts');
+		const answers: Record<string, string> = {};
+		let i = 0;
+
+		const track = (name: string, params: Record<string, string> = {}) => {
+			const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+			if (gtag) gtag('event', name, { page_path: location.pathname, ...params });
+		};
+
+		function render() {
+			const q = QUESTIONS[i];
+			stepEl.textContent = `${i + 1} / ${QUESTIONS.length}`;
+			back.hidden = i === 0;
+			qEl.textContent = q.q;
+			hintEl.textContent = q.hint;
+			optsEl.replaceChildren(
+				...q.opts.map((o) => {
+					const b = document.createElement('button');
+					b.type = 'button';
+					b.textContent = o.label;
+					b.addEventListener('click', () => {
+						answers[q.key] = o.v;
+						if (i < QUESTIONS.length - 1) { i += 1; render(); } else finish();
+					});
+					return b;
+				}),
+			);
+		}
+
+		function finish() {
+			const a = answers as { who: Who; auth: Yn; line: 'yes' | 'no'; unpaid: Yn };
+			let res: 'self' | 'visit' | 'ask' = 'self';
+			let why = '';
+			if (a.who === 'foreign') {
+				res = 'visit';
+				why = '외국인은 구비서류를 직접 확인해야 해서 대면 개통만 가능해요. 외국인은 1회선까지 개통할 수 있어요.';
+			} else if (a.who === 'minor') {
+				res = 'visit';
+				why = '미성년자는 대면 개통만 가능해요. 선불·후불 각 1회선까지 개통할 수 있고, 법정대리인 서류가 필요해요.';
+			} else if (a.line === 'yes') {
+				res = 'visit';
+				why = '앤텔레콤 회선을 이미 쓰고 계시면 셀프개통이 아니라 방문 개통으로 진행해요.';
+			} else if (a.auth === 'no') {
+				res = 'visit';
+				why = '간편인증 같은 본인 확인 수단이 없으면 셀프개통이 어려워 방문 개통으로 진행해요.';
+			} else if (a.auth === 'unsure') {
+				res = 'ask';
+			}
+
+			quiz.hidden = true;
+			stepEl.textContent = '진단 결과';
+			back.hidden = true;
+			result.hidden = false;
+			result.querySelectorAll<HTMLElement>('[data-res]').forEach((el) => { el.hidden = el.dataset.res !== res; });
+			const why$ = result.querySelector<HTMLElement>('.e-why');
+			if (why$) why$.textContent = why;
+			result.querySelectorAll<HTMLElement>('[data-note]').forEach((el) => { el.hidden = el.dataset.note !== a.unpaid; });
+			track('eligibility_result', { result: res, who: a.who, unpaid: a.unpaid });
+			root.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+		}
+
+		back.addEventListener('click', () => {
+			if (i > 0) { i -= 1; render(); }
+		});
+		$('.e-retry').addEventListener('click', () => {
+			i = 0;
+			for (const k of Object.keys(answers)) delete answers[k];
+			result.hidden = true;
+			quiz.hidden = false;
+			render();
+		});
+
+		render();
+	}
+</script>
