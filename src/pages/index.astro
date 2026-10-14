@@ -160,6 +160,11 @@ const faqSchema = {
 			.nposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
 			.final { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2.5rem 1rem; }
 			.final h2 { margin-top: 0; }
+			.svband { display: flex; align-items: center; gap: 0.4rem 1.2rem; flex-wrap: wrap; max-width: 860px; margin: 2.5rem auto 0; padding: 1rem 1.3rem; border-radius: 18px; background: linear-gradient(135deg, #eef1ff, #f3ecff); border: 1px solid rgba(35, 55, 255, 0.14); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; }
+			.svband:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(35, 55, 255, 0.14); }
+			.svb-t { font-weight: 800; }
+			.svb-d { flex: 1 1 14rem; font-size: 0.9rem; color: rgb(var(--gray-dark)); }
+			.svb-go { font-weight: 800; color: var(--accent); white-space: nowrap; }
 			.fold { max-width: 860px; margin: 2.2rem auto 0; padding: 0.4rem 1.2rem; }
 			.fold > summary { padding: 0.8rem 0; font-size: 1.02rem; list-style: none; display: flex; align-items: center; gap: 0.2rem; }
 			.fold > summary::-webkit-details-marker { display: none; }
@@ -258,6 +263,12 @@ const faqSchema = {
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans">전체 요금제 보기<Icon name="arrow" /></a></p>
 					<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
 			</section>
+
+			<a class="svband" href="/saving/">
+				<span class="svb-t"><Icon name="wallet" />지금 통신비가 얼마예요?</span>
+				<span class="svb-d">알뜰폰으로 바꾸면 한 달에 얼마나 아끼는지 계산해 보세요</span>
+				<span class="svb-go">요금 절약 계산기<Icon name="arrow" /></span>
+			</a>
 
 			<section id="check">
 				<h2 class="sec">나는 셀프개통이 될까?</h2>
