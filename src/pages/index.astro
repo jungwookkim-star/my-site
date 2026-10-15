@@ -265,7 +265,7 @@ const faqSchema = {
 				<div class="fpanel" data-p="post" role="tabpanel" hidden>
 					<div class="hs"><PlanCards plans={popularPostpaid} /></div>
 				</div>
-				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans">전체 요금제 보기<Icon name="arrow" /></a></p>
+				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans/">전체 요금제 보기<Icon name="arrow" /></a></p>
 					<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
 			</section>
 
@@ -361,7 +361,7 @@ const faqSchema = {
 						<span class="ft">개통 직후</span>
 					</li>
 				</ol>
-				<p style="text-align:center;margin-top:1.5rem"><a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a> <a class="btn ghost" href="/guide">개통 과정 자세히 보기<Icon name="arrow" /></a></p>
+				<p style="text-align:center;margin-top:1.5rem"><a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a> <a class="btn ghost" href="/guide/">개통 과정 자세히 보기<Icon name="arrow" /></a></p>
 				<details class="fold" id="prep">
 					<summary><Icon name="check" />개통 전 준비물 · 유심 구매처</summary>
 					<p class="sub" style="margin-top:0.8rem">셀프개통은 준비물만 갖추면 약 10분이면 끝납니다.</p>
@@ -392,7 +392,7 @@ const faqSchema = {
 				{faqs.map((f) => (
 					<details><summary>{f.q}</summary><p>{f.a}</p></details>
 				))}
-				<p style="text-align:center;margin-top:1.2rem"><a class="btn ghost" href="/faq">질문 전체 보기<Icon name="arrow" /></a></p>
+				<p style="text-align:center;margin-top:1.2rem"><a class="btn ghost" href="/faq/">질문 전체 보기<Icon name="arrow" /></a></p>
 			</section>
 
 			<section id="guides">
@@ -408,7 +408,7 @@ const faqSchema = {
 						</a>
 					))}
 				</div>
-				<p style="text-align:center;margin-top:1.4rem"><a class="btn ghost" href="/blog">블로그 글 {allPosts.length}편 전체 보기<Icon name="arrow" /></a></p>
+				<p style="text-align:center;margin-top:1.4rem"><a class="btn ghost" href="/blog/">블로그 글 {allPosts.length}편 전체 보기<Icon name="arrow" /></a></p>
 			</section>
 
 			{naverPosts.length > 0 && (

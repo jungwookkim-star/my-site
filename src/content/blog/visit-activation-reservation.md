@@ -40,4 +40,4 @@ pubDate: 'Oct 03 2026 10:20'
 ## 미성년자·외국인 서류가 궁금하다면
 필요 서류는 [외국인·미성년자 개통](/blog/foreigner-minor-activation/) 글에 정리되어 있습니다.
 
-[전화 예약 010-2848-6849](tel:01028486849) · [카카오톡 예약](http://pf.kakao.com/_QKvfX) · [개통 과정 안내](/guide)
+[전화 예약 010-2848-6849](tel:01028486849) · [카카오톡 예약](http://pf.kakao.com/_QKvfX) · [개통 과정 안내](/guide/)

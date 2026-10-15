@@ -116,7 +116,7 @@ const minPrice = Math.min(...items.map((i) => i.price)).toLocaleString('ko-KR');
 					<li>요금제와 제공량은 통신사 사정에 따라 바뀔 수 있어요. 개통 전 최신 내용은 상담으로 확인해 주세요.</li>
 					<li>커넥트모바일 요금제는 약정·위약금이 없고, 선불 요금제는 월 {minPrice}원부터 시작해요.</li>
 				</ul>
-				<p style="margin-top:1rem"><a href="/#check">나는 셀프개통이 될까? 진단하기</a> · <a href="/plans">전체 요금제 보기</a> · <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡 문의</a> · <a href={PHONE_LINK}>{PHONE}</a></p>
+				<p style="margin-top:1rem"><a href="/#check">나는 셀프개통이 될까? 진단하기</a> · <a href="/plans/">전체 요금제 보기</a> · <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡 문의</a> · <a href={PHONE_LINK}>{PHONE}</a></p>
 			</div>
 
 			<script type="application/json" id="sv-pool" set:html={JSON.stringify(pool)} />
@@ -179,7 +179,7 @@ const minPrice = Math.min(...items.map((i) => i.price)).toLocaleString('ko-KR');
 				out.append(cards);
 				const cta = el('div', 'sv-cta');
 				const a1 = el('a', 'btn alt'); a1.href = kakao; a1.target = '_blank'; a1.rel = 'noopener'; a1.textContent = '카카오톡으로 문의';
-				const a2 = el('a', 'btn ghost'); a2.href = '/plans'; a2.textContent = '전체 요금제 보기';
+				const a2 = el('a', 'btn ghost'); a2.href = '/plans/'; a2.textContent = '전체 요금제 보기';
 				const a3 = el('a', 'btn ghost'); a3.href = '/#check'; a3.textContent = '개통 가능 여부 진단';
 				cta.append(a1, a2, a3);
 				out.append(cta);
