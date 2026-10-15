@@ -47,6 +47,7 @@ const MAP: Record<string, Category> = {
 	'foreigner-minor-activation': '번호이동·가입 조건',
 
 	'what-is-mvno': '알뜰폰 기초',
+	'what-is-prepaid-phone': '알뜰폰 기초',
 	'prepaid-vs-postpaid': '알뜰폰 기초',
 	'first-post': '알뜰폰 기초',
 };
