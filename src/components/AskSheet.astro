@@ -17,6 +17,7 @@ const topics = [
 		<button type="button" class="as-close" aria-label="닫기" data-ask-close>×</button>
 	</div>
 	<p class="as-sub">고르시면 바로 맞는 안내로 연결해 드려요.</p>
+	<p class="as-status" id="ask-status"></p>
 	<ul class="as-list">
 		{
 			topics.map((t) => (
@@ -52,6 +53,8 @@ const topics = [
 	.as-head h2 { margin: 0; font-size: 1.25rem; }
 	.as-close { border: 0; background: #eef1ff; width: 34px; height: 34px; border-radius: 50%; font-size: 1.4rem; line-height: 1; cursor: pointer; color: #333a6b; }
 	.as-sub { margin: 0.3rem 0 0.8rem; font-size: 0.88rem; color: #5b6180; }
+	.as-status { margin: 0 0 0.8rem; font-size: 0.82rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: 10px; background: #f1f4ff; color: #333a6b; }
+	.as-status.on { background: #e8f5ee; color: #0b7a70; }
 	.as-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
 	.as-list a { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.8rem; border-radius: 14px; background: #f4f6ff; text-decoration: none; color: inherit; box-shadow: inset 0 0 0 1px #e1e6ff; transition: background 0.15s, transform 0.15s; }
 	.as-list a:hover, .as-list a:focus-visible { background: #e8ecff; transform: translateY(-1px); }
@@ -102,6 +105,16 @@ const topics = [
 		});
 		if (hit) list.firstElementChild?.classList.add('rec');
 	}
+	// 상담 운영시간(오전 9시~오후 10시, 한국 시간). 사이트의 HOURS 문구와 같게 유지하세요.
+	function paintStatus() {
+		const el = document.getElementById('ask-status');
+		if (!el) return;
+		const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+		const m = (Number(p.find((x) => x.type === 'hour')?.value ?? 0) % 24) * 60 + Number(p.find((x) => x.type === 'minute')?.value ?? 0);
+		const on = m >= 9 * 60 && m < 22 * 60;
+		el.classList.toggle('on', on);
+		el.textContent = on ? '지금은 상담 운영 시간이에요 (오전 9:00 ~ 오후 10:00)' : '지금은 운영 시간이 아니에요. 남겨 두시면 오전 9시 이후에 확인해 드려요.';
+	}
 	const pageName = () => document.title.split('|')[0].trim();
 
 	if (dlg && typeof dlg.showModal === 'function') {
@@ -112,6 +125,7 @@ const topics = [
 				e.preventDefault();
 				if (note) note.textContent = '';
 				arrange();
+				paintStatus();
 				dlg.showModal();
 				track('ask_open', { where: opener.dataset.ask ?? '' });
 				return;
