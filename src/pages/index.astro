@@ -7,6 +7,7 @@ import HomeStats from '../components/HomeStats.astro';
 import HoursBadge from '../components/HoursBadge.astro';
 import StuckHelp from '../components/StuckHelp.astro';
 import Reviews from '../components/Reviews.astro';
+import ChannelAdd from '../components/ChannelAdd.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
@@ -500,6 +501,7 @@ const faqSchema = {
 						<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
 					</div>
 				</div>
+				<div style="margin-top:1rem"><ChannelAdd /></div>
 			</section>
 		</main>
 		<Footer />
