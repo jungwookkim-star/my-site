@@ -210,3 +210,59 @@ const today = new Date();
 		pwa.hidden = true;
 	});
 </script>
+
+<style is:global>
+	.fb { margin-top: 0.8rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.85rem; color: rgb(var(--gray)); }
+	.fb button { border: 1.5px solid #cfd6ff; background: #fff; font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 999px; cursor: pointer; color: rgb(var(--gray-dark)); }
+	.fb button:hover { border-color: var(--accent); color: var(--accent); }
+	.fb a { color: var(--accent); font-weight: 700; }
+</style>
+
+<script>
+	import { KAKAO_URL } from '../consts';
+	// FAQ 답변을 펼치면 "도움이 됐나요?"를 한 번 묻고, 결과를 방문 통계(GA4)에만 기록합니다.
+	document.addEventListener(
+		'toggle',
+		(e) => {
+			const d = e.target as HTMLDetailsElement;
+			if (!(d instanceof HTMLDetailsElement) || !d.open || d.dataset.fb) return;
+			if (!d.closest('.fg, #faq')) return;
+			const answer = d.querySelector(':scope > p');
+			const q = d.querySelector(':scope > summary')?.textContent?.trim();
+			if (!answer || !q) return;
+			d.dataset.fb = '1';
+			const box = document.createElement('div');
+			box.className = 'fb';
+			const label = document.createElement('span');
+			label.textContent = '도움이 됐나요?';
+			const yes = document.createElement('button');
+			yes.type = 'button';
+			yes.textContent = '👍 네';
+			const no = document.createElement('button');
+			no.type = 'button';
+			no.textContent = '👎 아니요';
+			box.append(label, yes, no);
+			d.appendChild(box);
+			const send = (helpful: boolean) => {
+				const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+				if (g) g('event', 'faq_feedback', { page_path: location.pathname, question: q.slice(0, 60), helpful: helpful ? 'yes' : 'no' });
+				box.textContent = '';
+				if (helpful) {
+					box.textContent = '의견 고마워요!';
+				} else {
+					const t = document.createElement('span');
+					t.textContent = '의견 고마워요. 더 궁금한 점은 ';
+					const a = document.createElement('a');
+					a.href = `${KAKAO_URL}/chat`;
+					a.target = '_blank';
+					a.rel = 'noopener';
+					a.textContent = '카톡으로 물어봐 주세요';
+					box.append(t, a);
+				}
+			};
+			yes.addEventListener('click', () => send(true));
+			no.addEventListener('click', () => send(false));
+		},
+		true,
+	);
+</script>
