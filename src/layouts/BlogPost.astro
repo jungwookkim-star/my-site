@@ -16,6 +16,14 @@ type Props = CollectionEntry<'blog'>['data'] & { id?: string; seoTitle?: string;
 const { title, description, pubDate, updatedDate, heroImage, id: currentId, headings = [], category: explicitCat, seoTitle } = Astro.props;
 const isPost = !!currentId;
 const category = categoryOf(currentId ?? '', explicitCat);
+// 글 주제에 맞는 안내 문구와 바로가기 (카테고리별)
+const CTA: Record<string, { h: string; p: string; link: [string, string] }> = {
+	'개통 방법': { h: '개통 준비, 하나씩 확인해 볼까요?', p: '준비물을 체크하고 시작하면 중간에 막힐 일이 줄어요.', link: ['/guide/#prep-list', '준비물 체크하기'] },
+	'요금제 비교·추천': { h: '내게 맞는 요금제가 궁금하세요?', p: '질문 3개에 답하면 알맞은 요금제를 골라 드려요.', link: ['/#finder', '요금제 찾아보기'] },
+	'충전·이용·해지': { h: '충전을 깜빡하지 않게 챙겨 보세요', p: '선불은 충전하지 않으면 정지될 수 있어요. 폰 캘린더에 알림을 넣어 둘 수 있어요.', link: ['/guide/#cr', '충전 알림 추가'] },
+	'번호이동·가입 조건': { h: '나도 셀프개통이 될까요?', p: '몇 가지만 눌러 보면 바로 알려 드려요.', link: ['/#check', '셀프개통 가능 여부 진단'] },
+};
+const cta = CTA[category];
 const toc = headings.filter((h) => h.depth === 2);
 const all = (await getCollection('blog'))
 	.filter((p) => p.id !== currentId)
@@ -131,6 +139,7 @@ const ld = isPost
 			.post-cta p { margin: 0 0 1rem; color: rgb(var(--gray)); font-size: 0.9rem; }
 			.post-cta .row { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
 			.post-cta a { padding: 0.65rem 1.3rem; border-radius: 999px; font-weight: 700; text-decoration: none; color: #fff; background: var(--accent); }
+			.post-cta a.guide-link { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 			.post-cta a.self { background: #d92d20; }
 			.post-cta a.kakao { background: #fee500; color: #191919; }
 			@media (max-width: 720px) { .post-cta .row { flex-direction: column; } }
@@ -202,9 +211,10 @@ const ld = isPost
 						</div>
 					</section>}
 					<div class="post-cta">
-						<h3>개통이 궁금하세요?</h3>
-						<p>바로 셀프개통을 진행하거나, 전화·카카오톡으로 편하게 문의하세요.</p>
+						<h3>{cta ? cta.h : '개통이 궁금하세요?'}</h3>
+						<p>{cta ? cta.p : '바로 셀프개통을 진행하거나, 전화·카카오톡으로 편하게 문의하세요.'}</p>
 						<div class="row">
+							{cta && <a class="guide-link" href={cta.link[0]}>{cta.link[1]} ›</a>}
 							<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
 							<a href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
 							<a class="kakao" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
