@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import { KAKAO_URL } from '../consts';
+// 카카오톡 채널 추가 안내. 추가해 두면 채팅 목록에 남아 다시 문의하기 쉽습니다.
+const friendUrl = `${KAKAO_URL}/friend`;
+---
+
+<div class="ch">
+	<div class="ch-t">
+		<strong>카카오톡 채널 추가해 두세요</strong>
+		<p>채팅 목록에 남아 있어서, 개통 중에 막히거나 궁금한 게 생길 때 바로 물어보기 편해요.</p>
+	</div>
+	<a class="ch-b" href={friendUrl} target="_blank" rel="noopener" data-ch="channel_add"><Icon name="chat" />채널 추가하기</a>
+</div>
+
+<style>
+	.ch { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: #fffbe0; border-radius: 16px; padding: 1rem 1.2rem; box-shadow: inset 0 0 0 1.5px #fee500; }
+	.ch-t { flex: 1 1 260px; }
+	.ch-t strong { font-size: 1rem; }
+	.ch-t p { margin: 0.2rem 0 0; font-size: 0.86rem; color: rgb(var(--gray-dark)); }
+	.ch-b { display: inline-flex; align-items: center; gap: 0.4rem; background: #fee500; color: #191919; font-weight: 800; text-decoration: none; padding: 0.65rem 1.3rem; border-radius: 999px; }
+</style>
+
+<script>
+	document.addEventListener('click', (e) => {
+		const a = (e.target as HTMLElement).closest<HTMLElement>('[data-ch="channel_add"]');
+		if (!a) return;
+		const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+		if (g) g('event', 'channel_add_click', { page_path: location.pathname });
+	});
+</script>

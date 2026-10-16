@@ -15,11 +15,12 @@ interface Props {
 	jsonLd?: object | object[];
 	locale?: string;
 	alternates?: { hreflang: string; href: string }[];
+	noindex?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image, jsonLd, locale = 'ko_KR', alternates = [] } = Astro.props;
+const { title, description, image, jsonLd, locale = 'ko_KR', alternates = [], noindex = false } = Astro.props;
 // 페이지별 공유 미리보기 이미지(public/og/<키>.jpg)가 있으면 그것을, 없으면 기본 이미지를 씁니다.
 const pageOg = `/og/${ogKey(Astro.url.pathname)}.jpg`;
 const hasPageOg = existsSync(`public${pageOg}`);
@@ -70,6 +71,7 @@ const schemas = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonL
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />

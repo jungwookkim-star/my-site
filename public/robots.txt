@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /links/
+Disallow: /go/
 
 Sitemap: https://connectmobile.kr/sitemap-index.xml

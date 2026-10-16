@@ -1,0 +1,124 @@
+---
+// 관리용 페이지: 유입 경로 꼬리표가 붙은 짧은 주소와 QR 코드를 만듭니다. (검색에 노출되지 않습니다)
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const dests = [
+	{ code: '', label: '홈' },
+	{ code: 'g', label: '개통 과정 안내' },
+	{ code: 'p', label: '요금제 비교' },
+	{ code: 's', label: '세컨드 번호' },
+	{ code: 'f', label: '자주 묻는 질문' },
+	{ code: 'r', label: '지역별 안내' },
+	{ code: 'b', label: '블로그 목록' },
+	{ code: 'e', label: 'eSIM 개통 방법 글' },
+];
+const presets = [
+	{ src: 'card', label: '명함' },
+	{ src: 'flyer', label: '전단지' },
+	{ src: 'sign', label: '간판·입간판' },
+	{ src: 'sms', label: '문자' },
+	{ src: 'kakao', label: '카톡 안내' },
+	{ src: 'naver', label: '네이버 블로그' },
+];
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="링크·QR 만들기 | 커넥트모바일" description="유입 경로를 구분하는 짧은 주소와 QR 코드를 만듭니다." noindex={true} />
+		<style>
+			main.lk { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 4rem; width: auto; }
+			.lk h1 { font-size: 1.7rem; margin: 0 0 0.4rem; }
+			.lk .sub { color: rgb(var(--gray)); margin: 0 0 1.4rem; font-size: 0.95rem; }
+			.box { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; margin-bottom: 1rem; }
+			.row { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: end; }
+			label { font-size: 0.85rem; font-weight: 700; display: grid; gap: 0.3rem; }
+			select, input[type='text'] { font: inherit; padding: 0.55rem 0.8rem; border: 1.5px solid #cfd6ff; border-radius: 10px; min-width: 0; }
+			.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+			.chips button { border: 0; background: #eef1ff; color: var(--accent); font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.35rem 0.9rem; border-radius: 999px; cursor: pointer; }
+			.out { word-break: break-all; font-weight: 700; background: #f6f8ff; border: 1px dashed #b9c4ff; border-radius: 12px; padding: 0.8rem 1rem; margin: 0.6rem 0; }
+			.act { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+			.act button { border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 999px; cursor: pointer; }
+			.act button.alt { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			canvas { display: block; margin: 0.8rem auto 0; max-width: 100%; height: auto; }
+			.note { font-size: 0.82rem; color: rgb(var(--gray)); margin: 0.6rem 0 0; }
+			.err { color: #c2410c; font-size: 0.85rem; min-height: 1.2em; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="lk" id="main">
+			<h1>링크·QR 만들기</h1>
+			<p class="sub">어디에 붙이는 링크인지 이름을 정해 두면, 구글 애널리틱스에서 그 곳에서 온 방문자를 따로 볼 수 있어요. (관리용 페이지로, 검색에 나오지 않아요)</p>
+
+			<div class="box">
+				<div class="row">
+					<label>가는 곳
+						<select id="dest">{dests.map((d) => <option value={d.code}>{d.label}</option>)}</select>
+					</label>
+					<label>어디에 쓰나요? (영문·숫자·-)
+						<input type="text" id="src" value="card" maxlength="30" autocomplete="off" />
+					</label>
+				</div>
+				<div class="chips">{presets.map((p) => <button type="button" data-src={p.src}>{p.label}</button>)}</div>
+				<p class="err" id="err" role="alert"></p>
+			</div>
+
+			<div class="box">
+				<strong>짧은 주소</strong>
+				<div class="out" id="out"></div>
+				<div class="act">
+					<button type="button" id="copy">주소 복사</button>
+					<button type="button" id="dl" class="alt">QR 이미지 저장 (PNG)</button>
+				</div>
+				<canvas id="qr" width="320" height="320" aria-label="QR 코드"></canvas>
+				<p class="note">QR을 찍으면 이 짧은 주소로 들어와 해당 페이지로 자동 이동합니다. 인쇄 전에 휴대폰 카메라로 한 번 꼭 확인해 주세요. 이동 후 주소에는 <code>utm_source=(입력한 이름)&amp;utm_medium=short</code> 가 붙습니다.</p>
+			</div>
+		</main>
+		<Footer />
+		<script>
+			import QRCode from 'qrcode';
+			const dest = document.getElementById('dest') as HTMLSelectElement;
+			const src = document.getElementById('src') as HTMLInputElement;
+			const out = document.getElementById('out')!;
+			const err = document.getElementById('err')!;
+			const canvas = document.getElementById('qr') as HTMLCanvasElement;
+			const copy = document.getElementById('copy') as HTMLButtonElement;
+			const dl = document.getElementById('dl') as HTMLButtonElement;
+			let current = '';
+
+			async function render() {
+				const s = src.value.trim().toLowerCase();
+				if (!/^[a-z0-9-]{1,30}$/.test(s)) {
+					err.textContent = '이름은 영문 소문자·숫자·하이픈(-)만 쓸 수 있어요.';
+					out.textContent = '';
+					current = '';
+					canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height);
+					return;
+				}
+				err.textContent = '';
+				current = `https://connectmobile.kr/go/${s}${dest.value ? '/' + dest.value : ''}`;
+				out.textContent = current;
+				await QRCode.toCanvas(canvas, current, { width: 320, margin: 2, errorCorrectionLevel: 'M' });
+			}
+			dest.addEventListener('change', render);
+			src.addEventListener('input', render);
+			document.querySelectorAll<HTMLButtonElement>('.chips button').forEach((b) => b.addEventListener('click', () => { src.value = b.dataset.src ?? ''; render(); }));
+			copy.addEventListener('click', async () => {
+				if (!current) return;
+				try { await navigator.clipboard.writeText(current); copy.textContent = '복사됐어요!'; } catch { copy.textContent = '직접 복사해 주세요'; }
+				setTimeout(() => { copy.textContent = '주소 복사'; }, 2000);
+			});
+			dl.addEventListener('click', () => {
+				if (!current) return;
+				const a = document.createElement('a');
+				a.href = canvas.toDataURL('image/png');
+				a.download = `qr-${src.value.trim().toLowerCase()}-${dest.value || 'home'}.png`;
+				a.click();
+			});
+			render();
+		</script>
+	</body>
+</html>

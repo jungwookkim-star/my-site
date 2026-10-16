@@ -1,0 +1,11 @@
+# 짧은 주소: /go/<출처>/<목적지> → 해당 페이지(유입 경로 꼬리표 자동 부착)
+# 예) /go/card/g → /guide/?utm_source=card&utm_medium=short
+# 새 출처(card, flyer, kakao 등)는 코드 수정 없이 바로 쓸 수 있습니다. 만드는 곳: /links/
+/go/:src/g /guide/?utm_source=:src&utm_medium=short 302
+/go/:src/p /plans/?utm_source=:src&utm_medium=short 302
+/go/:src/s /second-number/?utm_source=:src&utm_medium=short 302
+/go/:src/f /faq/?utm_source=:src&utm_medium=short 302
+/go/:src/r /region/?utm_source=:src&utm_medium=short 302
+/go/:src/b /blog/?utm_source=:src&utm_medium=short 302
+/go/:src/e /blog/esim-vs-usim/?utm_source=:src&utm_medium=short 302
+/go/:src /?utm_source=:src&utm_medium=short 302

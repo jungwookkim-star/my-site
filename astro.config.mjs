@@ -9,7 +9,7 @@ export default defineConfig({
 	// 사이트 CSS를 각 페이지에 포함해 화면을 막는 요청을 줄입니다.
 	build: { inlineStylesheets: 'always' },
 	site: 'https://connectmobile.kr',
-	integrations: [mdx(), sitemap()],
+	integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/links/') })],
 	fonts: [
 		{
 			provider: fontProviders.local(),
