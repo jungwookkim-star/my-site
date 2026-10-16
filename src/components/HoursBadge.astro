@@ -1,15 +1,22 @@
 ---
+import { HOURS } from '../consts';
 // 셀프개통 접수 가능 시간 안내. 한국 시간 기준으로 현재 접수 가능 여부를 보여줍니다.
 ---
 
 <div class="hours" id="hours-badge">
 	<p class="row"><b>신규가입</b> <span data-kind="new">08:00~21:50</span></p>
 	<p class="row"><b>번호이동</b> <span data-kind="port">10:00~19:50 (일요일 제외)</span></p>
+	<p class="after" id="hours-after" hidden>
+		지금은 접수 시간이 아니에요. 카톡에 미리 남겨 두시면 운영시간({HOURS})에 확인해 드려요.
+		<a href="http://pf.kakao.com/_QKvfX" data-ask="hours_badge">궁금한 점 미리 남기기 ›</a>
+	</p>
 </div>
 
 <style>
 	.hours { display: inline-flex; flex-direction: column; gap: 0.3rem; margin-top: 0.9rem; padding: 0.6rem 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); font-size: 0.88rem; text-align: left; }
 	.row { margin: 0; display: flex; gap: 0.6rem; align-items: center; }
+	.after { margin: 0.2rem 0 0; padding-top: 0.45rem; border-top: 1px dashed rgb(var(--gray-light)); font-size: 0.8rem; line-height: 1.5; color: rgb(var(--gray-dark)); max-width: 24em; }
+	.after a { display: inline-block; margin-top: 0.15rem; font-weight: 700; color: var(--accent); text-decoration: none; }
 	.row b { min-width: 4.6em; }
 	.row span::before { content: ''; display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; margin-right: 0.4em; background: #aaa; }
 	.row span.open { color: #12805c; font-weight: 700; }
@@ -30,6 +37,8 @@
 	}
 	function render() {
 		const now = nowKst();
+		const after = document.getElementById('hours-after');
+		if (after) after.hidden = now >= RULES.new.open && now <= RULES.new.close;
 		document.querySelectorAll<HTMLElement>('#hours-badge span[data-kind]').forEach((el) => {
 			const r = RULES[el.dataset.kind as 'new' | 'port'];
 			if (el.dataset.kind === 'port' && isSundayKst()) {

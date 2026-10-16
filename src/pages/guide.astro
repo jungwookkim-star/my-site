@@ -106,6 +106,14 @@ const howTo = {
 			.cardgrid img { width: 100%; height: auto; border-radius: 14px; box-shadow: var(--box-shadow); margin: 0; }
 			.check { list-style: none; margin: 0; padding: 0; }
 			.check li { position: relative; padding-left: 1.7rem; margin-bottom: 0.5rem; font-size: 0.93rem; }
+			.check.tick li { padding-left: 0; }
+			.check.tick li::before { display: none; }
+			.check.tick label { display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; padding: 0.35rem 0.2rem; border-radius: 10px; }
+			.check.tick label:hover { background: #f4f6ff; }
+			.check.tick input { width: 1.25rem; height: 1.25rem; margin: 0.1rem 0 0; accent-color: #0b7a70; flex-shrink: 0; }
+			.check.tick input:checked + span { color: rgb(var(--gray)); text-decoration: line-through; }
+			.prep-prog { margin: 0.6rem 0 0; font-size: 0.85rem; font-weight: 700; color: #0b7a70; }
+			.prep-go { margin-top: 0.6rem; }
 			.check li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #e8f5ee; color: #0b7a70; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
 			.cases dt { font-weight: 700; margin-top: 0.7rem; font-size: 0.93rem; }
 			.cases dt:first-child { margin-top: 0; }
@@ -174,7 +182,9 @@ const howTo = {
 			<div class="two">
 				<div class="box">
 					<h3>준비물 체크리스트</h3>
-					<ul class="check">{checklist.map((c) => <li>{c}</li>)}</ul>
+					<ul class="check tick" id="prep-list">{checklist.map((c, i) => <li><label><input type="checkbox" data-i={i} data-opt={c.includes('번호이동') ? '1' : undefined} /><span>{c}{c.includes('번호이동') ? ' (선택)' : ''}</span></label></li>)}</ul>
+						<p class="prep-prog" id="prep-prog" aria-live="polite">준비된 항목을 눌러 체크해 보세요.</p>
+						<a class="btn self sm prep-go" id="prep-go" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener" hidden><Icon name="rocket" />준비 끝! 셀프개통 바로가기</a>
 					<p style="font-size:0.82rem;color:rgb(var(--gray));margin:0.8rem 0 0">개통 유형에 따라 필요한 서류나 인증 방식이 다를 수 있어, 상담 때 정확히 안내해 드립니다.</p>
 				</div>
 				<div class="box">
@@ -226,5 +236,31 @@ const howTo = {
 			</div>
 		</main>
 		<Footer />
+		<script>
+			const boxes = [...document.querySelectorAll<HTMLInputElement>('#prep-list input')];
+			const prog = document.getElementById('prep-prog');
+			const go = document.getElementById('prep-go');
+			const KEY = 'prep-checked';
+			let saved: number[] = [];
+			try { saved = JSON.parse(localStorage.getItem(KEY) ?? '[]'); } catch { /* 저장소를 못 쓰면 체크 기억만 생략 */ }
+			boxes.forEach((b) => { b.checked = saved.includes(Number(b.dataset.i)); });
+			let done = false;
+			function update(fromUser: boolean) {
+				const req = boxes.filter((b) => !b.dataset.opt);
+				const n = req.filter((b) => b.checked).length;
+				if (prog) prog.textContent = n === 0 ? '준비된 항목을 눌러 체크해 보세요.' : n === req.length ? '모두 준비됐어요!' : `${n}/${req.length} 준비됐어요`;
+				if (go) go.hidden = n !== req.length;
+				if (fromUser && n === req.length && !done) {
+					const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+					if (g) g('event', 'prep_complete', { page_path: location.pathname });
+				}
+				done = n === req.length;
+			}
+			boxes.forEach((b) => b.addEventListener('change', () => {
+				try { localStorage.setItem(KEY, JSON.stringify(boxes.filter((x) => x.checked).map((x) => Number(x.dataset.i)))); } catch { /* 무시 */ }
+				update(true);
+			}));
+			update(false);
+		</script>
 	</body>
 </html>
