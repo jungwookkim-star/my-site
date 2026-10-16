@@ -125,6 +125,11 @@ const howTo = {
 			.more a:hover { color: var(--accent); }
 			.help { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2rem 1rem; margin-top: 3rem; }
 			.help h2 { margin: 0 0 0.4rem; font-size: 1.4rem; }
+			.gp { display: block; width: fit-content; max-width: 100%; margin: 1rem auto 0; padding: 0.6rem 1.2rem; border-radius: 999px; background: #e8f5ee; color: #0b7a70; font-weight: 700; font-size: 0.92rem; text-decoration: none; box-sizing: border-box; }
+			.gp[hidden] { display: none; }
+			.stepdone { margin-top: 0.8rem; border: 1.5px solid #cfd6ff; background: #fff; color: var(--accent); font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.4rem 1rem; border-radius: 999px; cursor: pointer; }
+			.stepdone[aria-pressed='true'] { background: #0b7a70; border-color: #0b7a70; color: #fff; }
+			.tl li.done .num { background: #0b7a70; }
 			.help p { color: rgb(var(--gray)); margin: 0 0 1rem; font-size: 0.92rem; }
 			.cta { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
 			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
@@ -148,16 +153,18 @@ const howTo = {
 				<li><strong>STEP 4</strong>유심 장착·사용 시작</li>
 			</ul>
 
+			<a class="gp" id="gp" href="#step-1" hidden></a>
 			<h2 class="sec">단계별로 자세히 볼게요</h2>
 			<ol class="tl">
 				{steps.map((s, i) => (
-					<li>
+					<li id={`step-${i + 1}`} data-n={i + 1}>
 						<span class="num">{i + 1}</span>
 						<div class="step">
 							<h3>{s.title}</h3>
 							<span class="time">{s.time}</span>
 							<p>{s.desc}</p>
 							<ul>{s.tips.map((t) => <li>{t}</li>)}</ul>
+							<button type="button" class="stepdone" data-n={i + 1} aria-pressed="false">✓ 이 단계 마쳤어요</button>
 						</div>
 					</li>
 				))}
@@ -177,7 +184,7 @@ const howTo = {
 
 			<div style="margin-top:2rem"><ActivationCode /></div>
 
-			<h2 class="sec">개통하다 막히셨나요?</h2>
+			<h2 class="sec" id="help">개통하다 막히셨나요?</h2>
 			<StuckHelp />
 
 			<h2 class="sec">시작 전에 확인하세요</h2>
@@ -241,6 +248,30 @@ const howTo = {
 		</main>
 		<Footer />
 		<script>
+			const stepBtns = [...document.querySelectorAll<HTMLButtonElement>('.stepdone')];
+			const gp = document.getElementById('gp');
+			let stepDone = 0;
+			try { stepDone = Number(localStorage.getItem('guide-step') ?? 0) || 0; } catch { /* 저장소를 못 쓰면 이번 방문에만 적용 */ }
+			function paintSteps() {
+				stepBtns.forEach((b) => {
+					const n = Number(b.dataset.n);
+					b.setAttribute('aria-pressed', String(n <= stepDone));
+					b.closest('li[data-n]')?.classList.toggle('done', n <= stepDone);
+				});
+				if (gp) {
+					gp.hidden = stepDone === 0;
+					if (stepDone >= stepBtns.length) { gp.textContent = '모든 단계를 마쳤어요! 사용 중 막히면 아래에서 바로 문의하세요.'; gp.href = '#help'; }
+					else if (stepDone > 0) { gp.textContent = `지금 ${stepDone}단계까지 마쳤어요. ${stepDone + 1}단계로 이동 ›`; gp.href = `#step-${stepDone + 1}`; }
+				}
+			}
+			stepBtns.forEach((b) => b.addEventListener('click', () => {
+				const n = Number(b.dataset.n);
+				stepDone = stepDone === n ? n - 1 : n;
+				try { localStorage.setItem('guide-step', String(stepDone)); } catch { /* 무시 */ }
+				paintSteps();
+			}));
+			paintSteps();
+
 			const boxes = [...document.querySelectorAll<HTMLInputElement>('#prep-list input')];
 			const prog = document.getElementById('prep-prog');
 			const go = document.getElementById('prep-go');
