@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import AskSheet from './AskSheet.astro';
 import { SITE_TITLE, PHONE, PHONE_LINK, HOURS, BUSINESS_INFO, BIZ_ADDRESS, EMAIL, SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
 const today = new Date();
 ---
@@ -15,9 +16,10 @@ const today = new Date();
 </footer>
 <div class="sticky-cta">
 	<a class="call" href={PHONE_LINK}><Icon name="phone" />전화</a>
-	<a class="kakao" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카톡</a>
+	<a class="kakao" href={KAKAO_URL} target="_blank" rel="noopener" data-ask="sticky_bar"><Icon name="chat" />카톡</a>
 	<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통</a>
 </div>
+<AskSheet />
 <style>
 	.sticky-cta { display: none; }
 	@media (max-width: 720px) {
@@ -81,9 +83,9 @@ const today = new Date();
 		const ask = el.closest<HTMLElement>('.ask');
 		if (ask) return track('plan_inquiry', { plan_name: ask.dataset.plan ?? '' });
 		const a = el.closest<HTMLAnchorElement>('a[href]');
-		if (!a) return;
+		if (!a || a.hasAttribute('data-ask')) return;
 		const href = a.getAttribute('href') ?? '';
-		const where = a.closest('.post-tools') ? 'blog_tools' : a.closest('.elig') ? 'checker' : a.closest('.sv') ? 'calculator' : a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.mascot-link') ? 'mascot' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
+		const where = a.closest('.post-tools') ? 'blog_tools' : a.closest('.elig') ? 'checker' : a.closest('.sv') ? 'calculator' : a.closest('.ask-sheet') ? 'ask_sheet' : a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.mascot-link') ? 'mascot' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
 		if (href.startsWith('/saving')) track('tool_click', { tool: 'calculator', from: where, from_page: location.pathname });
 		else if (href.startsWith('/#check')) track('tool_click', { tool: 'checker', from: where, from_page: location.pathname });
 		else if (href.startsWith(SELF_ACTIVATION_URL)) track('self_activation_click', { where });

@@ -1,0 +1,105 @@
+---
+import Icon from './Icon.astro';
+import { PHONE, PHONE_LINK, KAKAO_CHAT_URL } from '../consts';
+// 마스코트·카톡 버튼을 누르면 바로 카톡으로 보내지 않고, 궁금한 주제를 먼저 고르게 하는 안내창
+const topics = [
+	{ key: 'plan', emoji: '💡', title: '요금제 추천받기', desc: '사용량에 맞는 요금제를 골라드려요', chat: '요금제 추천 부탁드려요.\n(통화·데이터 사용량: / 원하는 통신망: )' },
+	{ key: 'stuck', emoji: '🛠', title: '셀프개통이 막혔어요', desc: '단계별 해결 방법부터 확인', href: '/guide/' },
+	{ key: 'second', emoji: '📱', title: '세컨드 번호 만들기', desc: '인증용·업무용·중고거래용 번호', href: '/second-number/' },
+	{ key: 'visit', emoji: '🏢', title: '외국인·미성년자 대면 개통', desc: '지역 센터 예약 문의', chat: '대면 개통 예약 문의드려요.\n(희망 지역: / 개통 종류: )' },
+	{ key: 'faq', emoji: '❓', title: '그 밖에 궁금한 점', desc: '자주 묻는 질문에서 먼저 찾아보기', href: '/faq/' },
+];
+---
+
+<dialog class="ask-sheet" id="ask-sheet" aria-labelledby="ask-title">
+	<div class="as-head">
+		<h2 id="ask-title">어떤 게 궁금하세요?</h2>
+		<button type="button" class="as-close" aria-label="닫기" data-ask-close>×</button>
+	</div>
+	<p class="as-sub">고르시면 바로 맞는 안내로 연결해 드려요.</p>
+	<ul class="as-list">
+		{
+			topics.map((t) => (
+				<li>
+					{t.href ? (
+						<a href={t.href} data-topic={t.key}>
+							<span class="e">{t.emoji}</span>
+							<span class="t"><strong>{t.title}</strong><small>{t.desc}</small></span>
+							<span class="go">›</span>
+						</a>
+					) : (
+						<a href={KAKAO_CHAT_URL} target="_blank" rel="noopener" data-topic={t.key} data-copy={t.chat}>
+							<span class="e">{t.emoji}</span>
+							<span class="t"><strong>{t.title}</strong><small>{t.desc} · 카톡 상담</small></span>
+							<span class="go">›</span>
+						</a>
+					)}
+				</li>
+			))
+		}
+	</ul>
+	<div class="as-foot">
+		<a class="kk" href={KAKAO_CHAT_URL} target="_blank" rel="noopener" data-topic="direct"><Icon name="chat" />바로 카톡 상담</a>
+		<a class="tel" href={PHONE_LINK} data-topic="phone"><Icon name="phone" />{PHONE}</a>
+	</div>
+	<p class="as-note" id="ask-note" role="status" aria-live="polite"></p>
+</dialog>
+
+<style>
+	.ask-sheet { box-sizing: border-box; border: 0; padding: 1.2rem 1.2rem 1rem; border-radius: 22px; width: min(440px, calc(100vw - 1.6rem)); max-height: calc(100vh - 2rem); overflow: auto; background: #fff; color: #14183a; box-shadow: 0 24px 60px rgba(10, 20, 70, 0.35); margin: auto; }
+	.ask-sheet::backdrop { background: rgba(8, 16, 50, 0.55); backdrop-filter: blur(2px); }
+	.as-head { display: flex; justify-content: space-between; align-items: center; }
+	.as-head h2 { margin: 0; font-size: 1.25rem; }
+	.as-close { border: 0; background: #eef1ff; width: 34px; height: 34px; border-radius: 50%; font-size: 1.4rem; line-height: 1; cursor: pointer; color: #333a6b; }
+	.as-sub { margin: 0.3rem 0 0.8rem; font-size: 0.88rem; color: #5b6180; }
+	.as-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+	.as-list a { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.8rem; border-radius: 14px; background: #f4f6ff; text-decoration: none; color: inherit; box-shadow: inset 0 0 0 1px #e1e6ff; transition: background 0.15s, transform 0.15s; }
+	.as-list a:hover, .as-list a:focus-visible { background: #e8ecff; transform: translateY(-1px); }
+	.as-list .e { font-size: 1.4rem; width: 2rem; text-align: center; }
+	.as-list .t { flex: 1; display: grid; }
+	.as-list strong { font-size: 0.98rem; }
+	.as-list small { color: #5b6180; font-size: 0.78rem; }
+	.as-list .go { color: #8a91b8; font-size: 1.3rem; }
+	.as-foot { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+	.as-foot a { flex: 1; display: inline-flex; justify-content: center; align-items: center; gap: 0.35rem; padding: 0.75rem 0.5rem; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: 0.92rem; }
+	.as-foot .kk { background: #fee500; color: #191919; }
+	.as-foot .tel { background: #fff; color: #2337ff; box-shadow: inset 0 0 0 1.5px #2337ff; }
+	.as-note { margin: 0.6rem 0 0; min-height: 1.1em; font-size: 0.8rem; color: #1a7f4b; text-align: center; }
+	@media (max-width: 720px) {
+		.ask-sheet { margin: auto auto 0; width: 100%; max-width: 100%; border-radius: 22px 22px 0 0; padding-bottom: calc(1rem + env(safe-area-inset-bottom)); animation: askup 0.22s ease-out; }
+	}
+	@keyframes askup { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+</style>
+
+<script>
+	const dlg = document.getElementById('ask-sheet') as HTMLDialogElement | null;
+	const note = document.getElementById('ask-note');
+	function track(name: string, params: Record<string, string> = {}) {
+		const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+		if (gtag) gtag('event', name, { page_path: location.pathname, ...params });
+	}
+	if (dlg && typeof dlg.showModal === 'function') {
+		document.addEventListener('click', (e) => {
+			const el = e.target as HTMLElement;
+			const opener = el.closest<HTMLElement>('[data-ask]');
+			if (opener) {
+				e.preventDefault();
+				if (note) note.textContent = '';
+				dlg.showModal();
+				track('ask_open', { where: opener.dataset.ask ?? '' });
+				return;
+			}
+			if (el === dlg || el.closest('[data-ask-close]')) {
+				dlg.close();
+				return;
+			}
+			const pick = el.closest<HTMLAnchorElement>('.ask-sheet a[data-topic]');
+			if (pick) {
+				track('ask_pick', { topic: pick.dataset.topic ?? '' });
+				const text = pick.dataset.copy;
+				if (text && navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
+				if (text && note) note.textContent = '문의 양식이 복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.';
+			}
+		});
+	}
+</script>
