@@ -218,10 +218,13 @@ const faqSchema = {
 				.hc .hb-cta { margin-top: 2.9rem; }
 				.mini-mascot { display: block; position: absolute; right: -2px; top: 1.5rem; width: 106px; text-decoration: none; }
 				.mini-mascot img { width: 100%; height: auto; margin: 0; display: block; filter: drop-shadow(0 6px 10px rgba(20, 40, 120, 0.22)); }
-				.mini-mascot span { position: absolute; right: 6px; top: -1.8rem; font-size: 0.72rem; background: #fff; color: #0e2150; font-size: 0.66rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(20, 40, 120, 0.18); white-space: nowrap; }
+				.mini-mascot span { position: absolute; right: 6px; top: -1.8rem; font-size: 0.72rem; background: #fff; color: #0e2150; font-size: 0.66rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(20, 40, 120, 0.18); white-space: nowrap; animation: bubblebob 3.4s ease-in-out infinite; }
+				.mini-mascot span::after { content: ''; position: absolute; right: 26px; bottom: -5px; width: 10px; height: 10px; background: #fff; border-radius: 2px; transform: rotate(45deg); }
 				.hc .hb-note { text-align: left; }
 			}
 
+			@keyframes bubblebob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+			@media (prefers-reduced-motion: reduce) { .mini-mascot span { animation: none !important; } }
 			.stars { display: none; }
 			@media (min-width: 721px) {
 				.stars { display: block; position: absolute; z-index: -1; top: -54px; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; pointer-events: none; border-radius: 0 0 56px 56px / 0 0 36px 36px; }
@@ -267,7 +270,7 @@ const faqSchema = {
 				.hb-bubble { position: absolute; left: -27%; top: 14%; animation: bubblebob 3.4s ease-in-out infinite; background: #fff; color: #0e2150; font-size: 0.86rem; font-weight: 800; line-height: 1.4; padding: 0.7rem 1rem; border-radius: 16px; box-shadow: 0 10px 26px rgba(0, 10, 50, 0.3); text-align: left; }
 				.hb-bubble::after { content: ''; position: absolute; right: -9px; bottom: 14px; width: 18px; height: 18px; background: #fff; border-radius: 3px; transform: rotate(45deg) skew(8deg, 8deg); }
 				.hero-big:hover .hb-bubble { animation-play-state: paused; }
-				@keyframes bubblebob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+				
 				@keyframes bigwave { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1.5deg); } }
 				.statswrap { position: relative; z-index: 2; margin-top: -2.6rem; }
 				.statswrap :global(.stats) { margin-top: 0; }
