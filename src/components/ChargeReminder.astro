@@ -1,0 +1,93 @@
+---
+// 선불 충전을 잊지 않도록 폰 캘린더에 알림 일정을 넣어 주는 버튼 (서버 없이 .ics 파일을 만들어 내려받습니다)
+---
+
+<div class="cr" id="cr">
+	<h3>충전 알림 캘린더에 추가</h3>
+	<p class="cr-sub">선불은 충전하지 않으면 번호가 정지되거나 해지될 수 있어요. 날짜를 고르면 폰 캘린더에 알림이 등록됩니다.</p>
+	<div class="cr-row">
+		<label>알림 날짜 <input type="date" id="cr-date" /></label>
+		<label>시각
+			<select id="cr-time">
+				<option value="09">오전 9시</option>
+				<option value="12">낮 12시</option>
+				<option value="18">오후 6시</option>
+				<option value="20" selected>오후 8시</option>
+			</select>
+		</label>
+	</div>
+	<label class="cr-chk"><input type="checkbox" id="cr-monthly" /> 매달 같은 날 반복하기</label>
+	<button type="button" class="cr-btn" id="cr-go">캘린더 파일 받기 (.ics)</button>
+	<p class="cr-note" id="cr-note" aria-live="polite">받은 파일을 열면 아이폰·안드로이드·구글 캘린더에 일정이 추가됩니다. 충전 시점과 금액은 선택하신 요금제 안내를 확인해 주세요.</p>
+</div>
+
+<style>
+	.cr { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+	.cr h3 { margin: 0 0 0.3rem; font-size: 1.1rem; }
+	.cr-sub { margin: 0 0 0.9rem; font-size: 0.88rem; color: rgb(var(--gray)); }
+	.cr-row { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+	.cr-row label, .cr-chk { font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+	.cr-row input, .cr-row select { font: inherit; padding: 0.45rem 0.6rem; border: 1.5px solid #cfd6ff; border-radius: 10px; }
+	.cr-chk { margin-top: 0.7rem; font-weight: 600; }
+	.cr-chk input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
+	.cr-btn { margin-top: 0.9rem; border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 700; padding: 0.7rem 1.4rem; border-radius: 999px; cursor: pointer; }
+	.cr-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: rgb(var(--gray)); }
+</style>
+
+<script>
+	const dateEl = document.getElementById('cr-date') as HTMLInputElement | null;
+	const timeEl = document.getElementById('cr-time') as HTMLSelectElement | null;
+	const monthly = document.getElementById('cr-monthly') as HTMLInputElement | null;
+	const go = document.getElementById('cr-go');
+	const note = document.getElementById('cr-note');
+	if (dateEl && timeEl && monthly && go) {
+		const pad = (n: number) => String(n).padStart(2, '0');
+		const now = new Date();
+		const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+		dateEl.value = today;
+		dateEl.min = today;
+		go.addEventListener('click', () => {
+			if (!dateEl.value) {
+				if (note) note.textContent = '알림 날짜를 먼저 골라 주세요.';
+				return;
+			}
+			const d = dateEl.value.replace(/-/g, '');
+			const h = timeEl.value;
+			const end = pad(Number(h) + 1);
+			const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+			const lines = [
+				'BEGIN:VCALENDAR',
+				'VERSION:2.0',
+				'PRODID:-//connectmobile.kr//charge-reminder//KO',
+				'CALSCALE:GREGORIAN',
+				'BEGIN:VEVENT',
+				`UID:charge-${d}${h}-${Math.random().toString(36).slice(2, 10)}@connectmobile.kr`,
+				`DTSTAMP:${stamp}`,
+				`DTSTART:${d}T${h}0000`,
+				`DTEND:${d}T${end}0000`,
+				'SUMMARY:선불 요금 충전 확인',
+				'DESCRIPTION:충전하지 않으면 번호가 정지되거나 해지될 수 있어요. 충전 방법은 https://connectmobile.kr/guide/ 에서 확인하세요.',
+				...(monthly.checked ? ['RRULE:FREQ=MONTHLY'] : []),
+				'BEGIN:VALARM',
+				'ACTION:DISPLAY',
+				'DESCRIPTION:선불 요금 충전 확인',
+				'TRIGGER:-PT0M',
+				'END:VALARM',
+				'END:VEVENT',
+				'END:VCALENDAR',
+			];
+			const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'charge-reminder.ics';
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			setTimeout(() => URL.revokeObjectURL(url), 4000);
+			if (note) note.textContent = '파일을 열어 캘린더에 추가해 주세요. (받은 파일을 누르면 캘린더 앱이 열려요)';
+			const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+			if (g) g('event', 'charge_reminder', { page_path: location.pathname, monthly: String(monthly.checked) });
+		});
+	}
+</script>

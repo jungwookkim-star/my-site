@@ -15,6 +15,7 @@ import { items } from '../lib/planItems';
 		<p class="f-msg"></p>
 		<div class="f-cards"></div>
 		<div class="f-actions">
+			<a class="f-ask" href="http://pf.kakao.com/_QKvfX/chat" target="_blank" rel="noopener">이 조건으로 카톡 상담하기</a>
 			<button type="button" class="f-retry">다시 찾아보기</button>
 		</div>
 	</div>
@@ -43,6 +44,7 @@ import { items } from '../lib/planItems';
 	.f-msg { text-align: center; margin: 0.4rem 0 1rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 	.f-cards { display: grid; gap: 0.9rem; }
 	.f-actions { text-align: center; margin-top: 1.2rem; }
+	.f-ask { display: inline-block; margin: 0 0.4rem 0.4rem 0; background: #fee500; color: #191919; border-radius: 999px; padding: 0.6rem 1.3rem; font-weight: 700; text-decoration: none; }
 	.f-retry { border: 0; background: rgb(var(--gray-light)); border-radius: 999px; padding: 0.55rem 1.3rem; font: inherit; font-weight: 700; cursor: pointer; }
 </style>
 
@@ -89,6 +91,8 @@ import { items } from '../lib/planItems';
 		const msgEl = root.querySelector<HTMLElement>('.f-msg')!;
 		const cardsEl = root.querySelector<HTMLElement>('.f-cards')!;
 		const retryEl = root.querySelector<HTMLButtonElement>('.f-retry')!;
+		const askEl = root.querySelector<HTMLAnchorElement>('.f-ask')!;
+		let askText = '';
 
 		const items = Array.from(pool.content.children).map((el) => ({
 			el: el as HTMLElement,
@@ -152,10 +156,25 @@ import { items } from '../lib/planItems';
 					? '선택하신 조건에 맞는 요금제예요.'
 					: '예산 안에서 가장 가까운 요금제를 골랐어요. 예산을 조금 늘리면 선택지가 더 넓어져요.';
 			cands.forEach((c) => cardsEl.appendChild(c.el.cloneNode(true)));
+			const label = (key: string) => steps.find((x) => x.key === key)?.opts.find((o) => o.v === answers[key])?.label ?? '';
+			const names = cands.map((c) => c.el.querySelector<HTMLElement>('.plan')?.dataset.name).filter(Boolean).join(', ');
+			askText = '요금제 상담 부탁드려요.\n(사용 패턴: ' + label('usage') + ' / 예산: ' + label('budget') + ' / 제휴 혜택: ' + label('benefit') + ')' + (names ? '\n(추천받은 요금제: ' + names + ')' : '');
 			track({ usage: answers.usage, budget: answers.budget, benefit: answers.benefit, count: String(cands.length) });
 			root!.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		}
 
+		askEl.addEventListener('click', () => {
+			const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+			if (g) g('event', 'finder_ask', { page_path: location.pathname });
+			try { navigator.clipboard.writeText(askText).then(() => {
+				document.querySelector('.ask-toast')?.remove();
+				const t = document.createElement('div');
+				t.className = 'ask-toast';
+				t.textContent = '선택하신 조건이 복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.';
+				document.body.appendChild(t);
+				setTimeout(() => t.remove(), 4000);
+			}, () => {}); } catch { /* 복사를 못 해도 채팅창은 열립니다 */ }
+		});
 		backEl.addEventListener('click', () => {
 			if (i > 0) {
 				i--;
