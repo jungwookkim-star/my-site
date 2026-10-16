@@ -1,0 +1,15 @@
+{
+  "name": "커넥트모바일 선후불개통센터",
+  "short_name": "커넥트모바일",
+  "description": "선불폰·알뜰폰 개통, 요금제 비교, 셀프개통 안내",
+  "start_url": "/?utm_source=pwa&utm_medium=homescreen",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2337ff",
+  "lang": "ko",
+  "icons": [
+    { "src": "/logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
