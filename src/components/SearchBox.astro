@@ -1,0 +1,137 @@
+---
+// 헤더의 돋보기 버튼과 검색창. 색인(/search.json)은 처음 열 때만 불러옵니다.
+---
+
+<dialog class="sb" id="sb" aria-labelledby="sb-title">
+	<h2 id="sb-title" class="sr">사이트 검색</h2>
+	<div class="sb-top">
+		<input id="sb-q" type="search" placeholder="무엇을 찾으세요? (예: 유심비, 미납, eSIM)" autocomplete="off" aria-label="검색어" />
+		<button type="button" class="sb-x" data-sb-close aria-label="닫기">×</button>
+	</div>
+	<ul class="sb-res" id="sb-res"></ul>
+	<p class="sb-empty" id="sb-empty">검색어를 입력하면 요금제, 질문, 안내 글에서 한꺼번에 찾아 드려요.</p>
+</dialog>
+
+<style>
+	.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+	.sb { border: 0; padding: 0; border-radius: 18px; width: min(560px, calc(100vw - 1.4rem)); max-height: min(78vh, 640px); margin: 8vh auto auto; background: #fff; box-shadow: 0 24px 60px rgba(10, 20, 70, 0.35); overflow: hidden; }
+	.sb[open] { display: flex; flex-direction: column; }
+	.sb::backdrop { background: rgba(8, 16, 50, 0.55); backdrop-filter: blur(2px); }
+	.sb-top { display: flex; gap: 0.5rem; padding: 0.9rem; border-bottom: 1px solid #e8ecff; }
+	.sb-top input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; padding: 0.7rem 1rem; border: 1.5px solid #cfd6ff; border-radius: 999px; outline: none; }
+	.sb-top input:focus { border-color: #2337ff; }
+	.sb-x { border: 0; background: #eef1ff; width: 40px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #333a6b; }
+	.sb-res { list-style: none; margin: 0; padding: 0.4rem; overflow: auto; }
+	.sb-res :global(a) { display: block; padding: 0.65rem 0.8rem; border-radius: 12px; text-decoration: none; color: #14183a; }
+	.sb-res :global(a:hover), .sb-res :global(a:focus-visible) { background: #f1f4ff; }
+	.sb-res :global(b) { font-size: 0.95rem; font-weight: 700; color: #14183a; }
+	.sb-res :global(small) { display: block; color: #5b6180; font-size: 0.8rem; font-weight: 400; line-height: 1.45; margin-top: 0.1rem; }
+	.sb-res :global(i) { font-style: normal; font-size: 0.66rem; font-weight: 700; color: #2337ff; background: #e8ecff; border-radius: 999px; padding: 0.08rem 0.5rem; margin-right: 0.4rem; vertical-align: middle; }
+	.sb-empty { margin: 0; padding: 1rem 1.2rem 1.2rem; font-size: 0.85rem; color: #5b6180; }
+	.sb-empty[hidden] { display: none; }
+</style>
+
+<script>
+	type Item = { t: string; d: string; u: string; k: string };
+	const dlg = document.getElementById('sb') as HTMLDialogElement | null;
+	const q = document.getElementById('sb-q') as HTMLInputElement | null;
+	const res = document.getElementById('sb-res');
+	const empty = document.getElementById('sb-empty');
+	let index: Item[] | null = null;
+	let loading: Promise<void> | null = null;
+	const track = (name: string, p: Record<string, string> = {}) => {
+		const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+		if (g) g('event', name, { page_path: location.pathname, ...p });
+	};
+	const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
+	function load() {
+		loading ??= fetch('/search.json')
+			.then((r) => r.json())
+			.then((j: Item[]) => {
+				index = j;
+			})
+			.catch(() => {
+				loading = null;
+			});
+		return loading;
+	}
+	function render() {
+		if (!res || !empty || !q) return;
+		const words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+		res.innerHTML = '';
+		if (!words.length || !index) {
+			empty.hidden = false;
+			empty.textContent = '검색어를 입력하면 요금제, 질문, 안내 글에서 한꺼번에 찾아 드려요.';
+			return;
+		}
+		const scored = index
+			.map((it) => {
+				const title = norm(it.t);
+				const desc = norm(it.d + it.k);
+				let s = 0;
+				for (const w of words) {
+					const n = norm(w);
+					if (title.includes(n)) s += 3;
+					else if (desc.includes(n)) s += 1;
+					else return { it, s: 0 };
+				}
+				return { it, s };
+			})
+			.filter((x) => x.s > 0)
+			.sort((a, b) => b.s - a.s)
+			.slice(0, 12);
+		if (!scored.length) {
+			empty.hidden = false;
+			empty.textContent = '찾는 내용이 없어요. 바로 카톡으로 물어봐 주세요.';
+			return;
+		}
+		empty.hidden = true;
+		scored.forEach(({ it }) => {
+			const li = document.createElement('li');
+			const a = document.createElement('a');
+			a.href = it.u;
+			const b = document.createElement('b');
+			const tag = document.createElement('i');
+			tag.textContent = it.k;
+			b.append(tag, it.t);
+			const sm = document.createElement('small');
+			sm.textContent = it.d;
+			a.append(b, sm);
+			li.appendChild(a);
+			res.appendChild(li);
+		});
+	}
+	let timer = 0;
+	let tracked = '';
+	if (dlg && q) {
+		document.addEventListener('click', (e) => {
+			const el = e.target as HTMLElement;
+			if (el.closest('[data-search-open]')) {
+				e.preventDefault();
+				dlg.showModal();
+				q.focus();
+				load().then(render);
+				track('search_open');
+			} else if (el === dlg || el.closest('[data-sb-close]')) dlg.close();
+			else if (el.closest('#sb-res a')) track('search_pick', { query: q.value.trim().slice(0, 40) });
+		});
+		document.addEventListener('keydown', (e) => {
+			const target = e.target as HTMLElement;
+			if (e.key === '/' && !target.closest('input, textarea, select, [contenteditable]') && !dlg.open) {
+				e.preventDefault();
+				(document.querySelector('[data-search-open]') as HTMLElement | null)?.click();
+			}
+		});
+		q.addEventListener('input', () => {
+			render();
+			clearTimeout(timer);
+			timer = window.setTimeout(() => {
+				const v = q.value.trim();
+				if (v.length >= 2 && v !== tracked) {
+					tracked = v;
+					track('search', { query: v.slice(0, 40) });
+				}
+			}, 900);
+		});
+	}
+</script>

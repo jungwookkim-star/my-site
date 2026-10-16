@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import AskSheet from './AskSheet.astro';
+import SearchBox from './SearchBox.astro';
 import { SITE_TITLE, PHONE, PHONE_LINK, HOURS, BUSINESS_INFO, BIZ_ADDRESS, EMAIL, SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
 const today = new Date();
 ---
@@ -20,7 +21,12 @@ const today = new Date();
 	<a class="self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통</a>
 </div>
 <AskSheet />
+<SearchBox />
+<button type="button" class="to-top" id="to-top" aria-label="맨 위로" hidden>↑</button>
 <style>
+	.to-top { position: fixed; right: 1rem; bottom: 1.2rem; z-index: 45; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #0f1219; color: #fff; font-size: 1.2rem; font-weight: 800; cursor: pointer; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); opacity: 0.9; }
+	.to-top:hover { opacity: 1; transform: translateY(-2px); }
+	@media (max-width: 720px) { .to-top { bottom: 5.4rem; right: 0.8rem; width: 40px; height: 40px; } }
 	.sticky-cta { display: none; }
 	@media (max-width: 720px) {
 		footer { padding-bottom: 6em !important; }
@@ -92,4 +98,52 @@ const today = new Date();
 		else if (href.startsWith(KAKAO_URL)) track('kakao_click', { where });
 		else if (href.startsWith('tel:')) track('phone_click', { where });
 	});
+</script>
+
+<script>
+	// 맨 위로 버튼: 충분히 내려왔을 때만 보입니다.
+	const topBtn = document.getElementById('to-top');
+	if (topBtn) {
+		const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		let ticking = false;
+		const sync = () => {
+			topBtn.hidden = window.scrollY < 900;
+			ticking = false;
+		};
+		window.addEventListener('scroll', () => {
+			if (!ticking) {
+				ticking = true;
+				requestAnimationFrame(sync);
+			}
+		}, { passive: true });
+		topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
+		sync();
+	}
+
+	// PC에서는 전화 링크가 동작하지 않으므로, 누르면 번호를 복사해 줍니다. (폰은 그대로 전화 연결)
+	const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+	if (canHover) {
+		document.addEventListener('click', (e) => {
+			const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="tel:"]');
+			if (!a) return;
+			e.preventDefault();
+			const num = a.getAttribute('href')!.replace('tel:', '').replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3');
+			const done = (msg: string) => {
+				document.getElementById('copy-toast')?.remove();
+				const t = document.createElement('div');
+				t.id = 'copy-toast';
+				t.setAttribute('role', 'status');
+				t.textContent = msg;
+				t.style.cssText = 'position:fixed;left:50%;bottom:2rem;transform:translateX(-50%);z-index:200;background:rgba(15,18,25,.92);color:#fff;padding:.8rem 1.2rem;border-radius:12px;font-size:.9rem';
+				document.body.appendChild(t);
+				setTimeout(() => t.remove(), 2800);
+			};
+			navigator.clipboard.writeText(num).then(
+				() => done(`전화번호 ${num} 가 복사됐어요. 휴대폰으로 걸어 주세요.`),
+				() => done(`전화번호는 ${num} 입니다.`),
+			);
+			const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+			if (g) g('event', 'phone_copy', { page_path: location.pathname });
+		});
+	}
 </script>
