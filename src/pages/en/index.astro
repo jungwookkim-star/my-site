@@ -55,6 +55,8 @@ const msgLines = ['외국인 방문 개통 예약 문의드립니다.', '성함:
 			alternates={[
 				{ hreflang: 'ko', href: `${site}/` },
 				{ hreflang: 'en', href: `${site}/en/` },
+				{ hreflang: 'zh-CN', href: `${site}/zh/` },
+				{ hreflang: 'vi', href: `${site}/vi/` },
 				{ hreflang: 'x-default', href: `${site}/` },
 			]}
 			jsonLd={[faqSchema]}
@@ -188,7 +190,7 @@ const msgLines = ['외국인 방문 개통 예약 문의드립니다.', '성함:
 			<p>Business registration no. 499-37-01511 · Representative: {REPRESENTATIVE}</p>
 			<p>{BIZ_ADDRESS}</p>
 			<p>Phone <a href={PHONE_LINK}>{PHONE}</a> · Hours 09:00-22:00 (some activations are limited during major holidays)</p>
-			<p><a href="/">한국어 사이트</a> · <a href="/privacy/">개인정보 안내 (Korean)</a></p>
+			<p><a href="/">한국어 사이트</a> · <a href="/zh/" hreflang="zh-CN">中文</a> · <a href="/vi/" hreflang="vi">Tiếng Việt</a> · <a href="/privacy/">개인정보 안내 (Korean)</a></p>
 		</footer>
 
 		<script>
