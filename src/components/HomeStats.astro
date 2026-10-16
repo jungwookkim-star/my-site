@@ -6,7 +6,8 @@ import { postpaidPartners } from '../data/postpaidPlans';
 
 const prepaidAll = [...ktPrepaid, ...lgPrepaid, ...ktPrepaidMore, ...lgPrepaidMore];
 const planTotal = prepaidAll.length + lgPostpaid.length + ktPostpaid.length + postpaidPartners.reduce((n, p) => n + p.plans.length, 0);
-const minPrice = Math.min(...prepaidAll.map((p) => Number(p.price.replace(/[^0-9]/g, '')))).toLocaleString('ko-KR');
+const everyPlan = [...prepaidAll, ...lgPostpaid, ...ktPostpaid, ...postpaidPartners.flatMap((x) => x.plans)];
+const minPrice = Math.min(...everyPlan.map((p) => Number(p.price.replace(/[^0-9]/g, ''))).filter((n) => n > 0)).toLocaleString('ko-KR');
 const partners = postpaidPartners.map((p) => p.name);
 ---
 
@@ -14,7 +15,7 @@ const partners = postpaidPartners.map((p) => p.name);
 	<li><b>0원</b><span>약정, 위약금</span></li>
 	<li><b>약 10분</b><span>유심 받고 셀프개통</span></li>
 	<li><b>{planTotal}개</b><span>선불과 알뜰 요금제</span></li>
-	<li><b>{minPrice}원~</b><span>선불 요금제 월 요금</span></li>
+	<li><b>{minPrice}원~</b><span>선불과 알뜰 최저 월 요금</span></li>
 </ul>
 <div class="partners">
 	<span class="plabel">제휴 혜택 요금제</span>
