@@ -11,7 +11,12 @@ import ChannelAdd from '../components/ChannelAdd.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
+import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
 import { homeFaqs } from '../data/faqs';
+const allPlanPrices = [...ktPrepaid, ...lgPrepaid, ...ktPrepaidMore, ...lgPrepaidMore, ...ktPostpaid, ...lgPostpaid, ...postpaidPartners.flatMap((x) => x.plans)]
+	.map((x) => Number(x.price.replace(/[^0-9]/g, '')))
+	.filter((n) => n > 0);
+const heroMinPrice = Math.min(...allPlanPrices).toLocaleString('ko-KR');
 import { REGIONS } from '../data/regions';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -289,9 +294,9 @@ const faqSchema = {
 				<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 				<div class="hero-text">
 					<a class="mini-mascot" data-ask="mascot_mobile" href={KAKAO_URL} target="_blank" rel="noopener" aria-label="궁금한 점 고르고 상담하기"><span>뭐가 궁금하세요?</span><img src="/brand/mascot.webp" alt="" width="209" height="360" fetchpriority="high" /></a>
-					<span class="badge">KT망과 LG망 알뜰폰 개통</span>
-					<h1>선불과 알뜰폰 개통,<br />한 번에 끝내세요</h1>
-					<p>전국 어디서나 비대면 상담, 10분 셀프개통으로 간편하게 시작하세요.</p>
+					<span class="badge">약정 0원, 위약금 0원</span>
+					<h1>월 {heroMinPrice}원부터,<br />약정 없이 시작하세요</h1>
+					<p>선불폰과 알뜰폰을 비대면으로, KT망과 LG망 중에 고르세요.</p>
 					<div class="hb-cta">
 						<a class="btn self lg" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
 						<div class="hb-row">
