@@ -9,7 +9,7 @@ import NoticeBar from './NoticeBar.astro';
 <NoticeBar />
 <header>
 	<nav>
-		<h2><a href="/" aria-label={SITE_TITLE}><Logo /></a></h2>
+		<div class="brand"><a href="/" aria-label={SITE_TITLE}><Logo /></a></div>
 		<div class="internal-links">
 			<HeaderLink href="/">홈</HeaderLink>
 			<HeaderLink href="/plans/">요금제</HeaderLink>
@@ -28,12 +28,12 @@ import NoticeBar from './NoticeBar.astro';
 		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
-	h2 {
+	.brand {
 		margin: 0;
 		font-size: 1em;
 	}
-	h2 a,
-	h2 a.active {
+	.brand a,
+	.brand a.active {
 		text-decoration: none;
 	}
 	nav {
@@ -50,7 +50,7 @@ import NoticeBar from './NoticeBar.astro';
 	}
 	@media (max-width: 720px) {
 		nav { justify-content: center; }
-		h2 { width: 100%; text-align: center; padding-top: 0.6em; font-size: 1.05em; }
+		.brand { width: 100%; text-align: center; padding-top: 0.6em; font-size: 1.05em; }
 		.internal-links { display: flex; justify-content: center; width: 100%; }
 		nav a { padding: 0.6em 0.45em; font-size: 0.92rem; white-space: nowrap; }
 		.search-btn { padding: 0.6em 0.4em; }

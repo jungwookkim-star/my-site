@@ -157,6 +157,7 @@ const faqSchema = {
 			.feat figcaption { position: absolute; top: 8px; left: 8px; background: #d92d20; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; }
 			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
 			summary { cursor: pointer; font-weight: 700; }
+			.faq details > summary, details > summary { min-height: 2.6rem; }
 			details p { margin: 0.6rem 0 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 			.nposts { list-style: none; padding: 0; margin: 0 0 1.5rem; }
 			.nposts li { display: flex; justify-content: space-between; gap: 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.8rem 1.2rem; margin-bottom: 0.6rem; font-size: 0.95rem; }
@@ -304,7 +305,7 @@ const faqSchema = {
 				<a class="hero-big" data-ask="mascot_pc" href={KAKAO_URL} target="_blank" rel="noopener" aria-label="궁금한 점 고르고 상담하기">
 					<svg class="hb-waves" viewBox="0 0 400 400" aria-hidden="true"><g fill="none" stroke="#fff" stroke-linecap="round"><path d="M70 150a190 190 0 0 1 260 0" stroke-width="10" opacity="0.18"/><path d="M105 190a135 135 0 0 1 190 0" stroke-width="10" opacity="0.28"/><path d="M140 230a80 80 0 0 1 120 0" stroke-width="10" opacity="0.4"/></g><circle cx="200" cy="270" r="10" fill="#fff" opacity="0.5"/></svg>
 					<span class="hb-bubble">어떤 게 궁금하세요?<br />저를 눌러 골라보세요!</span>
-					<img src="/brand/mascot.png" alt="" width="371" height="640" loading="eager" />
+					<img src="/brand/mascot-lg.webp" alt="" width="371" height="640" loading="eager" />
 				</a>
 			</div>
 			<div class="statswrap"><HomeStats /></div>
