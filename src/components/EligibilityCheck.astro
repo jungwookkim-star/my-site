@@ -23,9 +23,9 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 			<span class="e-tag">셀프개통 가능</span>
 			<h3>휴대폰으로 약 10분, 셀프개통으로 진행하세요</h3>
 			<ul>
-				<li><b>접수 시간</b> 신규가입 08:00~21:50 · 번호이동 10:00~19:50 (번호이동은 일요일과 설·추석·신정 당일 제외)</li>
+				<li><b>접수 시간</b> 신규가입 08:00~21:50, 번호이동 10:00~19:50 (번호이동은 일요일과 설·추석·신정 당일 제외)</li>
 				<li><b>준비물</b> 신분증, 간편인증 수단 1가지, 안면인증이 되는 휴대폰, 셀프개통이 가능한 유심</li>
-				<li><b>유심</b> 퀵 배송(서울·수도권·광역시·제주) 또는 편의점 구매, 유심비 8,800원</li>
+				<li><b>유심</b> 퀵 배송(서울, 수도권, 광역시, 제주) 또는 편의점 구매, 유심비 8,800원</li>
 			</ul>
 			<div class="e-actions">
 				<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
@@ -35,13 +35,13 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 
 		<!-- 방문(대면) 개통 -->
 		<div class="e-card visit" data-res="visit" hidden>
-			<span class="e-tag">방문 개통 · 사전 예약</span>
+			<span class="e-tag">방문 개통 (사전 예약)</span>
 			<h3>방문(대면) 개통으로 진행하세요</h3>
 			<p class="e-why"></p>
 			<ul>
-				<li><b>예약</b> 전화나 카카오톡으로 성함, 연락처, 방문 희망 지역·날짜·시간, 선택한 요금제를 알려 주세요. 예약 없이 방문하면 개통이 어려울 수 있어요.</li>
+				<li><b>예약</b> 전화나 카카오톡으로 성함, 연락처, 방문 희망 지역, 날짜, 시간, 선택한 요금제를 알려 주세요. 예약 없이 방문하면 개통이 어려울 수 있어요.</li>
 				<li><b>준비물</b> 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰 (유심은 지점에서 준비)</li>
-				<li><b>서류</b> 외국인·미성년자는 필요한 서류가 달라서 예약할 때 안내해 드려요.</li>
+				<li><b>서류</b> 외국인과 미성년자는 필요한 서류가 달라서 예약할 때 안내해 드려요.</li>
 			</ul>
 			<div class="e-actions">
 				<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡으로 예약 문의</a>
@@ -64,7 +64,7 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 
 		<!-- 미납 안내 -->
 		<p class="e-note" data-note="yes" hidden>
-			<b>미납·연체가 있으시네요.</b> 선불 요금제는 다른 통신사에 미납이 있어도 개통할 수 있는 것으로 안내돼요. 다만 알뜰(후불) 요금제는 다른 통신사에 체납이 있으면 개통할 수 없고, 앤텔레콤 자체 미납이 있으면 개통이 어려워요.
+			<b>미납이나 연체가 있으시네요.</b> 선불 요금제는 다른 통신사에 미납이 있어도 개통할 수 있는 것으로 안내돼요. 다만 알뜰(후불) 요금제는 다른 통신사에 체납이 있으면 개통할 수 없고, 앤텔레콤 자체 미납이 있으면 개통이 어려워요.
 		</p>
 		<p class="e-note" data-note="unsure" hidden>
 			<b>미납 여부가 헷갈리시면</b> 선불 요금제를 먼저 보세요. 선불은 다른 통신사 미납과 상관없이 개통할 수 있고, 알뜰(후불)은 체납이 있으면 개통할 수 없어요.
@@ -157,7 +157,7 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 		},
 		{
 			key: 'unpaid',
-			q: '다른 통신사에 미납·연체가 있으세요?',
+			q: '다른 통신사에 미납이나 연체가 있으세요?',
 			hint: '선불과 알뜰(후불)은 미납에 대한 기준이 달라요.',
 			opts: [
 				{ v: 'no', label: '없어요' },
@@ -214,7 +214,7 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 				why = '외국인은 구비서류를 직접 확인해야 해서 대면 개통만 가능해요. 외국인은 1회선까지 개통할 수 있어요.';
 			} else if (a.who === 'minor') {
 				res = 'visit';
-				why = '미성년자는 대면 개통만 가능해요. 선불·후불 각 1회선까지 개통할 수 있고, 법정대리인 서류가 필요해요.';
+				why = '미성년자는 대면 개통만 가능해요. 선불과 후불 각 1회선까지 개통할 수 있고, 법정대리인 서류가 필요해요.';
 			} else if (a.line === 'yes') {
 				res = 'visit';
 				why = '앤텔레콤 회선을 이미 쓰고 계시면 셀프개통이 아니라 방문 개통으로 진행해요.';

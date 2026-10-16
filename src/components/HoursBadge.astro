@@ -43,19 +43,19 @@ import { HOURS } from '../consts';
 			const r = RULES[el.dataset.kind as 'new' | 'port'];
 			if (el.dataset.kind === 'port' && isSundayKst()) {
 				el.className = 'closed';
-				el.textContent = '일요일은 접수 불가 · 월요일 10:00부터';
+				el.textContent = '일요일은 접수 불가, 월요일 10:00부터';
 				return;
 			}
 			if (now >= r.open && now <= r.close) {
 				el.className = 'open';
 				const left = r.close - now;
-				el.textContent = left <= 180 ? `지금 접수 가능 (${fmt(r.close)}까지 · ${Math.floor(left / 60) > 0 ? Math.floor(left / 60) + '시간 ' : ''}${left % 60}분 남음)` : `지금 접수 가능 (${fmt(r.close)}까지)`;
+				el.textContent = left <= 180 ? `지금 접수 가능 (${fmt(r.close)}까지, ${Math.floor(left / 60) > 0 ? Math.floor(left / 60) + '시간 ' : ''}${left % 60}분 남음)` : `지금 접수 가능 (${fmt(r.close)}까지)`;
 			} else if (now < r.open) {
 				el.className = 'closed';
 				el.textContent = `오늘 ${fmt(r.open)}부터 접수`;
 			} else {
 				el.className = 'closed';
-				el.textContent = `오늘 마감 · 내일 ${fmt(r.open)}부터`;
+				el.textContent = `오늘 마감, 내일 ${fmt(r.open)}부터`;
 			}
 		});
 	}
