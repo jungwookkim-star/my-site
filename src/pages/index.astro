@@ -264,12 +264,15 @@ const faqSchema = {
 				.hero-big img { width: 100%; height: auto; display: block; margin: 0; filter: drop-shadow(0 18px 28px rgba(0, 10, 50, 0.45)); animation: bigwave 5s ease-in-out infinite; transform-origin: 50% 90%; }
 				.hero-big:hover img { animation: none; transform: scale(1.03); }
 				.hb-waves { position: absolute; left: -22%; top: -18%; width: 150%; height: auto; z-index: -1; pointer-events: none; }
-				.hb-bubble { position: absolute; left: -26%; top: 4%; background: #fff; color: #0e2150; font-size: 0.86rem; font-weight: 800; line-height: 1.4; padding: 0.7rem 1rem; border-radius: 16px 16px 4px 16px; box-shadow: 0 10px 26px rgba(0, 10, 50, 0.3); text-align: left; }
+				.hb-bubble { position: absolute; left: -27%; top: 14%; animation: bubblebob 3.4s ease-in-out infinite; background: #fff; color: #0e2150; font-size: 0.86rem; font-weight: 800; line-height: 1.4; padding: 0.7rem 1rem; border-radius: 16px; box-shadow: 0 10px 26px rgba(0, 10, 50, 0.3); text-align: left; }
+				.hb-bubble::after { content: ''; position: absolute; right: -9px; bottom: 14px; width: 18px; height: 18px; background: #fff; border-radius: 3px; transform: rotate(45deg) skew(8deg, 8deg); }
+				.hero-big:hover .hb-bubble { animation-play-state: paused; }
+				@keyframes bubblebob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 				@keyframes bigwave { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1.5deg); } }
 				.statswrap { position: relative; z-index: 2; margin-top: -2.6rem; }
 				.statswrap :global(.stats) { margin-top: 0; }
 			}
-			@media (min-width: 721px) and (prefers-reduced-motion: reduce) { .hero-big img { animation: none; } }
+			@media (min-width: 721px) and (prefers-reduced-motion: reduce) { .hero-big img, .hb-bubble { animation: none; } }
 		</style>
 	</head>
 	<body>
