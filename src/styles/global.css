@@ -266,3 +266,7 @@ h2.sec::after {
 	background: linear-gradient(90deg, #2337ff, #7c3aed);
 }
 h2.sec + .sub { margin-top: 0.8rem; }
+
+/* 글자 크게 보기 (푸터 버튼으로 켜고 끕니다) */
+html.bigtext { font-size: 112.5%; }
+html.bigtext body { font-size: 22.5px; }

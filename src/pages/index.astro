@@ -225,6 +225,8 @@ const faqSchema = {
 
 			@keyframes bubblebob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 			@media (prefers-reduced-motion: reduce) { .mini-mascot span { animation: none !important; } }
+			.resume { display: block; width: fit-content; max-width: 100%; margin: 1rem auto 0; padding: 0.55rem 1.1rem; border-radius: 999px; background: #fff; color: var(--accent); font-size: 0.9rem; font-weight: 700; text-decoration: none; box-shadow: var(--box-shadow); box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+			.resume[hidden] { display: none; }
 			.stars { display: none; }
 			@media (min-width: 721px) {
 				.stars { display: block; position: absolute; z-index: -1; top: -54px; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; pointer-events: none; border-radius: 0 0 56px 56px / 0 0 36px 36px; }
@@ -306,6 +308,7 @@ const faqSchema = {
 				</a>
 			</div>
 			<div class="statswrap"><HomeStats /></div>
+			<a class="resume" id="resume" href="/plans/" hidden></a>
 
 			<section id="finder">
 				<h2 class="sec">내게 맞는 요금제 찾기</h2>

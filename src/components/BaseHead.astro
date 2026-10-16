@@ -89,6 +89,9 @@ const schemas = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonL
 <meta property="og:site_name" content="커넥트모바일" />
 
 <!-- Google Analytics (실제 사이트에서만 동작) -->
+<script is:inline>
+	try { if (localStorage.getItem('bigtext') === '1') document.documentElement.classList.add('bigtext'); } catch (e) {}
+</script>
 <script is:inline define:vars={{ GA_ID }}>
 	if (location.hostname === 'connectmobile.kr' || location.hostname === 'www.connectmobile.kr') {
 		var s = document.createElement('script');
