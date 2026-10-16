@@ -81,7 +81,7 @@ const { plans, compare = false } = Astro.props;
 		const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.ask');
 		if (!btn) return;
 		const text = `[${btn.dataset.plan}] 요금제 문의드립니다.`;
-		window.open(btn.dataset.kakao, '_blank', 'noopener');
+		window.open((btn.dataset.kakao ?? '') + '/chat', '_blank', 'noopener');
 		try {
 			navigator.clipboard.writeText(text).then(
 				() => showToast('요금제 이름이 복사되었습니다. 카카오톡 대화창에 붙여넣어 보내주세요.'),

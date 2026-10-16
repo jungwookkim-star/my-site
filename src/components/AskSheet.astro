@@ -20,7 +20,7 @@ const topics = [
 	<ul class="as-list">
 		{
 			topics.map((t) => (
-				<li>
+				<li data-key={t.key}>
 					{t.href ? (
 						<a href={t.href} data-topic={t.key}>
 							<span class="e">{t.emoji}</span>
@@ -58,6 +58,8 @@ const topics = [
 	.as-list .e { font-size: 1.4rem; width: 2rem; text-align: center; }
 	.as-list .t { flex: 1; display: grid; }
 	.as-list strong { font-size: 0.98rem; }
+	.as-list li.rec strong::after { content: '지금 보는 내용'; margin-left: 0.4rem; font-size: 0.65rem; font-weight: 700; color: #fff; background: #2337ff; padding: 0.1rem 0.45rem; border-radius: 999px; vertical-align: middle; }
+	.as-list li.rec a { background: #e8ecff; box-shadow: inset 0 0 0 1.5px #2337ff; }
 	.as-list small { color: #5b6180; font-size: 0.78rem; }
 	.as-list .go { color: #8a91b8; font-size: 1.3rem; }
 	.as-foot { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
@@ -78,6 +80,30 @@ const topics = [
 		const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
 		if (gtag) gtag('event', name, { page_path: location.pathname, ...params });
 	}
+	// 보고 있던 페이지에 맞춰 선택지 순서를 바꿉니다.
+	const ORDER: [string, string[]][] = [
+		['/plans', ['plan', 'faq', 'stuck', 'second', 'visit']],
+		['/saving', ['plan', 'faq', 'stuck', 'second', 'visit']],
+		['/second-number', ['second', 'plan', 'stuck', 'visit', 'faq']],
+		['/blog/esim', ['second', 'stuck', 'plan', 'visit', 'faq']],
+		['/guide', ['stuck', 'faq', 'plan', 'visit', 'second']],
+		['/faq', ['faq', 'stuck', 'plan', 'visit', 'second']],
+		['/region', ['visit', 'stuck', 'plan', 'second', 'faq']],
+	];
+	function arrange() {
+		const list = dlg?.querySelector('.as-list');
+		if (!list) return;
+		list.querySelectorAll('li.rec').forEach((li) => li.classList.remove('rec'));
+		const hit = ORDER.find(([prefix]) => location.pathname.startsWith(prefix));
+		const keys = hit ? hit[1] : ['plan', 'stuck', 'second', 'visit', 'faq'];
+		keys.forEach((k) => {
+			const li = list.querySelector<HTMLElement>('li[data-key="' + k + '"]');
+			if (li) list.appendChild(li);
+		});
+		if (hit) list.firstElementChild?.classList.add('rec');
+	}
+	const pageName = () => document.title.split('|')[0].trim();
+
 	if (dlg && typeof dlg.showModal === 'function') {
 		document.addEventListener('click', (e) => {
 			const el = e.target as HTMLElement;
@@ -85,6 +111,7 @@ const topics = [
 			if (opener) {
 				e.preventDefault();
 				if (note) note.textContent = '';
+				arrange();
 				dlg.showModal();
 				track('ask_open', { where: opener.dataset.ask ?? '' });
 				return;
@@ -96,7 +123,7 @@ const topics = [
 			const pick = el.closest<HTMLAnchorElement>('.ask-sheet a[data-topic]');
 			if (pick) {
 				track('ask_pick', { topic: pick.dataset.topic ?? '' });
-				const text = pick.dataset.copy;
+				const text = pick.dataset.copy ? pick.dataset.copy + '\n(보던 페이지: ' + pageName() + ')' : '';
 				if (text && navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
 				if (text && note) note.textContent = '문의 양식이 복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.';
 			}
