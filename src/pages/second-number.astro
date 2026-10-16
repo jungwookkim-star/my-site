@@ -1,0 +1,186 @@
+---
+import Icon from '../components/Icon.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import ShareButton from '../components/ShareButton.astro';
+import { lgPrepaid, ktPrepaid } from '../data/prepaidPlans';
+import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
+
+const pick = (list: typeof lgPrepaid, name: string) => list.find((p) => p.name === name);
+// 요금은 사이트 요금 데이터(공식 요금제 기준)에서 그대로 가져옵니다.
+const rows = [
+	{ use: '인증 · 문자 수신, 번호만 유지', plan: pick(lgPrepaid, 'L망 선불 기본1'), net: 'LG망 (eSIM 가능)' },
+	{ use: '메신저와 가벼운 검색', plan: pick(lgPrepaid, 'L망 선불 데이터 2.5GB'), net: 'LG망 (eSIM 가능)' },
+	{ use: '업무 통화가 많은 번호', plan: pick(lgPrepaid, 'L망 선불 300분'), net: 'LG망 (eSIM 가능)' },
+	{ use: '두 번째 번호로도 폰처럼', plan: pick(lgPrepaid, 'L망 선불 396 10.3GB'), net: 'LG망 (eSIM 가능)' },
+	{ use: 'KT망으로 쓰고 싶을 때', plan: pick(ktPrepaid, '선불 LTE 기본1'), net: 'KT망 (실물 유심)' },
+].filter((r) => r.plan);
+
+const title = '세컨드 번호 만들기 | 폰 하나에 번호 두 개, 업무용·인증용 두 번째 번호 | 커넥트모바일';
+const description =
+	'업무용, 인증용, 중고거래용으로 두 번째 번호가 필요하신가요? eSIM 듀얼심이나 공기계로 쓰던 번호는 그대로 두고 선불 번호를 하나 더 만드는 방법, 비용, 준비물, 주의할 점을 앤텔레콤 공식 안내 기준으로 정리했습니다.';
+
+const faqs = [
+	{ q: '세컨드 번호는 어떻게 만드나요?', a: '쓰던 번호와 통신사는 그대로 두고, 선불 요금제로 번호를 하나 더 개통합니다. eSIM을 지원하는 휴대폰이라면 기존 번호는 실물 유심으로 두고 두 번째 번호를 eSIM으로 추가해 한 휴대폰에서 번호 두 개를 쓸 수 있습니다. eSIM이 안 되는 휴대폰이나 공기계는 실물 유심으로 개통합니다.' },
+	{ q: 'eSIM으로 두 번째 번호를 만들 수 있는 휴대폰은 무엇인가요?', a: '앤텔레콤 공식 안내 기준으로 아이폰 XS, XS Max, XR 및 이후 모델, 갤럭시 Z Flip4와 Z Fold4 이후 모델 및 해외 eSIM 지원 기종입니다. 키패드에서 *#06#을 눌러 EID와 IMEI가 나오면 eSIM 개통이 가능합니다. 통신사 약정으로 구매한 휴대폰은 eSIM 조회가 안 될 수 있습니다.' },
+	{ q: '비용은 얼마인가요?', a: '선불은 월 12,100원(선불 기본1)부터 시작합니다. eSIM 발급비는 2,750원이고 기기를 바꾸거나 통신사를 옮겨 다시 발급할 때도 2,750원이 듭니다. 실물 유심은 유심비 8,800원입니다. 요금제별 가격은 요금제 페이지에서 확인하세요.' },
+	{ q: '선불 eSIM은 어느 통신망으로 가능한가요?', a: '앤텔레콤 안내 기준으로 eSIM은 K망은 후불만, L망은 선불과 후불 모두 지원되어서 선불 eSIM은 LG망(L망)에서만 개통됩니다. KT망 선불은 실물 유심(바로유심)으로 개통합니다.' },
+	{ q: '충전은 어떻게 하나요?', a: '선불은 개통한 날 충전이 필요하고, 충전하지 않으면 번호가 정지되거나 해지될 수 있습니다. 계속 쓸 번호라면 개통 당일 충전을 끝내세요. 충전은 앤텔레콤 멤버십 앱에서 합니다.' },
+	{ q: '본인 명의로만 개통할 수 있나요?', a: '네. 본인 인증과 신분증 확인을 거쳐 본인 명의로 개통합니다. 만 19세 이상 내국인은 휴대폰으로 셀프개통하고, 외국인과 미성년자는 대면 개통만 가능해서 사전 예약 후 방문해야 합니다.' },
+	{ q: '번호이동으로도 만들 수 있나요?', a: '두 번째 번호를 새로 만들 때는 신규가입으로 개통합니다. 번호이동은 쓰던 번호를 다른 통신사로 옮기는 방식이라서 세컨드 번호 추가와는 다릅니다. 접수 시간은 신규가입 08:00~21:50, 번호이동 10:00~19:50이고 번호이동은 일요일과 신정·설·추석 당일에는 접수되지 않습니다.' },
+];
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const crumbs = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: '홈', item: 'https://connectmobile.kr/' },
+		{ '@type': 'ListItem', position: 2, name: '세컨드 번호', item: 'https://connectmobile.kr/second-number/' },
+	],
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={title} description={description} jsonLd={[faqSchema, crumbs]} />
+		<style>
+			.hero { text-align: center; padding: 2rem 0 1rem; }
+			.hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+			.hero p { color: rgb(var(--gray)); margin: 0; }
+			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.alt { background: #fee500; color: #191919; }
+			.btn.self { background: #ff3b30; color: #fff; }
+			.btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			section { margin-top: 3rem; }
+			h2.sec { text-align: center; }
+			.sub { text-align: center; color: rgb(var(--gray)); margin: -0.3rem 0 1.2rem; font-size: 0.95rem; }
+			.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 1rem; }
+			.card { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+			.card h3 { margin: 0 0 0.4rem; font-size: 1.1rem; }
+			.card p { margin: 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
+			.card .tag { display: inline-block; font-size: 0.75rem; font-weight: 800; color: var(--accent); background: #eef1ff; border-radius: 999px; padding: 0.15rem 0.7rem; margin-bottom: 0.6rem; }
+			.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.8rem; counter-reset: s; }
+			.steps li { counter-increment: s; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem 1rem 3.4rem; position: relative; font-size: 0.95rem; }
+			.steps li::before { content: counter(s); position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+			.tw { overflow-x: auto; }
+			table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--box-shadow); font-size: 0.93rem; }
+			th, td { padding: 0.7rem 0.8rem; text-align: left; border-bottom: 1px solid rgb(var(--gray-light)); }
+			th { background: #eef1ff; color: var(--accent-dark); white-space: nowrap; }
+			.note { text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); margin-top: 0.8rem; }
+			.warn { background: #fff7ed; border-left: 5px solid #ff8a3d; border-radius: 12px; padding: 1rem 1.2rem; }
+			.warn ul { margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.93rem; }
+			details { background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
+			summary { cursor: pointer; font-weight: 700; }
+			details p { margin: 0.6rem 0 0; font-size: 0.92rem; }
+			.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+			.chips a { background: #fff; box-shadow: var(--box-shadow); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.9rem; text-decoration: none; color: var(--black); }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main id="main" class="wide">
+			<div class="hero">
+				<h1>세컨드 번호, 폰 하나에 번호 두 개</h1>
+				<p>쓰던 번호는 그대로 두고 업무용·인증용 번호를 하나 더 만드세요.</p>
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+					<a class="btn ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
+				</div>
+			</div>
+
+			<section>
+				<h2 class="sec">이런 때 두 번째 번호가 필요해요</h2>
+				<div class="cards">
+					<div class="card"><span class="tag">업무</span><h3>업무용과 개인용 분리</h3><p>거래처나 고객 연락을 개인 번호와 나누어 받고 싶을 때</p></div>
+					<div class="card"><span class="tag">인증</span><h3>회원가입·인증용 번호</h3><p>가입이나 본인 확인에만 쓰는 번호를 따로 두고 싶을 때</p></div>
+					<div class="card"><span class="tag">거래</span><h3>택배·중고거래용</h3><p>중고거래나 배송 연락에 개인 번호를 쓰고 싶지 않을 때</p></div>
+					<div class="card"><span class="tag">계정</span><h3>본계정과 부계정</h3><p>메신저나 서비스 계정을 나눠 쓰고 싶을 때</p></div>
+				</div>
+				<p class="note">쓰던 번호와 통신사는 그대로 유지하고 번호만 하나 더 추가하는 방식입니다. 모든 번호는 본인 명의로 개통합니다.</p>
+			</section>
+
+			<section>
+				<h2 class="sec">두 번째 번호를 만드는 방법 3가지</h2>
+				<div class="cards">
+					<div class="card"><span class="tag">추천</span><h3>① eSIM으로 추가</h3><p>eSIM을 지원하는 휴대폰이라면 기존 번호는 실물 유심으로 두고 eSIM으로 번호를 하나 더 추가합니다. 유심을 사러 갈 필요가 없습니다. 선불 eSIM은 LG망만 가능합니다.</p></div>
+					<div class="card"><span class="tag">공기계</span><h3>② 쓰던 공기계에 유심</h3><p>서랍 속 공기계에 선불 유심을 끼워 두 번째 폰으로 씁니다. KT망과 LG망 중 선택할 수 있습니다.</p></div>
+					<div class="card"><span class="tag">번호 하나 추가</span><h3>③ 실물 유심만 교체</h3><p>하나의 휴대폰에서 유심을 바꿔 가며 쓸 수도 있지만 번호가 동시에 켜지지 않아서 업무용이나 인증용으로는 불편할 수 있습니다.</p></div>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="sec">용도별 요금제</h2>
+				<p class="sub">앤텔레콤 공식 요금제 기준이며 바뀔 수 있어요. 선불은 개통한 날 충전이 필요합니다.</p>
+				<div class="tw">
+					<table>
+						<thead><tr><th>용도</th><th>요금제</th><th>월 요금</th><th>제공량</th><th>통신망</th></tr></thead>
+						<tbody>
+							{rows.map((r) => (
+								<tr>
+									<td>{r.use}</td>
+									<td>{r.plan!.name}</td>
+									<td><strong>{r.plan!.price}</strong></td>
+									<td>통화 {r.plan!.voice} · 문자 {r.plan!.sms} · {r.plan!.data}</td>
+									<td>{r.net}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+				<p class="note"><a href="/plans/">요금제 전체 비교 보기</a></p>
+			</section>
+
+			<section>
+				<h2 class="sec">eSIM으로 만드는 순서</h2>
+				<ol class="steps">
+					<li>내 휴대폰이 eSIM을 지원하는지 확인합니다. 전화 앱 키패드에서 <strong>*#06#</strong>을 눌러 EID와 IMEI가 나오면 가능합니다.</li>
+					<li>셀프개통에서 가입유형(신규가입), 사용방식(선불), 유심 보유, 유심유형 <strong>eSIM</strong>을 선택합니다.</li>
+					<li>휴대폰 정보를 입력하고 조회한 뒤, 마지막 단계에서 eSIM 비용 2,750원을 결제합니다.</li>
+					<li>개통이 끝나면 eSIM을 활성화하고, <strong>개통한 날 충전</strong>합니다.</li>
+				</ol>
+				<p class="note">자세한 접수 순서와 입력 방법은 <a href="/blog/esim-vs-usim/">eSIM 개통 방법과 유심 차이</a> 글에서 확인하세요.</p>
+			</section>
+
+			<section>
+				<div class="warn">
+					<strong>시작하기 전에 확인하세요</strong>
+					<ul>
+						<li>선불 eSIM은 <strong>LG망</strong>만 가능합니다. KT망 선불은 실물 유심(바로유심)으로 개통합니다.</li>
+						<li>통신사 약정으로 산 휴대폰은 eSIM 조회가 안 될 수 있습니다. 그때는 실물 유심으로 진행하세요.</li>
+						<li>선불은 <strong>개통 당일 충전</strong>이 필요하고, 충전하지 않으면 번호가 정지되거나 해지될 수 있습니다.</li>
+						<li>셀프개통은 <strong>만 19세 이상 내국인</strong>만 가능합니다. 외국인과 미성년자는 사전 예약 후 방문 개통을 이용해 주세요.</li>
+						<li>이미 앤텔레콤 회선을 1개 사용 중이면 셀프개통이 안 되고 방문 개통으로만 진행됩니다.</li>
+						<li>접수 가능 시간: 신규가입 08:00~21:50, 번호이동 10:00~19:50(번호이동은 일요일·신정·설·추석 제외)</li>
+						<li>메신저를 두 개 쓰고 싶다면 기종마다 지원이 달라서 사용하는 앱과 휴대폰의 안내를 확인하세요.</li>
+					</ul>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="sec">자주 묻는 질문</h2>
+				{faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+			</section>
+
+			<section>
+				<p style="text-align:center;margin-bottom:1.5rem"><ShareButton title="세컨드 번호 만들기 | 커넥트모바일" /></p>
+				<h2 class="sec">함께 보면 좋은 글</h2>
+				<div class="chips">
+					<a href="/blog/esim-vs-usim/">eSIM 개통 방법과 유심 차이</a>
+					<a href="/blog/second-phone-prepaid/">세컨폰·서브폰으로 선불폰 쓰기</a>
+					<a href="/blog/second-number-guide/">세컨드 번호 만드는 법</a>
+					<a href="/blog/work-number-separate/">업무용 번호 따로 만들기</a>
+					<a href="/guide/">개통 과정 안내</a>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

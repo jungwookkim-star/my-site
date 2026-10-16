@@ -31,6 +31,8 @@ const MAP: Record<string, Category> = {
 	'tablet-wearable-plans': '요금제 비교·추천',
 	'senior-welfare-plans': '요금제 비교·추천',
 	'second-phone-prepaid': '요금제 비교·추천',
+	'second-number-guide': '요금제 비교·추천',
+	'work-number-separate': '요금제 비교·추천',
 
 	'prepaid-charge-guide': '충전·이용·해지',
 	'prepaid-cancel-pause': '충전·이용·해지',
