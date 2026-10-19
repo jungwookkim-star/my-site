@@ -1,4 +1,5 @@
 ---
+import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -80,10 +81,7 @@ const minPrice = Math.min(...items.map((i) => i.price)).toLocaleString('ko-KR');
 	<body>
 		<Header />
 		<main id="main">
-			<div class="sv-head">
-				<h1>알뜰폰으로 바꾸면 얼마나 아낄까?</h1>
-				<p>지금 내는 통신비를 넣으면, 사용량에 맞는 요금제와 절약 금액을 바로 계산해 드려요.</p>
-			</div>
+			<PageHead title="알뜰폰으로 바꾸면 얼마나 아낄까?" sub="지금 내는 통신비를 넣으면, 사용량에 맞는 요금제와 절약 금액을 바로 계산해 드려요." />
 
 			<div class="sv" id="sv">
 				<label class="sv-l" for="bill">한 달에 내는 통신비<span class="sv-sub">단말기 할부금은 빼고, 통신 요금만 넣어 주세요.</span></label>

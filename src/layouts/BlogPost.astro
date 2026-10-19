@@ -96,10 +96,14 @@ const ld = isPost
 				color: rgb(var(--gray-dark));
 			}
 			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
+				margin: 0.5em 0 1.5em;
+				padding: 1.8rem 1.4rem;
 				text-align: center;
 				line-height: 1.3;
+				color: #fff;
+				border-radius: 22px;
+				box-shadow: 0 14px 34px rgba(15, 40, 140, 0.24);
+				background: radial-gradient(520px 240px at 90% 0%, rgba(120, 190, 255, 0.4), transparent 60%), radial-gradient(420px 240px at 4% 100%, rgba(47, 123, 255, 0.45), transparent 65%), linear-gradient(135deg, #0b1d4d 0%, #123f9e 55%, #1c63e0 100%);
 			}
 			.prose { font-size: 1.02rem; line-height: 1.85; }
 			.prose :global(h2) { margin-top: 2.2rem; font-size: 1.5rem; }
@@ -110,7 +114,7 @@ const ld = isPost
 			.prose :global(th), .prose :global(td) { border-bottom: 1px solid rgb(var(--gray-light)); padding: 0.55rem 0.7rem; text-align: left; vertical-align: top; }
 			.prose :global(th) { background: #eef1ff; color: var(--accent-dark); white-space: nowrap; }
 			.prose :global(td) { min-width: 5em; }
-			.cat { display: inline-block; margin-bottom: 0.6rem; padding: 0.4rem 1rem; border-radius: 999px; background: #eef1ff; color: var(--accent); font-size: 0.8rem; font-weight: 800; text-decoration: none; }
+			.cat { display: inline-block; margin-bottom: 0.6rem; padding: 0.4rem 1rem; border-radius: 999px; background: rgba(255, 255, 255, 0.16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); color: #fff; font-size: 0.8rem; font-weight: 800; text-decoration: none; }
 			.toc { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.3rem; margin: 0 0 1.5rem; line-height: 1.5; }
 			.toc strong { display: block; margin-bottom: 0.4rem; color: rgb(var(--black)); }
 			.toc ol { margin: 0; padding-left: 1.2rem; font-size: 0.93rem; }
@@ -143,12 +147,17 @@ const ld = isPost
 			.post-cta a.self { background: #d92d20; }
 			.post-cta a.kakao { background: #fee500; color: #191919; }
 			@media (max-width: 720px) { .post-cta .row { flex-direction: column; } }
+			.title hr { display: none; }
 			.title h1 {
-				margin: 0 0 0.5em 0;
+				margin: 0.3em 0 0 0;
+				color: #fff;
+				font-size: clamp(1.5rem, 3.6vw, 2.1rem);
+				letter-spacing: -0.02em;
 			}
 			.date {
 				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+				color: rgba(255, 255, 255, 0.78);
+				font-size: 0.88rem;
 			}
 			.last-updated-on {
 				font-style: italic;

@@ -1,4 +1,5 @@
 ---
+import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -86,15 +87,13 @@ const crumbs = {
 	<body>
 		<Header />
 		<main id="main" class="wide">
-			<div class="hero">
-				<h1>세컨드 번호, 폰 하나에 번호 두 개</h1>
-				<p>쓰던 번호는 그대로 두고 업무용·인증용 번호를 하나 더 만드세요.</p>
+			<PageHead title="세컨드 번호, 폰 하나에 번호 두 개" sub="쓰던 번호는 그대로 두고 업무용·인증용 번호를 하나 더 만드세요.">
 				<div class="cta">
 					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
 					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
 					<a class="btn ghost" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 				</div>
-			</div>
+			</PageHead>
 
 			<section>
 				<h2 class="sec">이런 때 두 번째 번호가 필요해요</h2>
