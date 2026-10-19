@@ -12,7 +12,7 @@ import EligibilityCheck from '../components/EligibilityCheck.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
-import { homeFaqs } from '../data/faqs';
+import { homeFaqs, faqGroups } from '../data/faqs';
 const allPlanPrices = [...ktPrepaid, ...lgPrepaid, ...ktPrepaidMore, ...lgPrepaidMore, ...ktPostpaid, ...lgPostpaid, ...postpaidPartners.flatMap((x) => x.plans)]
 	.map((x) => Number(x.price.replace(/[^0-9]/g, '')))
 	.filter((n) => n > 0);
@@ -43,7 +43,10 @@ const regionIndex = [{ t: '가산', label: '서울 가산동', slug: 'seoul/gasa
 const popularPrepaid = [...ktPrepaid].filter((p) => ['LTE 선불 396 10.3GB', 'LTE 선불 459 20.3GB'].includes(p.name));
 const popularPostpaid = postpaidPartners.flatMap((p) => p.plans).filter((p) => ['밀리의서재 7GB+', '네이버페이 10GB+', '다이소 10GB+'].includes(p.name));
 
-const faqs = homeFaqs;
+// 홈에는 가장 자주 묻는 6개만 보여 주고, 나머지는 FAQ 페이지로 안내합니다. (화면과 구조화 데이터가 같은 목록을 씁니다)
+const homeKeep = ['개통하려면 무엇이 필요한가요?', '유심은 어떻게 받나요?', '셀프개통은 얼마나 걸리나요?', '미납이나 연체 이력이 있어도 개통되나요?', '약정이나 위약금이 있나요?', '외국인이나 미성년자도 개통할 수 있나요?'];
+const faqs = homeFaqs.filter((f) => homeKeep.includes(f.q));
+const faqTotal = faqGroups.reduce((n, g) => n + g.items.length, 0);
 const faqSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'FAQPage',
@@ -488,7 +491,7 @@ const faqSchema = {
 				{faqs.map((f) => (
 					<details><summary>{f.q}</summary><p>{f.a}</p></details>
 				))}
-				<p style="text-align:center;margin-top:1.2rem"><a class="btn ghost" href="/faq/">질문 전체 보기<Icon name="arrow" /></a></p>
+				<p style="text-align:center;margin-top:1.2rem"><a class="btn ghost" href="/faq/">질문 {faqTotal}개 전체 보기<Icon name="arrow" /></a></p>
 			</section>
 
 			<section id="guides">
