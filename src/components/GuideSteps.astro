@@ -134,5 +134,20 @@ import { KAKAO_URL } from '../consts';
 			document.getElementById('screens')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
 		}));
 		window.addEventListener('resize', () => go(cur));
+		// 주소가 #screen-숫자 이면 그 단계를 바로 보여 줍니다. (막힘 도움 칩, 공유 링크용)
+		const fromHash = () => {
+			const m = location.hash.match(/^#screen-([0-9]+)$/);
+			if (!m) return;
+			const n = Number(m[1]);
+			if (n < 1 || n > total) return;
+			track.scrollTo({ left: (n - 1) * track.clientWidth, behavior: 'auto' });
+			// 이미 같은 위치라 스크롤 이벤트가 안 올 수 있으니 표시를 직접 갱신합니다.
+			requestAnimationFrame(paint);
+			setTimeout(paint, 250);
+			document.getElementById('screens')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+		};
+		window.addEventListener('hashchange', fromHash);
+		setTimeout(fromHash, 150);
+		setTimeout(paint, 400);
 	}
 </script>

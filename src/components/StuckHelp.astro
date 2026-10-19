@@ -8,6 +8,15 @@ const items = [
 	{ href: '/faq/', t: '접수 시간이 지났어요', d: '신규 08:00~21:50, 번호이동 10:00~19:50' },
 	{ href: '/blog/visit-activation-reservation/', t: '셀프개통이 안 되는 경우', d: '방문 개통 예약 방법' },
 ];
+// 막히기 쉬운 단계는 실제 화면으로 바로 볼 수 있게 연결합니다. (번호는 개통 가이드의 화면 단계)
+const screens = [
+	{ n: 3, t: '가입 정보 입력' },
+	{ n: 9, t: '안면인증' },
+	{ n: 11, t: '본인인증' },
+	{ n: 14, t: '유심번호 입력' },
+	{ n: 15, t: '요금제 선택' },
+	{ n: 17, t: '가입자 정보' },
+];
 ---
 
 <div class="stuck">
@@ -24,6 +33,10 @@ const items = [
 		))
 	}
 </div>
+<p class="screens">
+	<span>실제 화면으로 바로 보기</span>
+	{screens.map((x) => <a href={`/guide/#screen-${x.n}`}>{x.n}단계 {x.t}</a>)}
+</p>
 
 <style>
 	.stuck { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 0.8rem; }
@@ -32,4 +45,8 @@ const items = [
 	.stuck strong { color: rgb(var(--black)); font-size: 1rem; line-height: 1.35; }
 	.stuck span { color: rgb(var(--gray)); font-size: 0.82rem; line-height: 1.45; flex: 1; }
 	.stuck em { font-style: normal; color: var(--accent); font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.2rem; margin-top: 0.3rem; }
+.screens { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 1rem 0 0; justify-content: center; }
+	.screens span { font-size: 0.85rem; font-weight: 700; color: rgb(var(--gray-dark)); }
+	.screens a { padding: 0.3rem 0.85rem; border-radius: 999px; background: #eef1ff; color: var(--accent); font-size: 0.84rem; font-weight: 700; text-decoration: none; }
+	.screens a:hover { background: #e0e6ff; }
 </style>
