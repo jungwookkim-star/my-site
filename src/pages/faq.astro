@@ -1,4 +1,5 @@
 ---
+import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -52,10 +53,7 @@ const schema = {
 	<body>
 		<Header />
 		<main id="main">
-			<div class="head">
-				<h1>자주 묻는 질문</h1>
-				<p>개통부터 충전, 해지까지 궁금한 점을 눌러 확인하세요.</p>
-			</div>
+			<PageHead title="자주 묻는 질문" sub="개통부터 충전, 해지까지 궁금한 점을 눌러 확인하세요." />
 
 			<div class="fsearch">
 				<input id="fq" type="search" placeholder="질문 검색 (예: 미납, 충전, 외국인, 유심비)" autocomplete="off" aria-label="질문 검색" />

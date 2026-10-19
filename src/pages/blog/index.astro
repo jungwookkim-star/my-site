@@ -1,4 +1,5 @@
 ---
+import PageHead from '../../components/PageHead.astro';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -43,8 +44,7 @@ const counts = Object.fromEntries(CATEGORIES.map((c) => [c, posts.filter((p) => 
 	<body>
 		<Header />
 		<main id="main">
-			<h1>블로그</h1>
-			<p class="lead">알뜰폰 개통 전에 알아두면 좋은 정보를 모았습니다.</p>
+			<PageHead title="블로그" sub="알뜰폰 개통 전에 알아두면 좋은 정보를 모았습니다." />
 			<div class="tools">
 				<input id="bq" type="search" placeholder="글 검색 (예: 충전, 번호이동, 396)" autocomplete="off" aria-label="블로그 글 검색" />
 				<div class="cats" role="group" aria-label="분류">

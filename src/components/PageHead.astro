@@ -1,0 +1,52 @@
+---
+// 안쪽 페이지 맨 위 제목 영역. 홈과 같은 파란 밴드에 별똥별과 마스코트를 더해 분위기를 맞춥니다.
+interface Props {
+	title: string;
+	sub?: string;
+	mascot?: boolean;
+}
+const { title, sub, mascot = true } = Astro.props;
+---
+
+<div class:list={['ph', { 'ph-m': mascot }]}>
+	<div class="stars" aria-hidden="true"><i></i><i></i><i></i></div>
+	<div class="ph-in">
+		<h1>{title}</h1>
+		{sub && <p>{sub}</p>}
+		<slot />
+	</div>
+	{mascot && <img class="ph-mascot" src="/brand/mascot-lg.webp" alt="" width="371" height="640" loading="eager" />}
+</div>
+
+<style>
+	.ph { position: relative; overflow: hidden; margin: 1rem 0 1.6rem; padding: 2rem 1.4rem 2rem; border-radius: 22px; text-align: center; color: #fff; box-shadow: 0 14px 34px rgba(15, 40, 140, 0.24);
+		background: radial-gradient(640px 280px at 88% 0%, rgba(120, 190, 255, 0.4), transparent 60%), radial-gradient(460px 260px at 4% 100%, rgba(47, 123, 255, 0.45), transparent 65%), linear-gradient(135deg, #0b1d4d 0%, #123f9e 55%, #1c63e0 100%); }
+	.ph-in { position: relative; z-index: 1; }
+	.ph h1 { margin: 0 0 0.4rem; color: #fff; font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.25; letter-spacing: -0.02em; }
+	.ph p { margin: 0 auto; max-width: 34rem; color: rgba(255, 255, 255, 0.88); font-size: 0.98rem; }
+	.ph-mascot { display: none; }
+	.ph .stars { display: none; }
+	@media (min-width: 721px) {
+		.ph { padding: 2.3rem 2.4rem; min-height: 190px; display: flex; align-items: center; text-align: left; }
+		.ph-in { flex: 1; }
+		.ph p { margin: 0; }
+		.ph-m .ph-in { padding-right: 150px; }
+		.ph-mascot { display: block; position: absolute; right: 1.6rem; bottom: -1.2rem; width: 138px; height: auto; margin: 0; z-index: 1; filter: drop-shadow(0 10px 16px rgba(0, 10, 50, 0.4)); }
+		.ph .stars { display: block; position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: inherit; }
+		.ph .stars i { position: absolute; width: 150px; height: 2px; border-radius: 2px; opacity: 0; background: linear-gradient(90deg, transparent, rgba(180, 220, 255, 0.5) 70%, #fff); filter: drop-shadow(0 0 5px rgba(170, 215, 255, 0.95)); transform: rotate(148deg); animation: phshoot 13s linear infinite; }
+		.ph .stars i:nth-child(1) { left: 80%; top: 6%; animation-delay: 1.5s; }
+		.ph .stars i:nth-child(2) { left: 55%; top: 2%; animation-delay: 6s; animation-duration: 15s; width: 120px; }
+		.ph .stars i:nth-child(3) { left: 95%; top: 30%; animation-delay: 9.5s; animation-duration: 12s; width: 170px; }
+		.ph .stars::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: phtwinkle 4s ease-in-out infinite;
+			box-shadow: 54px 20px 0 #fff, 190px 120px 0 #cfe4ff, 340px 36px 0 #fff, 470px 150px 0 #cfe4ff, 600px 60px 0 #fff, 700px 160px 0 #fff, 790px 24px 0 #cfe4ff, 860px 110px 0 #fff; }
+	}
+	@keyframes phtwinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.9; } }
+	@keyframes phshoot {
+		0% { opacity: 0; transform: translate(0, 0) rotate(148deg); }
+		1% { opacity: 1; }
+		6% { opacity: 1; }
+		8% { opacity: 0; transform: translate(-460px, 290px) rotate(148deg); }
+		100% { opacity: 0; transform: translate(-460px, 290px) rotate(148deg); }
+	}
+	@media (prefers-reduced-motion: reduce) { .ph .stars { display: none !important; } }
+</style>

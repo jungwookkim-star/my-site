@@ -1,4 +1,5 @@
 ---
+import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -55,7 +56,7 @@ const prepaid = [
 	<body>
 		<Header />
 		<main id="main" class="wide">
-			<h1 style="text-align:center">요금제 안내</h1>
+			<PageHead title="요금제 안내" sub="선불과 알뜰(후불) 요금제를 한눈에 비교하세요." />
 			<p class="note"><a href="/#finder">어떤 요금제가 맞는지 모르겠다면? 내게 맞는 요금제 찾기 →</a></p>
 			<p style="text-align:center;margin:0.8rem 0 0"><ShareButton title="앤텔레콤 선불·알뜰 요금제 비교 | 커넥트모바일" label="요금제 공유하기" /></p>
 			<div class="tabs"><a href="#postpaid">알뜰 요금제</a><a href="#prepaid">선불 요금제</a></div>
