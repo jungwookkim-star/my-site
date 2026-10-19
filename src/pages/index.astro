@@ -170,8 +170,23 @@ const faqSchema = {
 			.nposts a { color: var(--black); text-decoration: none; font-weight: 700; }
 			.nposts a:hover { color: var(--accent); }
 			.nposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
-			.final { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2.5rem 1rem; }
-			.final h2 { margin-top: 0; }
+			.final { position: relative; overflow: hidden; display: grid; align-items: center; text-align: center; color: #fff; border-radius: 22px; box-shadow: 0 16px 40px rgba(15, 40, 140, 0.28); padding: 2.4rem 1.2rem 0;
+				background: radial-gradient(700px 320px at 85% 0%, rgba(120, 190, 255, 0.4), transparent 60%), radial-gradient(500px 300px at 5% 100%, rgba(47, 123, 255, 0.45), transparent 65%), linear-gradient(135deg, #0b1d4d 0%, #123f9e 55%, #1c63e0 100%); }
+			.final h2 { margin: 0 0 0.5rem; color: #fff; font-size: 1.9rem; }
+			.final p { color: rgba(255, 255, 255, 0.88); margin: 0 0 1.2rem; }
+			.final small { color: rgba(255, 255, 255, 0.72); }
+			.final .stars { z-index: 0; top: 0; left: 0; width: 100%; transform: none; border-radius: inherit; }
+			.final-in { position: relative; z-index: 1; padding-bottom: 2rem; }
+			.final .btn:not(.self):not(.alt) { background: #fff; color: #0b1d4d; }
+			.final-mascot { position: relative; z-index: 1; justify-self: center; width: 150px; margin-top: -0.5rem; line-height: 0; }
+			.final-mascot img { width: 100%; height: auto; margin: 0; display: block; filter: drop-shadow(0 12px 18px rgba(0, 10, 50, 0.45)); transition: transform 0.2s; }
+			.final-mascot:hover img { transform: translateY(-4px) scale(1.02); }
+			@media (min-width: 721px) {
+				.final { grid-template-columns: 1fr 240px; text-align: left; padding: 2.8rem 2.4rem 0 2.8rem; min-height: 340px; }
+				.final-in { padding-bottom: 2.8rem; }
+				.final .cta { justify-content: flex-start; }
+				.final-mascot { width: 240px; align-self: end; margin-top: 0; margin-right: -0.4rem; }
+			}
 			.svband { display: flex; align-items: center; gap: 0.4rem 1.2rem; flex-wrap: wrap; max-width: 860px; margin: 2.5rem auto 0; padding: 1rem 1.3rem; border-radius: 18px; background: linear-gradient(135deg, #eef1ff, #f3ecff); border: 1px solid rgba(35, 55, 255, 0.14); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; }
 			.svband:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(35, 55, 255, 0.14); }
 			.svb-t { font-weight: 800; }
@@ -498,13 +513,17 @@ const faqSchema = {
 
 			<section>
 				<div class="final">
-					<h2>지금 바로 상담받으세요</h2>
-					<p>운영시간 {HOURS}<br /><small>{HOLIDAY_NOTE}</small></p>
-					<div class="cta">
-						<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
-						<a class="btn" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
-						<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+					<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+					<div class="final-in">
+						<h2>지금 바로 상담받으세요</h2>
+						<p>운영시간 {HOURS}<br /><small>{HOLIDAY_NOTE}</small></p>
+						<div class="cta">
+							<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+							<a class="btn" href={PHONE_LINK}><Icon name="phone" />{PHONE}</a>
+							<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+						</div>
 					</div>
+					<a class="final-mascot" data-ask="mascot_final" href={KAKAO_URL} target="_blank" rel="noopener" aria-label="궁금한 점 고르고 상담하기"><img src="/brand/mascot-lg.webp" alt="" width="371" height="640" loading="lazy" /></a>
 				</div>
 				<div style="margin-top:1rem"><ChannelAdd /></div>
 			</section>
