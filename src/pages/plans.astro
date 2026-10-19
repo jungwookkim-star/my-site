@@ -129,10 +129,21 @@ const prepaid = [
 					const scope = bar.dataset.scope;
 					const btns = bar.querySelectorAll<HTMLButtonElement>("button");
 					const groups = document.querySelectorAll<HTMLElement>(`.group[data-scope="${scope}"]`);
-					btns.forEach((b) => b.addEventListener("click", () => {
+					const apply = (b: HTMLButtonElement) => {
 						btns.forEach((x) => x.classList.toggle("on", x === b));
 						groups.forEach((g) => { g.hidden = b.dataset.f !== "all" && g.dataset.key !== b.dataset.f; });
+					};
+					const key = `plans-filter-${scope}`;
+					btns.forEach((b) => b.addEventListener("click", () => {
+						apply(b);
+						// 다른 페이지에 갔다 와도 고른 필터가 유지되도록 이번 방문 동안 기억합니다.
+						try { sessionStorage.setItem(key, b.dataset.f ?? "all"); } catch { /* 저장 못 해도 필터는 동작합니다 */ }
 					}));
+					try {
+						const saved = sessionStorage.getItem(key);
+						const hit = saved && Array.from(btns).find((x) => x.dataset.f === saved);
+						if (hit) apply(hit);
+					} catch { /* 무시 */ }
 				});
 		</script>
 	</body>
