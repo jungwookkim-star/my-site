@@ -1,0 +1,28 @@
+---
+import { REPRESENTATIVE } from '../consts';
+// 홈 중간에 한 번 더 보여 주는 신뢰 안내. 푸터와 소개 페이지에 이미 있는 사실만 담습니다.
+---
+
+<a class="trust" href="/about/#verified" aria-label="앤텔레콤 사전승낙 판매점 확인하기">
+	<img src="/trust/sajeon-seungnak.webp" alt="" width="72" height="101" loading="lazy" />
+	<span class="tr-t">
+		<strong>앤텔레콤 사전승낙 온라인 판매점이에요</strong>
+		<span>이동통신서비스 판매점 사전승낙을 받았어요 (승낙일 2026년 9월 29일)</span>
+		<span>사업자등록번호 499-37-01511, 대표 {REPRESENTATIVE}</span>
+	</span>
+	<span class="tr-go">승낙서 확인하기 ›</span>
+</a>
+
+<style>
+	.trust { display: flex; align-items: center; gap: 1rem; max-width: 860px; margin: 2.2rem auto 0; padding: 0.9rem 1.2rem; border-radius: 18px; background: #fff; box-shadow: var(--box-shadow), inset 0 0 0 1.5px #d7e8dc; text-decoration: none; color: inherit; transition: transform 0.15s, box-shadow 0.15s; }
+	.trust:hover { transform: translateY(-2px); }
+	.trust img { width: 72px; height: auto; margin: 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0; }
+	.tr-t { flex: 1; display: grid; gap: 0.15rem; min-width: 0; }
+	.tr-t strong { font-size: 1rem; color: #0b7a70; }
+	.tr-t span { font-size: 0.84rem; color: rgb(var(--gray-dark)); }
+	.tr-go { font-weight: 800; font-size: 0.86rem; color: var(--accent); white-space: nowrap; }
+	@media (max-width: 720px) {
+		.trust { flex-wrap: wrap; }
+		.tr-go { width: 100%; text-align: right; }
+	}
+</style>

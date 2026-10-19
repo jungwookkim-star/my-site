@@ -8,6 +8,7 @@ import HoursBadge from '../components/HoursBadge.astro';
 import StuckHelp from '../components/StuckHelp.astro';
 import Reviews from '../components/Reviews.astro';
 import ChannelAdd from '../components/ChannelAdd.astro';
+import TrustStrip from '../components/TrustStrip.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
@@ -156,6 +157,20 @@ const faqSchema = {
 			.ftabs button { border: 0; padding: 0.55rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
 			.ftabs button.on { background: var(--accent); color: #fff; }
 			.fpanel[hidden] { display: none; }
+			.qnav { display: flex; gap: 0.5rem; justify-content: center; overflow-x: auto; margin: 1.2rem auto 0; padding: 0.2rem 0.2rem 0.5rem; scrollbar-width: none; }
+			.qnav::-webkit-scrollbar { display: none; }
+			.qnav a { flex: 0 0 auto; padding: 0.45rem 1rem; border-radius: 999px; background: #fff; color: var(--accent); font-size: 0.88rem; font-weight: 700; text-decoration: none; box-shadow: var(--box-shadow), inset 0 0 0 1.5px #d7ddff; }
+			.qnav a:hover { background: #eef1ff; }
+			@media (max-width: 720px) { .qnav { justify-content: flex-start; } }
+			#tools, #faq { position: relative; }
+			.sec-mascot { display: none; }
+			@media (min-width: 960px) {
+				.sec-mascot { display: block; position: absolute; right: 1.5rem; top: -0.4rem; width: 104px; pointer-events: none; }
+				.sec-mascot img { width: 100%; height: auto; margin: 0; display: block; filter: drop-shadow(0 8px 12px rgba(20, 40, 120, 0.22)); }
+				.sec-mascot span { position: absolute; right: 84px; top: 0.4rem; background: #fff; color: #0e2150; font-size: 0.78rem; font-weight: 800; line-height: 1.35; padding: 0.5rem 0.8rem; border-radius: 14px; box-shadow: 0 6px 16px rgba(20, 40, 120, 0.16); white-space: nowrap; text-align: left; animation: bubblebob 3.4s ease-in-out infinite; }
+				.sec-mascot span::after { content: ''; position: absolute; right: -6px; top: 14px; width: 12px; height: 12px; background: #fff; border-radius: 2px; transform: rotate(45deg); }
+			}
+			@media (prefers-reduced-motion: reduce) { .sec-mascot span { animation: none !important; } }
 			.ttabs { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.2rem; }
 			.ttabs button { border: 0; padding: 0.65rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
 			.ttabs button.on { background: var(--accent); color: #fff; }
@@ -339,7 +354,16 @@ const faqSchema = {
 			<div class="statswrap"><HomeStats /></div>
 			<a class="resume" id="resume" href="/plans/" hidden></a>
 
+			<nav class="qnav" aria-label="홈 바로가기">
+				<a href="#finder">요금제 찾기</a>
+				<a href="#check">셀프개통 가능 확인</a>
+				<a href="#steps">개통 절차</a>
+				<a href="#regions">지역별 안내</a>
+				<a href="#faq">자주 묻는 질문</a>
+			</nav>
+
 			<section id="tools">
+				<div class="sec-mascot" aria-hidden="true"><span>어떤 게 맞을지<br />같이 골라봐요!</span><img src="/brand/mascot.webp" alt="" width="104" height="179" loading="lazy" /></div>
 				<h2 class="sec">내게 맞게 골라 드릴게요</h2>
 				<div class="ttabs" role="tablist" aria-label="도우미 선택">
 					<button type="button" role="tab" aria-selected="true" data-tt="finder" class="on">내게 맞는 요금제 찾기</button>
@@ -382,6 +406,8 @@ const faqSchema = {
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/plans/">전체 요금제 보기<Icon name="arrow" /></a></p>
 					<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
 			</section>
+
+			<TrustStrip />
 
 			<a class="svband" href="/saving/">
 				<span class="svb-t"><Icon name="wallet" />지금 통신비가 얼마예요?</span>
@@ -486,6 +512,7 @@ const faqSchema = {
 			</section>
 
 			<section id="faq" class="band">
+				<div class="sec-mascot" aria-hidden="true"><span>궁금한 건<br />먼저 여기서!</span><img src="/brand/mascot.webp" alt="" width="104" height="179" loading="lazy" /></div>
 				<h2 class="sec">자주 묻는 질문</h2>
 				<p class="sub">궁금한 점을 눌러 확인하세요.</p>
 				{faqs.map((f) => (
