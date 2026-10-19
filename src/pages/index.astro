@@ -153,6 +153,10 @@ const faqSchema = {
 			.ftabs button { border: 0; padding: 0.55rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
 			.ftabs button.on { background: var(--accent); color: #fff; }
 			.fpanel[hidden] { display: none; }
+			.ttabs { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.2rem; }
+			.ttabs button { border: 0; padding: 0.65rem 1.4rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-weight: 700; cursor: pointer; }
+			.ttabs button.on { background: var(--accent); color: #fff; }
+			.tpanel[hidden] { display: none; }
 			.hs { position: relative; }
 			.hs :global(.plan-grid) { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.4rem 0.3rem 1rem; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
 			.hs :global(.plan) { flex: 0 0 min(310px, 82%); scroll-snap-align: start; }
@@ -332,10 +336,31 @@ const faqSchema = {
 			<div class="statswrap"><HomeStats /></div>
 			<a class="resume" id="resume" href="/plans/" hidden></a>
 
-			<section id="finder">
-				<h2 class="sec">내게 맞는 요금제 찾기</h2>
-				<p class="sub">질문 3개에 답하면 알맞은 요금제를 추천해 드려요.</p>
-				<PlanFinder />
+			<section id="tools">
+				<h2 class="sec">내게 맞게 골라 드릴게요</h2>
+				<div class="ttabs" role="tablist" aria-label="도우미 선택">
+					<button type="button" role="tab" aria-selected="true" data-tt="finder" class="on">내게 맞는 요금제 찾기</button>
+					<button type="button" role="tab" aria-selected="false" data-tt="check">나는 셀프개통이 될까?</button>
+				</div>
+				<div class="tpanel" id="finder" data-tp="finder" role="tabpanel">
+					<p class="sub">질문 3개에 답하면 알맞은 요금제를 추천해 드려요.</p>
+					<PlanFinder />
+				</div>
+				<div class="tpanel" id="check" data-tp="check" role="tabpanel" hidden>
+					<p class="sub">4가지만 눌러 보세요. 셀프개통인지, 방문 개통인지 바로 알려 드려요.</p>
+					<EligibilityCheck />
+				<details class="fold" id="who">
+					<summary><Icon name="user" />상황별로 자세히 보기</summary>
+					<p class="sub" style="margin-top:0.8rem">상황이 달라도 먼저 편하게 문의해 주세요.</p>
+					<div class="who">
+					<div><strong><Icon name="wallet" />미납이나 연체가 있어요</strong><p>선불 요금제는 다른 통신사 미납이 있어도 개통할 수 있는 것으로 안내됩니다. 알뜰(후불)은 조건이 달라 상담이 필요합니다.</p></div>
+					<div><strong><Icon name="globe" />외국인이에요</strong><p>외국인은 대면 개통만 가능해요. 가산 사업장은 방문 전에 꼭 예약해야 하고, 전국 대면 사업장은 지역별 안내에서 확인하고 예약해 주세요.</p></div>
+					<div><strong><Icon name="user" />미성년자예요</strong><p>미성년자는 대면 개통만 가능해요. 법정대리인 서류가 필요하고, 방문 전에 꼭 예약해 주세요.</p></div>
+					<div><strong><Icon name="phone" />번호가 하나 더 필요해요</strong><p>업무용이나 인증용 두 번째 번호를 쓰던 번호 그대로 두고 만들 수 있어요. <a href="/second-number/">세컨드 번호 보기</a></p></div>
+					<div><strong><Icon name="badge" />약정이 부담돼요</strong><p>약정과 위약금 없이 필요한 기간만 사용할 수 있습니다.</p></div>
+				</div>
+				</details>
+				</div>
 			</section>
 
 			<section id="featured" class="band">
@@ -361,22 +386,6 @@ const faqSchema = {
 				<span class="svb-go">요금 절약 계산기<Icon name="arrow" /></span>
 			</a>
 
-			<section id="check">
-				<h2 class="sec">나는 셀프개통이 될까?</h2>
-				<p class="sub">4가지만 눌러 보세요. 셀프개통인지, 방문 개통인지 바로 알려 드려요.</p>
-				<EligibilityCheck />
-				<details class="fold" id="who">
-					<summary><Icon name="user" />상황별로 자세히 보기</summary>
-					<p class="sub" style="margin-top:0.8rem">상황이 달라도 먼저 편하게 문의해 주세요.</p>
-					<div class="who">
-					<div><strong><Icon name="wallet" />미납이나 연체가 있어요</strong><p>선불 요금제는 다른 통신사 미납이 있어도 개통할 수 있는 것으로 안내됩니다. 알뜰(후불)은 조건이 달라 상담이 필요합니다.</p></div>
-					<div><strong><Icon name="globe" />외국인이에요</strong><p>외국인은 대면 개통만 가능해요. 가산 사업장은 방문 전에 꼭 예약해야 하고, 전국 대면 사업장은 지역별 안내에서 확인하고 예약해 주세요.</p></div>
-					<div><strong><Icon name="user" />미성년자예요</strong><p>미성년자는 대면 개통만 가능해요. 법정대리인 서류가 필요하고, 방문 전에 꼭 예약해 주세요.</p></div>
-					<div><strong><Icon name="phone" />번호가 하나 더 필요해요</strong><p>업무용이나 인증용 두 번째 번호를 쓰던 번호 그대로 두고 만들 수 있어요. <a href="/second-number/">세컨드 번호 보기</a></p></div>
-					<div><strong><Icon name="badge" />약정이 부담돼요</strong><p>약정과 위약금 없이 필요한 기간만 사용할 수 있습니다.</p></div>
-				</div>
-				</details>
-			</section>
 
 			<Reviews />
 
@@ -537,6 +546,17 @@ const faqSchema = {
 		</style>
 		<script>
 			// 선불/알뜰 탭 전환
+			const ttabs = document.querySelectorAll<HTMLButtonElement>('.ttabs button');
+			const tpanels = document.querySelectorAll<HTMLElement>('.tpanel');
+			function openTool(key: string, scroll: boolean) {
+				ttabs.forEach((b) => { const on = b.dataset.tt === key; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+				tpanels.forEach((pn) => { pn.hidden = pn.dataset.tp !== key; });
+				if (scroll) document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}
+			ttabs.forEach((b) => b.addEventListener('click', () => openTool(b.dataset.tt ?? 'finder', false)));
+			const fromHash = () => { const h = location.hash; if (h === '#check' || h === '#finder') openTool(h.slice(1), true); };
+			window.addEventListener('hashchange', fromHash);
+			fromHash();
 			const tabs = document.querySelectorAll<HTMLButtonElement>('.ftabs button');
 			const panels = document.querySelectorAll<HTMLElement>('.fpanel');
 			tabs.forEach((b) =>
