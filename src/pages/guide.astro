@@ -8,6 +8,7 @@ import ShareButton from '../components/ShareButton.astro';
 import ActivationCode from '../components/ActivationCode.astro';
 import ChargeReminder from '../components/ChargeReminder.astro';
 import ChannelAdd from '../components/ChannelAdd.astro';
+import GuideSteps from '../components/GuideSteps.astro';
 import Header from '../components/Header.astro';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
 
@@ -168,6 +169,8 @@ const howTo = {
 					</li>
 				))}
 			</ol>
+
+			<GuideSteps />
 
 			<details class="selfsteps">
 				<summary>셀프개통 화면은 이런 순서로 진행돼요 (10단계)</summary>
