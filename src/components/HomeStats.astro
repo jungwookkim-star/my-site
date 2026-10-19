@@ -11,7 +11,7 @@ const minPrice = Math.min(...everyPlan.map((p) => Number(p.price.replace(/[^0-9]
 const partners = postpaidPartners.map((p) => p.name);
 ---
 
-<ul class="stats">
+<ul class="stats" id="home-stats">
 	<li><b>0원</b><span>약정, 위약금</span></li>
 	<li><b>약 10분</b><span>유심 받고 셀프개통</span></li>
 	<li><b>{planTotal}개</b><span>선불과 알뜰 요금제</span></li>
@@ -35,3 +35,33 @@ const partners = postpaidPartners.map((p) => p.name);
 		.stats b { font-size: 1.4rem; }
 	}
 </style>
+
+<script>
+	// 숫자 카드가 처음 화면에 보일 때 숫자가 0에서 올라갑니다. (동작 줄이기 설정이면 건너뜁니다)
+	const list = document.getElementById('home-stats');
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (list && !reduce && 'IntersectionObserver' in window) {
+		const targets = Array.from(list.querySelectorAll<HTMLElement>('li > b')).flatMap((b) => {
+			const m = (b.textContent ?? '').match(/^(.*?)([0-9][0-9,]*)(.*)$/);
+			if (!m) return [];
+			const to = Number(m[2].replace(/,/g, ''));
+			if (!to) return [];
+			return [{ b, pre: m[1], post: m[3], to, comma: m[2].includes(',') }];
+		});
+		const fmt = (n: number, comma: boolean) => (comma ? n.toLocaleString('ko-KR') : String(n));
+		const io = new IntersectionObserver((entries) => {
+			if (!entries.some((e) => e.isIntersecting)) return;
+			io.disconnect();
+			const t0 = performance.now();
+			const dur = 900;
+			const step = (t: number) => {
+				const k = Math.min(1, (t - t0) / dur);
+				const ease = 1 - Math.pow(1 - k, 3);
+				targets.forEach((x) => (x.b.textContent = x.pre + fmt(Math.round(x.to * ease), x.comma) + x.post));
+				if (k < 1) requestAnimationFrame(step);
+			};
+			requestAnimationFrame(step);
+		}, { threshold: 0.4 });
+		io.observe(list);
+	}
+</script>
