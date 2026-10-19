@@ -24,6 +24,7 @@ const { title, sub, mascot = true } = Astro.props;
 	.ph-in { position: relative; z-index: 1; }
 	.ph h1 { margin: 0 0 0.4rem; color: #fff; font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.25; letter-spacing: -0.02em; }
 	.ph p { margin: 0 auto; max-width: 34rem; color: rgba(255, 255, 255, 0.88); font-size: 0.98rem; }
+	.ph :global(.btn:not(.self):not(.alt):not(.ghost)) { background: #fff; color: #0b1d4d; }
 	.ph-mascot { display: none; }
 	.ph .stars { display: none; }
 	@media (min-width: 721px) {

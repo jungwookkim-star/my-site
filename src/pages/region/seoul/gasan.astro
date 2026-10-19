@@ -1,4 +1,5 @@
 ---
+import PageHead from '../../../components/PageHead.astro';
 import Icon from '../../../components/Icon.astro';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
@@ -86,15 +87,13 @@ const crumbs = {
 		<Header />
 		<main id="main" class="wide">
 			<p class="crumb"><a href="/region/">지역별 안내</a> › <a href="/region/seoul/">서울</a> › 가산동</p>
-			<div class="hero">
-				<h1>가산동 선불폰 개통</h1>
-				<p>가산디지털단지에서 점심시간·퇴근 후에 휴대폰으로 끝내거나, 예약 후 방문해서 개통하세요.</p>
+			<PageHead title="가산동 선불폰 개통" sub="가산디지털단지에서 점심시간·퇴근 후에 휴대폰으로 끝내거나, 예약 후 방문해서 개통하세요.">
 				<div class="cta">
 					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
 					<a class="btn" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
 				</div>
-			</div>
+			</PageHead>
 
 			<section>
 				<h2 class="sec">나에게 맞는 개통 방법</h2>
