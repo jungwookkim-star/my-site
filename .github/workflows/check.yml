@@ -1,0 +1,22 @@
+# 푸시할 때마다 사이트를 빌드하고 깨진 내부 링크가 없는지 점검합니다.
+# 점검에 실패해도 Cloudflare 배포는 막지 않습니다. GitHub 화면에서 실패 표시로만 알려 줍니다.
+name: Check site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check:links
