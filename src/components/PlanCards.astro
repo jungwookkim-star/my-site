@@ -8,6 +8,18 @@ interface Props {
 	compare?: boolean;
 }
 const { plans, compare = false } = Astro.props;
+
+// 데이터 제공량을 막대로 보여 주기 위한 값 (300MB ~ 180GB 를 로그 눈금으로 0~100%)
+function dataPct(text: string): number {
+	const m = text.match(/([\d.]+)\s*(GB|MB)/i);
+	if (!m) return 0;
+	let mb = Number(m[1]) * (m[2].toUpperCase() === 'GB' ? 1000 : 1);
+	if (text.includes('매일')) mb *= 30;
+	const lo = Math.log10(300);
+	const hi = Math.log10(180000);
+	const pct = ((Math.log10(Math.max(mb, 300)) - lo) / (hi - lo)) * 100;
+	return Math.round(Math.min(100, Math.max(8, pct)));
+}
 ---
 
 <div class="plan-grid">
@@ -25,6 +37,7 @@ const { plans, compare = false } = Astro.props;
 						<dt>데이터</dt>
 						<dd>
 							{p.data}
+							<span class="dbar" aria-hidden="true"><i style={`width:${dataPct(p.data)}%`}></i></span>
 							{p.dataNote && <small>{p.dataNote}</small>}
 						</dd>
 					</div>
@@ -52,6 +65,8 @@ const { plans, compare = false } = Astro.props;
 	dt { width: 3.2rem; flex-shrink: 0; color: rgb(var(--gray)); font-weight: 700; }
 	dd { margin: 0; line-height: 1.5; }
 	dd small { display: block; color: rgb(var(--gray)); font-size: 0.78rem; }
+	.dbar { display: block; height: 6px; margin-top: 0.35rem; border-radius: 999px; background: #e8ecff; overflow: hidden; }
+	.dbar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #5b6bff, #2337ff); }
 	.pnote { margin: 0.5rem 0 0; font-size: 0.8rem; color: #c2410c; }
 	.plan footer { display: flex; justify-content: space-between; align-items: baseline; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 2px solid rgb(var(--gray-light)); }
 	.plan footer strong { font-size: 1.3rem; color: var(--accent); }
