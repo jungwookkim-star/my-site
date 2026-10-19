@@ -48,7 +48,7 @@ function dataPct(text: string): number {
 					{p.daily && <span>{p.daily}</span>}
 				</footer>
 				<button type="button" class="ask" data-plan={p.name} data-kakao={KAKAO_URL}><Icon name="chat" />이 요금제로 문의하기</button>
-				{compare && <label class="cmp-l"><input type="checkbox" class="cmp" />비교에 담기</label>}
+				{compare && <div class="cmp-row"><label class="cmp-l"><input type="checkbox" class="cmp" />비교에 담기</label><button type="button" class="plink" data-name={p.name}>링크 복사</button></div>}
 			</article>
 		))
 	}
@@ -73,6 +73,12 @@ function dataPct(text: string): number {
 	.plan footer span { font-size: 0.8rem; color: rgb(var(--gray)); }
 	.ask { margin-top: 0.8rem; padding: 0.65rem 1rem; border: 0; border-radius: 999px; background: #fee500; color: #191919; font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: transform 0.15s; }
 	.ask:hover { transform: translateY(-2px); }
+	.cmp-row { display: flex; align-items: center; justify-content: center; gap: 0.9rem; margin-top: 0.6rem; }
+	.cmp-row .cmp-l { margin-top: 0; }
+	.plink { border: 0; background: transparent; color: rgb(var(--gray)); font: inherit; font-size: 0.8rem; font-weight: 700; text-decoration: underline; cursor: pointer; padding: 0.2rem 0.3rem; }
+	.plink:hover { color: var(--accent); }
+	.plan.flash { animation: planflash 2.6s ease; }
+	@keyframes planflash { 0%, 100% { box-shadow: var(--box-shadow); } 20%, 70% { box-shadow: 0 0 0 4px #2337ff, 0 10px 28px rgba(35, 55, 255, 0.28); } }
 	.cmp-l { display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.6rem; font-size: 0.85rem; font-weight: 700; color: rgb(var(--gray-dark)); cursor: pointer; }
 	.cmp-l input { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); }
 </style>
@@ -153,6 +159,14 @@ function dataPct(text: string): number {
 		document.body.appendChild(t);
 		setTimeout(() => t.remove(), 3000);
 	};
+	async function copyText(text: string, ok: string) {
+		try {
+			await navigator.clipboard.writeText(text);
+			toast(ok);
+		} catch {
+			toast('주소: ' + text);
+		}
+	}
 	const num = (s: string) => Number(s.replace(/[^0-9]/g, ''));
 
 	function readPlan(card: HTMLElement): Plan {
@@ -263,7 +277,17 @@ function dataPct(text: string): number {
 		close.type = 'button';
 		close.textContent = '닫기';
 		close.addEventListener('click', () => dialog?.close());
-		head.appendChild(close);
+		const share = document.createElement('button');
+		share.type = 'button';
+		share.textContent = '비교 링크 복사';
+		share.addEventListener('click', () => {
+			copyText(`${location.origin}/plans/?cmp=${encodeURIComponent(plans.map((x) => x.name).join('|'))}`, '비교 링크가 복사됐어요. 카톡으로 보내 보세요.');
+			gtag('event', 'compare_link_copy', { page_path: location.pathname });
+		});
+		const actions = document.createElement('div');
+		actions.style.cssText = 'display:flex;gap:0.5rem';
+		actions.append(share, close);
+		head.appendChild(actions);
 		const wrap = document.createElement('div');
 		wrap.className = 'cmp-scroll';
 		wrap.appendChild(table);
@@ -276,6 +300,14 @@ function dataPct(text: string): number {
 		dialog.showModal();
 		gtag('event', 'compare_open', { page_path: location.pathname, plans: plans.map((p) => p.name).join(' | ') });
 	}
+
+	// 카드 링크 복사
+	document.addEventListener('click', (e) => {
+		const b = (e.target as HTMLElement).closest<HTMLElement>('.plink');
+		if (!b) return;
+		copyText(`${location.origin}/plans/?p=${encodeURIComponent(b.dataset.name ?? '')}`, '이 요금제 링크가 복사됐어요.');
+		gtag('event', 'plan_link_copy', { page_path: location.pathname });
+	});
 
 	document.addEventListener('change', (e) => {
 		const box = e.target as HTMLInputElement;
@@ -293,4 +325,44 @@ function dataPct(text: string): number {
 		} else picked.delete(plan.name);
 		renderTray();
 	});
+
+	// 링크(?p=요금제 이름, ?cmp=이름|이름)로 들어오면 해당 카드를 펼쳐서 보여 주고 비교창도 엽니다.
+	const findCard = (name: string) => Array.from(document.querySelectorAll<HTMLElement>('.plan')).find((c) => c.dataset.name === name);
+	function reveal(card: HTMLElement) {
+		let el: HTMLElement | null = card;
+		while (el) {
+			if (el instanceof HTMLDetailsElement) el.open = true;
+			el = el.parentElement;
+		}
+		const hiddenGroup = card.closest<HTMLElement>('.group[hidden]');
+		if (hiddenGroup) {
+			document.querySelector<HTMLButtonElement>(`.filter[data-scope="${hiddenGroup.dataset.scope}"] button[data-f="all"]`)?.click();
+			hiddenGroup.hidden = false;
+		}
+	}
+	const qs = new URLSearchParams(location.search);
+	const onePlan = qs.get('p');
+	const cmpNames = qs.get('cmp');
+	if (onePlan) {
+		const c = findCard(onePlan);
+		if (c) {
+			reveal(c);
+			setTimeout(() => {
+				c.scrollIntoView({ block: 'center' });
+				c.classList.add('flash');
+			}, 200);
+		}
+	}
+	if (cmpNames) {
+		cmpNames.split('|').slice(0, MAX).forEach((n) => {
+			const c = findCard(n);
+			const box = c?.querySelector<HTMLInputElement>('.cmp');
+			if (c && box && !box.checked) {
+				reveal(c);
+				box.checked = true;
+				box.dispatchEvent(new Event('change', { bubbles: true }));
+			}
+		});
+		if (picked.size >= 2) setTimeout(openDialog, 250);
+	}
 </script>
