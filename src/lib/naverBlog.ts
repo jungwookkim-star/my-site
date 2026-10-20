@@ -7,7 +7,7 @@ export type NaverPost = { title: string; link: string; date: Date };
 // 홈페이지에는 선불폰·통신 관련 글만 보여 줍니다. IT 글(방문자 유입용)은 제외합니다.
 // 1) 네이버 블로그 카테고리 이름이 아래 목록에 있으면 제외합니다. (IT 글을 'IT' 카테고리에 올리면 가장 확실합니다)
 // 2) 제목에 통신 관련 단어가 하나도 없으면 제외합니다.
-const EXCLUDE_CATEGORIES = ['IT', 'IT꿀팁', 'IT 정보', '아이티'];
+const EXCLUDE_CATEGORIES = ['IT', 'IT꿀팁', 'IT 정보', '아이티', '휴대폰 IT 정보'];
 const TELECOM = /선불|후불|알뜰|유심|개통|요금제|번호이동|앤텔레콤|멤버십/;
 
 const pick = (xml: string, tag: string) => {
