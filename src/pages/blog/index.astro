@@ -44,7 +44,9 @@ const counts = Object.fromEntries(CATEGORIES.map((c) => [c, posts.filter((p) => 
 	<body>
 		<Header />
 		<main id="main">
-			<PageHead title="블로그" sub="알뜰폰 개통 전에 알아두면 좋은 정보를 모았습니다." />
+			<PageHead title="블로그" sub="알뜰폰 개통 전에 알아두면 좋은 정보를 모았습니다.">
+				<a href="https://blog.naver.com/connect_mobile" target="_blank" rel="noopener" data-nf="blog_index" style="display:inline-block;margin-top:0.9rem;background:#03c75a;color:#fff;font-weight:800;text-decoration:none;padding:0.55rem 1.3rem;border-radius:999px;font-size:0.9rem">네이버 블로그 이웃 추가 →</a>
+			</PageHead>
 			<div class="tools">
 				<input id="bq" type="search" placeholder="글 검색 (예: 충전, 번호이동, 396)" autocomplete="off" aria-label="블로그 글 검색" />
 				<div class="cats" role="group" aria-label="분류">
