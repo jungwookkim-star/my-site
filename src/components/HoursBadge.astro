@@ -4,16 +4,18 @@ import { HOURS } from '../consts';
 ---
 
 <div class="hours" id="hours-badge">
+	<p class="now" id="hours-now">상담은 매일 {HOURS}에 운영해요.</p>
 	<p class="row"><b>신규가입</b> <span data-kind="new">08:00~21:50</span></p>
 	<p class="row"><b>번호이동</b> <span data-kind="port">10:00~19:50 (일요일 제외)</span></p>
 	<p class="after" id="hours-after" hidden>
-		지금은 접수 시간이 아니에요. 카톡에 미리 남겨 두시면 운영시간({HOURS})에 확인해 드려요.
+		카톡에 미리 남겨 두시면 운영시간({HOURS})에 먼저 확인해 드려요.
 		<a href="http://pf.kakao.com/_QKvfX" data-ask="hours_badge">궁금한 점 미리 남기기 ›</a>
 	</p>
 </div>
 
 <style>
 	.hours { display: inline-flex; flex-direction: column; gap: 0.3rem; margin-top: 0.9rem; padding: 0.6rem 1rem; background: #fff; border-radius: 12px; box-shadow: var(--box-shadow); font-size: 0.88rem; text-align: left; }
+	.now { flex-basis: 100%; margin: 0 0 0.15rem; font-size: 0.86rem; font-weight: 700; line-height: 1.45; color: var(--accent); }
 	.row { margin: 0; display: flex; gap: 0.6rem; align-items: center; }
 	.after { margin: 0.2rem 0 0; padding-top: 0.45rem; border-top: 1px dashed rgb(var(--gray-light)); font-size: 0.8rem; line-height: 1.5; color: rgb(var(--gray-dark)); max-width: 24em; }
 	.after a { display: inline-block; margin-top: 0.15rem; font-weight: 700; color: var(--accent); text-decoration: none; }
@@ -35,8 +37,20 @@ import { HOURS } from '../consts';
 		const h = Number(p.find((x) => x.type === 'hour')?.value ?? 0) % 24;
 		return h * 60 + Number(p.find((x) => x.type === 'minute')?.value ?? 0);
 	}
+	// 지금 시각에 맞춰 "지금 무엇을 하면 되는지"를 한 줄로 알려 줍니다. (상담 09:00~22:00, 신규 08:00~21:50, 번호이동 10:00~19:50 일요일 제외)
+	function nowMessage(now: number, sunday: boolean) {
+		if (now < 8 * 60) return '이른 시간이에요. 카톡에 남겨 두시면 오전 9시 이후에 먼저 답해 드려요.';
+		if (now < 9 * 60) return '신규가입 셀프개통은 지금부터 가능해요. 상담은 오전 9시부터예요.';
+		if (now < 10 * 60) return '상담 운영 중이에요. 번호이동은 오전 10시부터 접수돼요.';
+		if (now <= RULES.port.close) return sunday ? '상담과 신규가입은 지금 가능해요. 번호이동은 월요일 오전 10시부터예요.' : '지금 상담과 셀프개통 모두 가능해요.';
+		if (now <= RULES.new.close) return '번호이동은 오늘 마감됐어요. 신규가입은 지금도 가능해요.';
+		if (now < 22 * 60) return '오늘 접수는 마무리됐어요. 남겨 두시면 내일 아침 먼저 답해 드려요.';
+		return '오늘은 쉬는 시간이에요. 카톡에 남겨 두시면 내일 오전 9시 이후에 먼저 답해 드려요.';
+	}
 	function render() {
 		const now = nowKst();
+		const msg = document.getElementById('hours-now');
+		if (msg) msg.textContent = nowMessage(now, isSundayKst());
 		const after = document.getElementById('hours-after');
 		if (after) after.hidden = now >= RULES.new.open && now <= RULES.new.close;
 		document.querySelectorAll<HTMLElement>('#hours-badge span[data-kind]').forEach((el) => {

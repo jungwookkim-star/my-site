@@ -245,7 +245,8 @@ const faqSchema = {
 			.hb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
 			.hb-row .btn { text-align: center; box-shadow: none; }
 			.hb-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: rgb(var(--gray)); }
-			.hb :global(.hours) { margin-top: 0.8rem; }
+			.hb .hb-note { margin-top: 0.7rem; }
+			.hb :global(.hours) { display: flex; width: fit-content; max-width: 100%; margin-top: 0.8rem; }
 			.mini-mascot { display: none; }
 			.statswrap :global(.stats) { margin-top: 1.2rem; }
 			@media (max-width: 720px) {
