@@ -1,0 +1,126 @@
+---
+// 내 개통 노트: 접수번호, 요금제, 충전 예정일을 이 기기 안에만 적어 둡니다. 서버로 보내거나 저장하지 않습니다(브라우저 localStorage).
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ChargeReminder from '../components/ChargeReminder.astro';
+import { KAKAO_CHAT_URL } from '../consts';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="내 개통 노트 | 커넥트모바일" description="접수번호와 요금제, 충전 예정일을 이 휴대폰에만 적어 두는 메모입니다. 서버에 저장되지 않아요." noindex={true} />
+		<style is:global>
+			main.mn { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 4rem; width: auto; }
+			.mn h1 { font-size: 1.7rem; margin: 0 0 0.4rem; }
+			.mn .sub { color: rgb(var(--gray)); margin: 0 0 1rem; font-size: 0.95rem; }
+			.mn-priv { background: var(--tint-green); box-shadow: inset 0 0 0 1.5px var(--line-green); color: var(--green); border-radius: 14px; padding: 0.7rem 1rem; font-size: 0.86rem; font-weight: 700; line-height: 1.55; margin-bottom: 1rem; }
+			.mn-card { background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; margin-bottom: 1rem; }
+			.mn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.9rem; }
+			.mn label.mn-l { display: grid; gap: 0.3rem; font-size: 0.86rem; font-weight: 800; }
+			.mn label.mn-l small { font-weight: 500; color: var(--muted); font-size: 0.76rem; }
+			.mn input, .mn select, .mn textarea { font: inherit; font-size: 1rem; padding: 0.55rem 0.8rem; border: 1.5px solid var(--line); border-radius: 10px; width: 100%; box-sizing: border-box; background: var(--surface); color: inherit; }
+			.mn textarea { min-height: 5rem; resize: vertical; }
+			.mn input:focus, .mn select:focus, .mn textarea:focus { outline: none; border-color: var(--accent); }
+			.mn-wide { grid-column: 1 / -1; }
+			.mn-dday { margin: 0 0 1rem; padding: 0.9rem 1.1rem; border-radius: 14px; background: var(--surface-2); font-weight: 800; line-height: 1.5; }
+			.mn-dday.soon { background: var(--tint-amber); color: var(--amber); }
+			.mn-dday.late { background: var(--tint-warn); color: var(--warn); }
+			.mn-dday a { color: inherit; text-decoration: underline; }
+			.mn-act { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+			.mn-b { border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 800; font-size: 0.9rem; padding: 0.6rem 1.2rem; border-radius: 999px; cursor: pointer; text-decoration: none; display: inline-block; }
+			.mn-b.alt { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.mn-b.kk { background: #fee500; color: #191919; }
+			.mn-state { font-size: 0.8rem; color: var(--green); min-height: 1.2em; margin: 0.6rem 0 0; font-weight: 700; }
+			[hidden] { display: none !important; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="mn" id="main">
+			<h1>내 개통 노트</h1>
+			<p class="sub">접수번호, 요금제, 충전할 날짜를 적어 두면 나중에 다시 열어서 볼 수 있어요.</p>
+			<p class="mn-priv">이 휴대폰(브라우저) 안에만 저장돼요. 커넥트모바일 서버로 보내지 않아요. 이름, 주민등록번호, 계좌번호, 비밀번호는 적지 마세요. 브라우저 기록을 지우면 노트도 사라져요.</p>
+
+			<div class="mn-dday" id="mn-dday" hidden></div>
+
+			<div class="mn-card">
+				<div class="mn-grid">
+					<label class="mn-l">요금제<input id="mn-plan" maxlength="40" placeholder="예) LTE 선불 396 10.3GB" autocomplete="off" /></label>
+					<label class="mn-l">통신망
+						<select id="mn-net"><option value="">선택 안 함</option><option>KT망</option><option>LG망</option></select>
+					</label>
+					<label class="mn-l">접수번호<small>개통결과 조회에 쓰는 번호</small><input id="mn-no" maxlength="30" placeholder="접수 후 받은 번호" autocomplete="off" /></label>
+					<label class="mn-l">개통한 날<input id="mn-open" type="date" /></label>
+					<label class="mn-l">다음 충전 예정일<small>선불은 미리 충전해 두세요</small><input id="mn-charge" type="date" /></label>
+					<label class="mn-l mn-wide">메모<textarea id="mn-memo" maxlength="300" placeholder="예) 번호이동 신청함, 유심은 편의점에서 구매"></textarea></label>
+				</div>
+				<p class="mn-state" id="mn-state" role="status" aria-live="polite"></p>
+				<div class="mn-act">
+					<button type="button" class="mn-b kk" id="mn-copy">상담용으로 복사하기</button>
+					<a class="mn-b alt" href={KAKAO_CHAT_URL} target="_blank" rel="noopener">카톡 열기</a>
+					<button type="button" class="mn-b alt" id="mn-clear">노트 지우기</button>
+				</div>
+			</div>
+
+			<ChargeReminder />
+		</main>
+		<Footer />
+		<script is:inline>
+			(function () {
+				var KEY = 'my-note-v1';
+				var ids = ['plan', 'net', 'no', 'open', 'charge', 'memo'];
+				var $ = function (id) { return document.getElementById('mn-' + id); };
+				var state = $('state');
+				function load() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
+				function save() {
+					var d = {};
+					ids.forEach(function (k) { d[k] = $(k).value; });
+					d.at = Date.now();
+					try { localStorage.setItem(KEY, JSON.stringify(d)); state.textContent = '이 기기에 저장됐어요'; } catch (e) { state.textContent = '이 브라우저에서는 저장이 안 돼요. 복사해서 보관해 주세요.'; }
+					dday();
+				}
+				function dday() {
+					var box = $('dday'), v = $('charge').value;
+					if (!v) { box.hidden = true; return; }
+					var t = new Date(); t.setHours(0, 0, 0, 0);
+					var p = v.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2]);
+					var n = Math.round((d - t) / 86400000);
+					box.hidden = false; box.className = 'mn-dday'; box.textContent = '';
+					var link = document.createElement('a'); link.href = '/blog/prepaid-charge-guide/'; link.textContent = '충전 방법 보기';
+					if (n > 3) box.textContent = '충전 예정일까지 ' + n + '일 남았어요. ';
+					else if (n > 0) { box.classList.add('soon'); box.textContent = '충전 예정일까지 ' + n + '일 남았어요. 미리 충전해 두세요. '; }
+					else if (n === 0) { box.classList.add('soon'); box.textContent = '오늘이 충전 예정일이에요. 잔액이 떨어지기 전에 충전해 두세요. '; }
+					else { box.classList.add('late'); box.textContent = '충전 예정일이 ' + (-n) + '일 지났어요. 잔액을 확인하고 필요하면 충전해 주세요. '; }
+					box.appendChild(link);
+				}
+				var d = load();
+				ids.forEach(function (k) { if (d[k]) $(k).value = d[k]; $(k).addEventListener('input', save); $(k).addEventListener('change', save); });
+				if (d.at) state.textContent = '저장된 노트를 불러왔어요';
+				dday();
+				$('copy').addEventListener('click', function () {
+					var L = [];
+					if ($('plan').value) L.push('요금제: ' + $('plan').value);
+					if ($('net').value) L.push('통신망: ' + $('net').value);
+					if ($('no').value) L.push('접수번호: ' + $('no').value);
+					if ($('open').value) L.push('개통한 날: ' + $('open').value);
+					if ($('charge').value) L.push('충전 예정일: ' + $('charge').value);
+					if ($('memo').value) L.push('메모: ' + $('memo').value);
+					var text = '개통 문의드려요.\n' + (L.length ? '(' + L.join(' / ') + ')' : '');
+					var btn = this;
+					navigator.clipboard.writeText(text).then(function () { state.textContent = '복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.'; }, function () { state.textContent = '복사가 안 돼요. 직접 적어서 보내 주세요.'; });
+					if (window.gtag) window.gtag('event', 'my_note_copy', { page_path: location.pathname });
+				});
+				$('clear').addEventListener('click', function () {
+					if (!confirm('이 기기에 적어 둔 노트를 모두 지울까요?')) return;
+					ids.forEach(function (k) { $(k).value = ''; });
+					try { localStorage.removeItem(KEY); } catch (e) {}
+					state.textContent = '노트를 지웠어요';
+					dday();
+				});
+				if (window.gtag) window.gtag('event', 'my_note_view', { page_path: location.pathname, saved: d.at ? 'yes' : 'no' });
+			})();
+		</script>
+	</body>
+</html>
