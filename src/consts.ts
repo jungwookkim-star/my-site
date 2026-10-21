@@ -18,6 +18,9 @@ export const REPRESENTATIVE = '김정욱';
 export const EMAIL = 'jungwook.kim01@gmail.com';
 export const BIZ_ADDRESS = '서울특별시 금천구 가산동 234-34 (두산로9길 66)';
 
+// 앤텔레콤 공식 요금제 페이지와 사이트 요금 데이터를 마지막으로 대조한 날(모두 같을 때만 scripts/stamp-verified.mjs가 갱신합니다)
+export const PRICES_VERIFIED = '2026-10-21';
+
 export const GA_ID = 'G-ESSXNKWHDS';
 export const NAVER_WA_ID = '12264ddd1f1df90';
 export const ACTIVATION_CODE = '2936849';

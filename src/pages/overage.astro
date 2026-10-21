@@ -1,5 +1,6 @@
 ---
 import PageHead from '../components/PageHead.astro';
+import VerifiedStamp from '../components/VerifiedStamp.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -94,6 +95,7 @@ const pool = items
 					L망 선불은 요금제마다 초과 요금이 달라서 금액은 계산하지 않고 "제공량을 넘는지"만 알려 드려요. 실제 요금은 앤텔레콤 이용약관을 확인하세요.
 					<a href="/blog/prepaid-overage-fee/">초과 요금 자세히 보기</a>
 				</p>
+				<VerifiedStamp align="left" />
 				<div class="ov-act">
 					<a class="kk" href={KAKAO_CHAT_URL} target="_blank" rel="noopener" id="ov-ask">이 사용량으로 상담하기</a>
 					<a class="pl" href="/plans/">요금제 전체 보기</a>

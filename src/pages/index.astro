@@ -12,6 +12,7 @@ import TrustStrip from '../components/TrustStrip.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
 import WhoPicker from '../components/WhoPicker.astro';
 import Welcome from '../components/Welcome.astro';
+import VerifiedStamp from '../components/VerifiedStamp.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
@@ -404,6 +405,7 @@ const faqSchema = {
 			<section id="featured" class="band">
 				<h2 class="sec">인기 요금제</h2>
 				<p class="sub">선불은 396, 459 요금제가 가장 인기 있어요. 알뜰 요금제는 제휴처별로 비교해 보세요. 옆으로 넘겨 보세요.</p>
+				<VerifiedStamp />
 				<div class="ftabs" role="tablist" aria-label="요금제 종류">
 					<button type="button" role="tab" aria-selected="true" data-t="pre" class="on">선불 요금제</button>
 					<button type="button" role="tab" aria-selected="false" data-t="post">알뜰 요금제</button>
