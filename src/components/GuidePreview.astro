@@ -1,0 +1,107 @@
+---
+import { guideSteps } from '../data/guideSteps';
+// 홈의 "개통 절차" 아래에서 실제 셀프개통 화면 20장을 자동으로 넘겨 보여 줍니다. (이미지는 개인정보를 가린 것을 그대로 씁니다)
+// 일시정지, 점 눌러 이동, 동작 줄이기 설정이면 자동 재생 없이 직접 넘기기만 됩니다.
+const steps = guideSteps.map((s) => ({ n: s.n, title: s.title, src: `/guide/${s.imgs[0]}` }));
+---
+
+<div class="gp" id="gp" aria-label="셀프개통 화면 미리보기">
+	<div class="gp-phone">
+		<div class="gp-screen">
+			{steps.map((s, i) => <img class:list={['gp-img', { on: i === 0 }]} data-i={i} data-src={s.src} src={i === 0 ? s.src : undefined} alt={`${s.n}단계: ${s.title}`} width="560" height="1000" decoding="async" />)}
+		</div>
+	</div>
+	<div class="gp-side">
+		<span class="gp-tag">실제 개통 화면 미리보기</span>
+		<h3 class="gp-t" id="gp-t">{steps[0].n}단계 {steps[0].title}</h3>
+		<p class="gp-sub">셀프개통은 이런 화면으로 진행돼요. 개인정보는 가려 두었어요.</p>
+		<div class="gp-dots" id="gp-dots" role="group" aria-label="단계 선택">
+			{steps.map((s, i) => <button type="button" class:list={['gp-dot', { on: i === 0 }]} data-i={i} aria-label={`${s.n}단계 보기`} aria-pressed={i === 0 ? 'true' : 'false'}></button>)}
+		</div>
+		<div class="gp-act">
+			<button type="button" class="gp-b" id="gp-play" aria-label="일시정지">일시정지</button>
+			<a class="gp-b main" href="/guide/#screens">단계별로 자세히 보기</a>
+		</div>
+	</div>
+</div>
+
+<style is:global>
+	.gp { display: grid; grid-template-columns: 230px 1fr; gap: 1.6rem; align-items: center; max-width: 700px; margin: 2rem auto 0; padding: 1.4rem; background: var(--surface); border-radius: 22px; box-shadow: var(--box-shadow); }
+	.gp-phone { width: 230px; padding: 10px; border-radius: 30px; background: #12172b; box-shadow: 0 10px 26px rgba(10, 20, 70, 0.3); }
+	.gp-screen { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 560 / 1000; background: var(--surface-3); }
+	.gp-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.45s ease; margin: 0; }
+	.gp-img.on { opacity: 1; }
+	.gp-tag { display: inline-block; font-size: 0.74rem; font-weight: 800; color: var(--accent); background: var(--surface-2); padding: 0.15rem 0.7rem; border-radius: 999px; }
+	.gp-t { margin: 0.6rem 0 0.3rem; font-size: 1.25rem; line-height: 1.35; }
+	.gp-sub { margin: 0 0 0.9rem; font-size: 0.86rem; color: var(--muted); }
+	.gp-dots { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+	.gp-dot { width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; background: var(--line); cursor: pointer; }
+	.gp-dot.on { background: var(--accent); transform: scale(1.35); }
+	.gp-act { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	.gp-b { border: 0; font: inherit; font-weight: 800; font-size: 0.85rem; text-decoration: none; padding: 0.5rem 1.1rem; border-radius: 999px; cursor: pointer; background: var(--surface-2); color: var(--ink); }
+	.gp-b.main { background: var(--accent); color: #fff; }
+	@media (max-width: 640px) {
+		.gp { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 1rem; }
+		.gp-phone { width: 200px; }
+		.gp-dots, .gp-act { justify-content: center; }
+	}
+	@media (prefers-reduced-motion: reduce) { .gp-img { transition: none; } }
+</style>
+
+<script>
+	const root = document.getElementById('gp');
+	if (root) {
+		const imgs = Array.from(root.querySelectorAll<HTMLImageElement>('.gp-img'));
+		const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('.gp-dot'));
+		const title = document.getElementById('gp-t')!;
+		const play = document.getElementById('gp-play') as HTMLButtonElement;
+		const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		let i = 0;
+		let timer = 0;
+		let playing = false;
+		let started = false;
+		let userPaused = false;
+		const track = (name: string, p: Record<string, string> = {}) => {
+			const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+			if (g) g('event', name, { page_path: location.pathname, ...p });
+		};
+		const load = (k: number) => {
+			const im = imgs[k];
+			if (im && !im.src && im.dataset.src) im.src = im.dataset.src;
+		};
+		function show(k: number) {
+			i = (k + imgs.length) % imgs.length;
+			load(i);
+			load((i + 1) % imgs.length);
+			imgs.forEach((im, n) => im.classList.toggle('on', n === i));
+			dots.forEach((d, n) => {
+				d.classList.toggle('on', n === i);
+				d.setAttribute('aria-pressed', String(n === i));
+			});
+			title.textContent = imgs[i].alt;
+		}
+		function setPlaying(on: boolean) {
+			playing = on;
+			clearInterval(timer);
+			if (on) timer = window.setInterval(() => show(i + 1), 1800);
+			play.textContent = on ? '일시정지' : '다시 재생';
+			play.setAttribute('aria-label', on ? '일시정지' : '다시 재생');
+		}
+		dots.forEach((d) => d.addEventListener('click', () => { userPaused = true; setPlaying(false); show(Number(d.dataset.i)); track('guide_preview_pick', { step: String(Number(d.dataset.i) + 1) }); }));
+		play.addEventListener('click', () => { userPaused = playing; setPlaying(!playing); track('guide_preview_toggle', { playing: String(playing) }); });
+		if (reduce) setPlaying(false);
+		else {
+			// 화면에 보일 때만 이미지를 불러오고 재생합니다. 화면 밖으로 나가면 멈춥니다.
+			new IntersectionObserver((es) => {
+				for (const e of es) {
+					if (e.isIntersecting) {
+						if (!started) { started = true; track('guide_preview_view'); }
+						if (!playing && !userPaused) setPlaying(true);
+						load(1);
+					} else if (playing) setPlaying(false);
+				}
+			}, { threshold: 0.35 }).observe(root);
+		}
+		if (reduce) play.textContent = '다시 재생';
+	}
+</script>
