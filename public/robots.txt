@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /links/
 Disallow: /go/
+Disallow: /status/
+Disallow: /status-link/
 
 Sitemap: https://connectmobile.kr/sitemap-index.xml

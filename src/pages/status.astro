@@ -1,0 +1,121 @@
+---
+// 고객에게 보내는 "개통 진행 상황" 안내 페이지. 서버나 저장소 없이, 링크 주소 뒤(#)에 담긴 단계 값으로 화면을 그립니다.
+// 주소 뒤(#) 값은 서버로 전송되지 않고, 개인정보는 담지 않습니다. 링크는 /status-link/ 에서 만듭니다.
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { KAKAO_CHAT_URL, PHONE, PHONE_LINK } from '../consts';
+import { STEPS, KIND_LABEL } from '../data/statusSteps';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="개통 진행 상황 | 커넥트모바일" description="커넥트모바일 개통 진행 상황 안내 페이지입니다." noindex={true} />
+		<style is:global>
+			main.st { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; width: auto; }
+			.st h1 { font-size: 1.6rem; margin: 0 0 0.3rem; }
+			.st .sub { margin: 0 0 1.2rem; color: rgb(var(--gray)); font-size: 0.92rem; }
+			.st-kind { display: inline-block; font-size: 0.78rem; font-weight: 800; color: var(--accent); background: #eef1ff; padding: 0.2rem 0.7rem; border-radius: 999px; margin-bottom: 0.5rem; }
+			.st-list { list-style: none; margin: 0 0 1.2rem; padding: 0; display: grid; gap: 0; }
+			.st-list li { position: relative; padding: 0.55rem 0 0.55rem 2.6rem; color: rgb(var(--gray)); }
+			.st-list li::before { content: attr(data-n); position: absolute; left: 0; top: 0.5rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: #e4e8f5; color: #6b7390; display: grid; place-items: center; font-weight: 800; font-size: 0.88rem; }
+			.st-list li::after { content: ''; position: absolute; left: 0.93rem; top: 2.5rem; bottom: -0.45rem; width: 2px; background: #e4e8f5; }
+			.st-list li:last-child::after { display: none; }
+			.st-list li.done { color: #1a7f4b; }
+			.st-list li.done::before { content: '✓'; background: #1a7f4b; color: #fff; }
+			.st-list li.done::after { background: #1a7f4b; }
+			.st-list li.now { color: inherit; font-weight: 800; }
+			.st-list li.now::before { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px rgba(35, 55, 255, 0.18); }
+			.st-list .t { display: block; font-size: 1rem; }
+			.card { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.1rem 1.3rem; margin-bottom: 1rem; }
+			.card h2 { margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--accent); }
+			.card p { margin: 0 0 0.5rem; font-size: 0.92rem; }
+			.card ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.65; }
+			.card a.more { display: inline-block; margin-top: 0.6rem; font-weight: 700; font-size: 0.88rem; color: var(--accent); }
+			.memo { background: #fffbe6; box-shadow: inset 0 0 0 1.5px #f1e3a2; }
+			.memo h2 { color: #8a6d00; }
+			.when { font-size: 0.8rem; color: rgb(var(--gray)); margin: 0 0 1rem; }
+			.acts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+			.acts a { flex: 1 1 140px; text-align: center; padding: 0.75rem 1rem; border-radius: 999px; font-weight: 800; text-decoration: none; }
+			.acts .kk { background: #fee500; color: #191919; }
+			.acts .tel { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.note { font-size: 0.78rem; color: rgb(var(--gray)); margin-top: 1rem; line-height: 1.6; }
+			[hidden] { display: none !important; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="st" id="main">
+			<span class="st-kind" id="st-kind"></span>
+			<h1 id="st-h1">개통 진행 상황</h1>
+			<p class="sub" id="st-sub">진행 단계를 한눈에 확인하세요.</p>
+			<p class="when" id="st-when" hidden></p>
+
+			<ol class="st-list" id="st-list"></ol>
+
+			<div class="card" id="st-now" hidden>
+				<h2 id="st-now-t"></h2>
+				<p id="st-now-d"></p>
+				<ul id="st-now-todo"></ul>
+				<a class="more" id="st-now-link" href="#" hidden></a>
+			</div>
+			<div class="card memo" id="st-memo" hidden>
+				<h2>상담원 메모</h2>
+				<p id="st-memo-t"></p>
+			</div>
+
+			<div class="acts">
+				<a class="kk" href={KAKAO_CHAT_URL} target="_blank" rel="noopener">카톡으로 물어보기</a>
+				<a class="tel" href={PHONE_LINK}>{PHONE}</a>
+			</div>
+			<p class="note">이 안내는 상담 시점 기준이에요. 단계가 바뀌면 새 안내 링크를 보내 드려요. 개인정보(이름, 전화번호, 주민등록번호)는 이 페이지에 담기지 않아요.</p>
+		</main>
+		<Footer />
+		<script is:inline define:vars={{ STEPS, KIND_LABEL }}>
+			(function () {
+				var p = new URLSearchParams(location.hash.replace(/^#/, ''));
+				var kind = p.get('k') === 'visit' ? 'visit' : 'self';
+				var steps = STEPS[kind];
+				var s = parseInt(p.get('s') || '', 10);
+				var has = s >= 1 && s <= steps.length;
+				function ie(w){var c=w.charCodeAt(w.length-1)-0xAC00;return w+(c>=0&&c%28!==0?'이에요':'예요');}
+				var $ = function (id) { return document.getElementById(id); };
+				$('st-kind').textContent = KIND_LABEL[kind];
+				var list = $('st-list');
+				steps.forEach(function (st, i) {
+					var li = document.createElement('li');
+					li.dataset.n = String(i + 1);
+					if (has && i + 1 < s) li.className = 'done';
+					if (has && i + 1 === s) li.className = 'now';
+					var t = document.createElement('span');
+					t.className = 't';
+					t.textContent = st.title;
+					li.appendChild(t);
+					list.appendChild(li);
+				});
+				if (has) {
+					var cur = steps[s - 1];
+					$('st-h1').textContent = s === steps.length ? '개통이 완료됐어요' : '지금은 ' + s + '단계, ' + ie(cur.title);
+					$('st-sub').textContent = s + ' / ' + steps.length + ' 단계';
+					$('st-now').hidden = false;
+					$('st-now-t').textContent = '지금 해야 할 일';
+					$('st-now-d').textContent = cur.desc;
+					var ul = $('st-now-todo');
+					cur.todo.forEach(function (x) { var li = document.createElement('li'); li.textContent = x; ul.appendChild(li); });
+					if (cur.link) { var a = $('st-now-link'); a.hidden = false; a.href = cur.link.href; a.textContent = cur.link.t + ' ›'; }
+					var memo = (p.get('m') || '').slice(0, 80);
+					if (memo) { $('st-memo').hidden = false; $('st-memo-t').textContent = memo; }
+					var ts = parseInt(p.get('t') || '', 10);
+					if (ts > 1700000000000) {
+						var d = new Date(ts);
+						var w = $('st-when');
+						w.hidden = false;
+						w.textContent = '마지막 업데이트 ' + d.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+					}
+				}
+				if (window.gtag) window.gtag('event', 'status_view', { page_path: location.pathname, kind: kind, step: has ? String(s) : 'none' });
+			})();
+		</script>
+	</body>
+</html>

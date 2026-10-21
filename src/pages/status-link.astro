@@ -1,0 +1,111 @@
+---
+// 관리용 페이지: 고객에게 보낼 "개통 진행 상황" 링크를 만듭니다. (검색에 노출되지 않습니다. 서버에 아무것도 저장하지 않습니다)
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { STEPS, KIND_LABEL } from '../data/statusSteps';
+const kinds = Object.keys(STEPS) as (keyof typeof STEPS)[];
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="진행 상황 링크 만들기 | 커넥트모바일" description="고객에게 보낼 개통 진행 상황 링크를 만듭니다." noindex={true} />
+		<style is:global>
+			main.sl { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 4rem; width: auto; }
+			.sl h1 { font-size: 1.7rem; margin: 0 0 0.4rem; }
+			.sl .sub { color: rgb(var(--gray)); margin: 0 0 1.4rem; font-size: 0.95rem; }
+			.box { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; margin-bottom: 1rem; }
+			.box > strong { display: block; margin-bottom: 0.6rem; }
+			.opts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+			.opts label { display: flex; align-items: center; gap: 0.4rem; border: 2px solid #cfd6ff; border-radius: 12px; padding: 0.5rem 0.9rem; font-weight: 700; font-size: 0.92rem; cursor: pointer; }
+			.opts label:has(input:checked) { border-color: var(--accent); background: #eef1ff; }
+			.opts input { accent-color: var(--accent); }
+			textarea { width: 100%; box-sizing: border-box; font: inherit; padding: 0.6rem 0.8rem; border: 1.5px solid #cfd6ff; border-radius: 10px; min-height: 4.2rem; resize: vertical; }
+			.hint { font-size: 0.8rem; color: rgb(var(--gray)); margin: 0.4rem 0 0; }
+			.warn { color: #c2410c; }
+			.out { word-break: break-all; font-weight: 700; background: #f6f8ff; border: 1px dashed #b9c4ff; border-radius: 12px; padding: 0.8rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+			.msg { white-space: pre-wrap; background: #fffbe6; border: 1px dashed #e8d98a; border-radius: 12px; padding: 0.8rem 1rem; margin: 0.6rem 0; font-size: 0.9rem; }
+			.act { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+			.act button, .act a { border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 999px; cursor: pointer; text-decoration: none; }
+			.act .alt { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="sl" id="main">
+			<h1>진행 상황 링크 만들기</h1>
+			<p class="sub">단계를 고르면 고객에게 보낼 전용 링크와 카톡 안내 문구가 만들어져요. 단계가 바뀌면 다시 만들어서 보내 주세요. (관리용 페이지로 검색에 나오지 않고, 아무것도 저장되지 않아요)</p>
+
+			<div class="box">
+				<strong>1. 어떤 개통인가요?</strong>
+				<div class="opts" id="kinds">
+					{kinds.map((k, i) => <label><input type="radio" name="kind" value={k} checked={i === 0} />{KIND_LABEL[k]}</label>)}
+				</div>
+			</div>
+			<div class="box">
+				<strong>2. 지금 어느 단계인가요?</strong>
+				<div class="opts" id="steps"></div>
+			</div>
+			<div class="box">
+				<strong>3. 고객에게 남길 메모 (선택)</strong>
+				<textarea id="memo" maxlength="80" placeholder="예) 오늘 오후 3시쯤 유심이 도착할 예정이에요."></textarea>
+				<p class="hint warn">이름, 전화번호, 주민등록번호 같은 개인정보는 쓰지 마세요. 링크 안에 그대로 담겨요. (최대 80자)</p>
+			</div>
+			<div class="box">
+				<strong>4. 고객에게 보낼 링크</strong>
+				<div class="out" id="out"></div>
+				<div class="msg" id="msg"></div>
+				<div class="act">
+					<button type="button" id="copy-link">링크 복사</button>
+					<button type="button" id="copy-msg" class="alt">카톡 문구까지 복사</button>
+					<a id="preview" class="alt" href="#" target="_blank" rel="noopener">고객 화면 미리보기</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+		<script is:inline define:vars={{ STEPS, KIND_LABEL }}>
+			(function () {
+				function ie(w) { var c = w.charCodeAt(w.length - 1) - 0xAC00; return w + (c >= 0 && c % 28 !== 0 ? '이에요' : '예요'); }
+				var $ = function (id) { return document.getElementById(id); };
+				var stepsEl = $('steps'), out = $('out'), msg = $('msg'), memo = $('memo');
+				var kind = 'self', step = 1, link = '', text = '';
+				function drawSteps() {
+					stepsEl.innerHTML = '';
+					STEPS[kind].forEach(function (st, i) {
+						var l = document.createElement('label');
+						var r = document.createElement('input');
+						r.type = 'radio'; r.name = 'step'; r.value = String(i + 1); r.checked = i + 1 === step;
+						r.addEventListener('change', function () { step = i + 1; render(); });
+						l.appendChild(r);
+						l.appendChild(document.createTextNode((i + 1) + '. ' + st.title));
+						stepsEl.appendChild(l);
+					});
+				}
+				function render() {
+					var p = new URLSearchParams();
+					p.set('k', kind); p.set('s', String(step)); p.set('t', String(Date.now()));
+					var m = memo.value.trim();
+					if (m) p.set('m', m);
+					link = 'https://connectmobile.kr/status/#' + p.toString();
+					var st = STEPS[kind][step - 1];
+					out.textContent = link;
+					text = '[커넥트모바일] 개통 진행 상황을 안내드려요.\n지금은 ' + step + '단계, ' + ie(st.title) + '.' + (m ? '\n' + m : '') + '\n\n아래 링크에서 지금 해야 할 일을 확인하실 수 있어요.\n' + link;
+					msg.textContent = text;
+					$('preview').href = link;
+				}
+				document.querySelectorAll('input[name=kind]').forEach(function (r) {
+					r.addEventListener('change', function () { kind = r.value; step = 1; drawSteps(); render(); });
+				});
+				memo.addEventListener('input', render);
+				function copy(btn, val, label) {
+					navigator.clipboard.writeText(val).then(function () { btn.textContent = '복사됐어요!'; }, function () { btn.textContent = '직접 복사해 주세요'; });
+					setTimeout(function () { btn.textContent = label; }, 2000);
+				}
+				$('copy-link').addEventListener('click', function () { copy(this, link, '링크 복사'); });
+				$('copy-msg').addEventListener('click', function () { copy(this, text, '카톡 문구까지 복사'); });
+				drawSteps(); render();
+			})();
+		</script>
+	</body>
+</html>
