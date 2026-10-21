@@ -1,5 +1,6 @@
 ---
 // 헤더의 돋보기 버튼과 검색창. 색인(/search.json)은 처음 열 때만 불러옵니다.
+import { KAKAO_CHAT_URL } from '../consts';
 ---
 
 <dialog class="sb" id="sb" aria-labelledby="sb-title">
@@ -10,6 +11,10 @@
 	</div>
 	<ul class="sb-res" id="sb-res"></ul>
 	<p class="sb-empty" id="sb-empty">검색어를 입력하면 요금제, 질문, 안내 글에서 한꺼번에 찾아 드려요.</p>
+	<div class="sb-miss" id="sb-miss" hidden>
+		<a class="sb-ask" id="sb-ask" href={KAKAO_CHAT_URL} target="_blank" rel="noopener">이 내용 카톡으로 물어보기</a>
+		<span class="sb-note" id="sb-note" role="status" aria-live="polite"></span>
+	</div>
 </dialog>
 
 <style>
@@ -29,6 +34,10 @@
 	.sb-res :global(i) { font-style: normal; font-size: 0.66rem; font-weight: 700; color: #2337ff; background: var(--surface-2); border-radius: 999px; padding: 0.08rem 0.5rem; margin-right: 0.4rem; vertical-align: middle; }
 	.sb-empty { margin: 0; padding: 1rem 1.2rem 1.2rem; font-size: 0.85rem; color: var(--muted); }
 	.sb-empty[hidden] { display: none; }
+	.sb-miss { padding: 0 1.2rem 1.2rem; display: grid; gap: 0.5rem; justify-items: start; }
+	.sb-miss[hidden] { display: none; }
+	.sb-ask { display: inline-block; background: #fee500; color: #191919; font-weight: 800; font-size: 0.88rem; text-decoration: none; padding: 0.55rem 1.2rem; border-radius: 999px; }
+	.sb-note { font-size: 0.8rem; color: var(--green); min-height: 1.1em; }
 </style>
 
 <script>
@@ -37,6 +46,8 @@
 	const q = document.getElementById('sb-q') as HTMLInputElement | null;
 	const res = document.getElementById('sb-res');
 	const empty = document.getElementById('sb-empty');
+	const miss = document.getElementById('sb-miss');
+	const missNote = document.getElementById('sb-note');
 	let index: Item[] | null = null;
 	let loading: Promise<void> | null = null;
 	const track = (name: string, p: Record<string, string> = {}) => {
@@ -59,6 +70,7 @@
 		if (!res || !empty || !q) return;
 		const words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
 		res.innerHTML = '';
+		if (miss) miss.hidden = true;
 		if (!words.length || !index) {
 			empty.hidden = false;
 			empty.textContent = '검색어를 입력하면 요금제, 질문, 안내 글에서 한꺼번에 찾아 드려요.';
@@ -82,7 +94,8 @@
 			.slice(0, 12);
 		if (!scored.length) {
 			empty.hidden = false;
-			empty.textContent = '찾는 내용이 없어요. 바로 카톡으로 물어봐 주세요.';
+			empty.textContent = `"${q.value.trim().slice(0, 30)}"에 맞는 글을 아직 못 찾았어요. 카톡으로 물어봐 주시면 답해 드리고, 자주 묻는 내용은 사이트에 추가할게요.`;
+			if (miss) { miss.hidden = false; if (missNote) missNote.textContent = ''; }
 			return;
 		}
 		empty.hidden = true;
@@ -114,6 +127,12 @@
 				track('search_open');
 			} else if (el === dlg || el.closest('[data-sb-close]')) dlg.close();
 			else if (el.closest('#sb-res a')) track('search_pick', { query: q.value.trim().slice(0, 40) });
+			else if (el.closest('#sb-ask')) {
+				const text = `사이트에서 찾지 못한 내용을 문의드려요.
+(찾은 말: ${q.value.trim().slice(0, 40)})`;
+				track('search_miss_ask', { query: q.value.trim().slice(0, 40) });
+				try { navigator.clipboard.writeText(text).then(() => { if (missNote) missNote.textContent = '찾던 말이 복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.'; }, () => {}); } catch { /* 복사를 못 해도 채팅창은 열립니다 */ }
+			}
 		});
 		document.addEventListener('keydown', (e) => {
 			const target = e.target as HTMLElement;
@@ -130,6 +149,7 @@
 				if (v.length >= 2 && v !== tracked) {
 					tracked = v;
 					track('search', { query: v.slice(0, 40) });
+					if (miss && !miss.hidden) track('search_miss', { query: v.slice(0, 40) });
 				}
 			}, 900);
 		});
