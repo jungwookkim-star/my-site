@@ -24,6 +24,14 @@ pubDate: 'Sep 30 2026'
 ## 6. 접수 가능 시간 안에 진행했나요?
 셀프개통은 가입 유형별로 접수 가능한 시간이 정해져 있습니다. 신규가입은 08:00~21:50, 번호이동은 10:00~19:50이며 일요일과 신정·설·추석 당일에는 접수되지 않습니다. 번호이동은 마감이 빨라서 퇴근 후에 하려다 놓치는 경우가 많습니다. 명절 연휴에는 개통이 일부 제한될 수 있으니 미리 확인하세요.
 
+## 상황별로 더 자세히
+- [접수 시간이 지났다고 나올 때](/blog/self-activation-time-over/)
+- [앤텔레콤 회선이 이미 있다고 할 때](/blog/self-activation-already-has-line/)
+- [전화번호 선택에서 멈췄을 때](/blog/self-activation-number-choice/)
+- [신청 후 개통됐는지 확인하는 법](/blog/self-activation-check-result/)
+- [안면인증이 안 될 때](/blog/self-activation-face-auth/)
+- [유심번호 입력 방법](/blog/usim-number-input/)
+
 ## 그래도 안 된다면
 혼자 오래 붙들고 있지 마시고 바로 문의해 주세요. 어느 단계에서 어떤 화면이 나오는지 알려주시면 가장 빠르게 도와드릴 수 있습니다.
 

@@ -14,6 +14,10 @@ const MAP: Record<string, Category> = {
 	'visit-activation-reservation': '개통 방법',
 	'after-activation-checklist': '개통 방법',
 	'after-activation-account': '개통 방법',
+	'self-activation-time-over': '개통 방법',
+	'self-activation-already-has-line': '개통 방법',
+	'self-activation-number-choice': '개통 방법',
+	'self-activation-check-result': '개통 방법',
 
 	'kt-prepaid-lineup': '요금제 비교·추천',
 	'kt-vs-lg-prepaid': '요금제 비교·추천',
