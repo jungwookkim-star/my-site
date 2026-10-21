@@ -1,6 +1,7 @@
 ---
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
+import VerifySteps from '../components/VerifySteps.astro';
 import { SITE_TITLE, ADDRESS, HOURS, PHONE, PHONE_LINK, KAKAO_URL, BUSINESS_INFO, HOLIDAY_NOTE, BIZ_ADDRESS, EMAIL } from '../consts';
 ---
 
@@ -43,6 +44,8 @@ import { SITE_TITLE, ADDRESS, HOURS, PHONE, PHONE_LINK, KAKAO_URL, BUSINESS_INFO
 		<img src="/trust/sajeon-seungnak.webp" alt="앤텔레콤 이동통신서비스 판매점 사전승낙서: 승인판매점 커넥트 모바일(대표 김정욱), 승인 이동통신 사업자 앤텔레콤, 2026년 9월 29일" width="900" height="1262" loading="lazy" />
 		<figcaption>이동통신서비스 판매점 사전승낙서</figcaption>
 	</figure>
+
+	<VerifySteps />
 
 	<h2>사업자 정보</h2>
 	<p>{BUSINESS_INFO}<br />사업장 주소: {BIZ_ADDRESS}<br />이메일: <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
