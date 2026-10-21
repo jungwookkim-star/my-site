@@ -1,0 +1,242 @@
+---
+// 폰 하나로 개통하는 분이 개통 중에 갤러리에서 열어 볼 수 있게, 준비물과 순서를 한 장 이미지로 만들어 줍니다.
+// 이미지는 이 기기 안에서만 만들어지고(서버로 보내지 않음), 내용은 사이트의 개통 안내와 같은 기준입니다.
+import { PHONE } from '../consts';
+---
+
+<div class="pc" id="pc" data-phone={PHONE}>
+	<h3 class="pc-h">개통하면서 보는 준비물 카드</h3>
+	<p class="pc-sub">폰 하나로 개통하면 안내 화면을 같이 볼 수 없어요. 내게 맞는 카드를 이미지로 저장해 두고 갤러리에서 열어 보세요.</p>
+	<div class="pc-row">
+		<label>통신망
+			<select id="pc-net"><option value="KT">KT망</option><option value="LG">LG망</option></select>
+		</label>
+		<label>가입 유형
+			<select id="pc-kind"><option value="new">신규가입</option><option value="port">번호이동</option></select>
+		</label>
+	</div>
+	<div class="pc-view">
+		<img id="pc-img" alt="내게 맞는 셀프개통 준비물과 순서 카드" width="1080" height="1700" />
+	</div>
+	<div class="pc-act">
+		<button type="button" class="pc-b main" id="pc-save">이미지로 저장</button>
+		<button type="button" class="pc-b" id="pc-share" hidden>공유하기</button>
+	</div>
+	<p class="pc-note" id="pc-note" role="status" aria-live="polite">저장이 안 되면 위 이미지를 길게 눌러서 "이미지 저장"을 고르세요.</p>
+</div>
+
+<style is:global>
+	.pc { background: var(--surface); border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.3rem 1.3rem 1.2rem; max-width: 640px; margin: 0 auto; }
+	.pc-h { margin: 0 0 0.3rem; font-size: 1.15rem; }
+	.pc-sub { margin: 0 0 0.9rem; font-size: 0.88rem; color: rgb(var(--gray)); }
+	.pc-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.9rem; }
+	.pc-row label { display: grid; gap: 0.25rem; font-size: 0.82rem; font-weight: 800; }
+	.pc-row select { font: inherit; font-size: 0.95rem; padding: 0.45rem 0.7rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); color: inherit; }
+	.pc-view { display: grid; justify-items: center; background: var(--surface-3); border-radius: 14px; padding: 0.8rem; }
+	.pc-view img { width: min(100%, 340px); height: auto; border-radius: 10px; box-shadow: 0 4px 16px rgba(10, 20, 70, 0.18); }
+	.pc-act { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+	.pc-b { border: 0; font: inherit; font-weight: 800; font-size: 0.9rem; padding: 0.6rem 1.3rem; border-radius: 999px; cursor: pointer; background: var(--surface-2); color: var(--ink); }
+	.pc-b.main { background: var(--accent); color: #fff; }
+	.pc-b[hidden] { display: none; }
+	.pc-note { margin: 0.6rem 0 0; font-size: 0.8rem; color: var(--muted); min-height: 1.1em; }
+</style>
+
+<script>
+	const root = document.getElementById('pc');
+	if (root) {
+		const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+		const netEl = $<HTMLSelectElement>('pc-net'), kindEl = $<HTMLSelectElement>('pc-kind'), img = $<HTMLImageElement>('pc-img');
+		const note = $('pc-note'), saveBtn = $('pc-save'), shareBtn = $('pc-share');
+		const PHONE = root.dataset.phone ?? '';
+		const W = 1080;
+		let blob: Blob | null = null;
+		const track = (name: string, p: Record<string, string> = {}) => {
+			const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+			if (g) g('event', name, { page_path: location.pathname, ...p });
+		};
+
+		function content(net: string, kind: string) {
+			const isNew = kind === 'new';
+			const sim = net === 'KT' ? '유심번호: 모델명(대문자와 숫자 4자리) + 일련번호 숫자 19자리, 끝 문자 F는 빼고 숫자만' : '유심번호: 모델명(대문자와 숫자 4자리) + 일련번호 숫자 8자리, 숫자만';
+			return {
+				title: '셀프개통 준비물과 순서',
+				sub: `${net}망 선불, ${isNew ? '신규가입' : '번호이동'}`,
+				prep: [
+					'신분증 (주민등록증 또는 운전면허증)',
+					'간편인증 수단 1가지 (카카오, 토스, 네이버, PASS, 국민, 신한)',
+					'안면인증이 되는 휴대폰 (선글라스, 모자, 마스크는 벗기)',
+					`셀프개통이 가능한 ${net}망 유심 (유심비 8,800원)`,
+					sim,
+				],
+				time: isNew ? '신규가입 접수 시간 08:00~21:50' : '번호이동 접수 시간 10:00~19:50 (일요일, 신정, 설, 추석 당일은 접수 불가)',
+				steps: [
+					`개통 사이트에 접속해서 ${net}망을 선택해요`,
+					'본인 확인: 안면인증(신분증 촬영 등)과 간편인증을 해요',
+					`가입 유형은 ${isNew ? '신규가입' : '번호이동'}, 만 19세 이상 내국인, 선불을 골라요`,
+					'유심번호를 입력하고, 요금제(선불 396, 459가 인기)를 고르고, 약관에 동의해요',
+					isNew ? '전화번호 뒤 4자리를 조회해서 마음에 드는 번호를 예약해요' : '번호이동은 쓰던 번호를 옮기는 방식이에요. 접수 화면 안내에 따라 진행해요',
+					'셀프개통을 신청해요. 처리에 5~10분이 걸리고 접수번호로 결과를 조회할 수 있어요',
+					'카카오톡 채널에 접수 여부를 알리고, 개통한 날 충전까지 끝내요',
+				],
+			};
+		}
+
+		function wrap(ctx: CanvasRenderingContext2D, text: string, maxW: number) {
+			const lines: string[] = [];
+			let cur = '';
+			for (const ch of text) {
+				if (ctx.measureText(cur + ch).width > maxW && cur) { lines.push(cur); cur = ch.trimStart(); } else cur += ch;
+			}
+			if (cur) lines.push(cur);
+			return lines;
+		}
+
+		async function draw() {
+			// 오래된 브라우저에는 roundRect가 없어서 같은 모양을 직접 그려 줍니다.
+			if (!CanvasRenderingContext2D.prototype.roundRect) {
+				CanvasRenderingContext2D.prototype.roundRect = function (x: number, y: number, w: number, h: number, r: number | number[]) {
+					const rr = Math.min(Array.isArray(r) ? r[0] : r, w / 2, h / 2);
+					this.moveTo(x + rr, y); this.arcTo(x + w, y, x + w, y + h, rr); this.arcTo(x + w, y + h, x, y + h, rr); this.arcTo(x, y + h, x, y, rr); this.arcTo(x, y, x + w, y, rr); this.closePath();
+					return this;
+				};
+			}
+			const c = content(netEl.value, kindEl.value);
+			const all = [c.title, c.sub, ...c.prep, c.time, ...c.steps, '준비물', '접수 시간', '개통 순서', `막히면 ${PHONE}`, '카카오톡 채널 커넥트모바일 | connectmobile.kr', '공식 안내는 바뀔 수 있어요'].join('');
+			try { await document.fonts.load('700 30px "Pretendard Variable"', all); await document.fonts.load('500 30px "Pretendard Variable"', all); } catch { /* 글꼴을 못 불러도 기본 글꼴로 그립니다 */ }
+			const FONT = '"Pretendard Variable", Pretendard, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
+			const cv = document.createElement('canvas');
+			cv.width = W;
+			cv.height = 2400;
+			const ctx = cv.getContext('2d')!;
+			const PAD = 64;
+			const inner = W - PAD * 2;
+			const f = (w: number, s: number) => `${w} ${s}px ${FONT}`;
+			// 1) 높이 계산 후 2) 그리기 (같은 함수를 두 번 돌립니다)
+			function layout(drawIt: boolean) {
+				let y = 0;
+				if (drawIt) {
+					const g = ctx.createLinearGradient(0, 0, W, 260);
+					g.addColorStop(0, '#0e2150');
+					g.addColorStop(1, '#1c4aa8');
+					ctx.fillStyle = '#f3f8ff';
+					ctx.fillRect(0, 0, W, cv.height);
+					ctx.fillStyle = g;
+					ctx.fillRect(0, 0, W, 250);
+					ctx.fillStyle = '#fff';
+					ctx.font = f(800, 62);
+					ctx.fillText(c.title, PAD, 110);
+					ctx.fillStyle = '#cfe2ff';
+					ctx.font = f(700, 38);
+					ctx.fillText(c.sub, PAD, 175);
+					ctx.font = f(500, 26);
+					ctx.fillStyle = '#9fb7e6';
+					ctx.fillText('커넥트모바일 선후불 개통센터', PAD, 222);
+				}
+				y = 250 + 56;
+				const head = (t: string) => {
+					if (drawIt) { ctx.fillStyle = '#1356d6'; ctx.font = f(800, 40); ctx.fillText(t, PAD, y + 30); }
+					y += 62;
+				};
+				// 준비물
+				head('준비물');
+				for (const t of c.prep) {
+					ctx.font = f(600, 33);
+					const ls = wrap(ctx, t, inner - 70);
+					const h = ls.length * 46 + 26;
+					if (drawIt) {
+						ctx.fillStyle = '#fff';
+						ctx.beginPath(); ctx.roundRect(PAD, y, inner, h, 20); ctx.fill();
+						ctx.strokeStyle = '#2337ff'; ctx.lineWidth = 5;
+						ctx.beginPath(); ctx.roundRect(PAD + 22, y + 22, 34, 34, 8); ctx.stroke();
+						ctx.fillStyle = '#0e2150'; ctx.font = f(600, 33);
+						ls.forEach((l, k) => ctx.fillText(l, PAD + 76, y + 50 + k * 46));
+					}
+					y += h + 14;
+				}
+				y += 18;
+				// 접수 시간
+				head('접수 시간');
+				ctx.font = f(700, 34);
+				const tl = wrap(ctx, c.time, inner - 56);
+				const th = tl.length * 48 + 30;
+				if (drawIt) {
+					ctx.fillStyle = '#fff4d6';
+					ctx.beginPath(); ctx.roundRect(PAD, y, inner, th, 20); ctx.fill();
+					ctx.fillStyle = '#6b4f00'; ctx.font = f(700, 34);
+					tl.forEach((l, k) => ctx.fillText(l, PAD + 28, y + 52 + k * 48));
+				}
+				y += th + 36;
+				// 순서
+				head('개통 순서');
+				c.steps.forEach((t, n) => {
+					ctx.font = f(600, 33);
+					const ls = wrap(ctx, t, inner - 100);
+					const h = ls.length * 46 + 28;
+					if (drawIt) {
+						ctx.fillStyle = '#fff';
+						ctx.beginPath(); ctx.roundRect(PAD, y, inner, h, 20); ctx.fill();
+						ctx.fillStyle = '#2337ff';
+						ctx.beginPath(); ctx.arc(PAD + 46, y + h / 2, 28, 0, Math.PI * 2); ctx.fill();
+						ctx.fillStyle = '#fff'; ctx.font = f(800, 32); ctx.textAlign = 'center';
+						ctx.fillText(String(n + 1), PAD + 46, y + h / 2 + 11);
+						ctx.textAlign = 'left';
+						ctx.fillStyle = '#0e2150'; ctx.font = f(600, 33);
+						ls.forEach((l, k) => ctx.fillText(l, PAD + 92, y + 50 + k * 46));
+					}
+					y += h + 14;
+				});
+				y += 22;
+				// 안내
+				if (drawIt) {
+					ctx.fillStyle = '#0e2150';
+					ctx.beginPath(); ctx.roundRect(PAD, y, inner, 190, 24); ctx.fill();
+					ctx.fillStyle = '#fff'; ctx.font = f(800, 40);
+					ctx.fillText(`막히면 ${PHONE}`, PAD + 36, y + 66);
+					ctx.fillStyle = '#cfe2ff'; ctx.font = f(600, 30);
+					ctx.fillText('카카오톡 채널 커넥트모바일 | connectmobile.kr', PAD + 36, y + 118);
+					ctx.fillStyle = '#9fb7e6'; ctx.font = f(500, 26);
+					ctx.fillText('공식 안내는 바뀔 수 있어요', PAD + 36, y + 160);
+				}
+				y += 190 + 56;
+				return y;
+			}
+			const total = layout(false);
+			cv.height = total;
+			layout(true);
+			return cv;
+		}
+
+		let seq = 0;
+		async function render() {
+			const my = ++seq;
+			const cv = await draw();
+			if (my !== seq) return;
+			img.width = cv.width;
+			img.height = cv.height;
+			cv.toBlob((b) => { if (my === seq) { blob = b; if (b) { URL.revokeObjectURL(img.src); img.src = URL.createObjectURL(b); } } }, 'image/png');
+		}
+		const fileName = () => `개통준비물-${netEl.value}망-${kindEl.value === 'new' ? '신규' : '번호이동'}.png`;
+		netEl.addEventListener('change', render);
+		kindEl.addEventListener('change', render);
+		saveBtn.addEventListener('click', () => {
+			if (!blob) return;
+			const a = document.createElement('a');
+			a.href = URL.createObjectURL(blob);
+			a.download = fileName();
+			a.click();
+			note.textContent = '저장했어요. 갤러리나 다운로드 폴더에서 열어 보세요. 안 보이면 이미지를 길게 눌러서 저장하세요.';
+			track('prep_card_save', { net: netEl.value, kind: kindEl.value });
+		});
+		const canShareFiles = () => { try { return !!blob && !!navigator.canShare && navigator.canShare({ files: [new File([blob], fileName(), { type: 'image/png' })] }); } catch { return false; } };
+		shareBtn.addEventListener('click', async () => {
+			if (!blob || !canShareFiles()) return;
+			try { await navigator.share({ files: [new File([blob], fileName(), { type: 'image/png' })], title: '셀프개통 준비물과 순서' }); track('prep_card_share', { net: netEl.value, kind: kindEl.value }); } catch { /* 취소하면 아무 일도 없습니다 */ }
+		});
+		// 화면에 보일 때 처음 한 번만 그립니다. (페이지를 열 때마다 이미지를 만들지 않도록)
+		new IntersectionObserver((es, ob) => {
+			if (es.some((e) => e.isIntersecting)) { ob.disconnect(); render().then(() => { if (canShareFiles()) shareBtn.hidden = false; }); }
+		}, { rootMargin: '200px' }).observe(root);
+		netEl.addEventListener('change', () => setTimeout(() => { shareBtn.hidden = !canShareFiles(); }, 300));
+		kindEl.addEventListener('change', () => setTimeout(() => { shareBtn.hidden = !canShareFiles(); }, 300));
+	}
+</script>

@@ -15,6 +15,7 @@ import Welcome from '../components/Welcome.astro';
 import VerifiedStamp from '../components/VerifiedStamp.astro';
 import SimCheck from '../components/SimCheck.astro';
 import GuidePreview from '../components/GuidePreview.astro';
+import PrepCard from '../components/PrepCard.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
@@ -515,6 +516,7 @@ const faqSchema = {
 					<a href="/guide/"><img src="/cards/self-prep.webp" alt="셀프개통 전 준비물 체크: 간편인증, 신분증, 사용 휴대폰, 유심" width="900" height="900" loading="lazy" /></a>
 					<a href="/blog/usim-delivery/"><img src="/cards/sim-prep.webp" alt="KT 바로유심, LG 모두의 유심 원칩 구매처와 유심비 안내" width="900" height="900" loading="lazy" /></a>
 				</div>
+					<div style="margin-top:1.2rem"><PrepCard /></div>
 				</details>
 							<p style="text-align:center;margin-top:1.5rem"><a class="btn ghost" href="/guide/#screens">실제 개통 화면 20단계 보기<Icon name="arrow" /></a></p>
 			</section>
