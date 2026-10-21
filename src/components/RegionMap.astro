@@ -1,0 +1,119 @@
+---
+import { REGIONS } from '../data/regions';
+// 시도를 실제 위치와 비슷하게 배치한 타일 지도입니다. (열 1~6, 행 1~7)
+// 색: 유심 퀵 배송 가능(서울, 수도권, 광역시, 제주)은 파랑, 그 밖은 흰색(편의점 유심). 점은 대면 개통 사업장이 있는 곳입니다.
+const POS: Record<string, [number, number]> = {
+	gyeonggi: [3, 1],
+	gangwon: [4, 1],
+	incheon: [2, 2],
+	seoul: [3, 2],
+	chungnam: [2, 3],
+	sejong: [3, 3],
+	chungbuk: [4, 3],
+	gyeongbuk: [5, 3],
+	jeonbuk: [2, 4],
+	daejeon: [3, 4],
+	daegu: [5, 4],
+	ulsan: [6, 4],
+	gwangju: [2, 5],
+	gyeongnam: [4, 5],
+	busan: [5, 5],
+	jeonnam: [2, 6],
+	jeju: [2, 7],
+};
+const tiles = REGIONS.map((r) => ({
+	slug: r.slug,
+	name: r.name,
+	quick: r.quick,
+	centers: r.centers,
+	col: POS[r.slug][0],
+	row: POS[r.slug][1],
+}));
+---
+
+<div class="rmap" id="rmap">
+	<div class="rm-legend" aria-hidden="true">
+		<span><i class="q"></i>유심 퀵 배송</span>
+		<span><i class="c"></i>편의점 유심</span>
+		<span><i class="d"></i>대면 개통 사업장</span>
+	</div>
+	<div class="rm-grid" role="group" aria-label="지역 선택">
+		{
+			tiles.map((t) => (
+				<button type="button" class:list={['rm-t', { q: t.quick }]} data-slug={t.slug} style={`grid-column:${t.col};grid-row:${t.row}`} aria-pressed="false">
+					<b>{t.name}</b>
+					{t.centers.length > 0 && <span class="dot" aria-hidden="true" />}
+				</button>
+			))
+		}
+	</div>
+	<div class="rm-panel" id="rm-panel" role="status" aria-live="polite">
+		<p class="rm-hint">지역을 눌러 보세요. 유심 받는 방법과 방문 개통이 가능한 곳을 알려 드려요.</p>
+	</div>
+	<script type="application/json" id="rm-data" set:html={JSON.stringify(tiles.map((t) => ({ slug: t.slug, name: t.name, quick: t.quick, centers: t.centers })))} />
+</div>
+
+<style is:global>
+	.rmap { max-width: 520px; margin: 1.2rem auto 0; }
+	.rm-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem 0.9rem; font-size: 0.78rem; color: rgb(var(--gray-dark)); margin-bottom: 0.7rem; }
+	.rm-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+	.rm-legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 4px; background: #fff; box-shadow: inset 0 0 0 1.5px #cfd6ff; }
+	.rm-legend i.q { background: var(--accent); box-shadow: none; }
+	.rm-legend i.d { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #ff7a29; box-shadow: none; }
+	.rm-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(7, auto); gap: 6px; }
+	.rm-t { position: relative; aspect-ratio: 1; border: 0; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1.5px #cfd6ff; color: inherit; font: inherit; cursor: pointer; display: grid; place-items: center; padding: 0; transition: transform 0.12s, box-shadow 0.12s; }
+	.rm-t b { font-size: 0.82rem; }
+	.rm-t.q { background: var(--accent); color: #fff; box-shadow: none; }
+	.rm-t:hover { transform: translateY(-2px); }
+	.rm-t[aria-pressed='true'] { box-shadow: 0 0 0 3px #ffd54a; transform: translateY(-2px); }
+	.rm-t .dot { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; border-radius: 50%; background: #ff7a29; box-shadow: 0 0 0 2px #fff; }
+	.rm-panel { margin-top: 0.9rem; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem; min-height: 4.5rem; }
+	.rm-hint { margin: 0; text-align: center; color: rgb(var(--gray)); font-size: 0.9rem; }
+	.rm-panel h3 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+	.rm-panel dl { margin: 0; display: grid; gap: 0.5rem; font-size: 0.9rem; line-height: 1.55; }
+	.rm-panel dt { font-weight: 800; color: var(--accent); font-size: 0.8rem; }
+	.rm-panel dd { margin: 0; }
+	.rm-go { display: inline-block; margin-top: 0.8rem; background: var(--accent); color: #fff; font-weight: 800; font-size: 0.9rem; padding: 0.55rem 1.2rem; border-radius: 999px; text-decoration: none; }
+	@media (prefers-reduced-motion: reduce) { .rm-t { transition: none; } }
+</style>
+
+<script>
+	type R = { slug: string; name: string; quick: boolean; centers: string[] };
+	const root = document.getElementById('rmap');
+	const dataEl = document.getElementById('rm-data');
+	if (root && dataEl) {
+		const data: R[] = JSON.parse(dataEl.textContent ?? '[]');
+		const panel = document.getElementById('rm-panel')!;
+		const tiles = root.querySelectorAll<HTMLButtonElement>('.rm-t');
+		const mk = (tag: string, text: string, cls?: string) => {
+			const el = document.createElement(tag);
+			el.textContent = text;
+			if (cls) el.className = cls;
+			return el;
+		};
+		function show(slug: string) {
+			const r = data.find((x) => x.slug === slug);
+			if (!r) return;
+			tiles.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.slug === slug)));
+			panel.innerHTML = '';
+			panel.appendChild(mk('h3', r.name));
+			const dl = document.createElement('dl');
+			const row = (dt: string, dd: string) => {
+				const w = document.createElement('div');
+				w.appendChild(mk('dt', dt));
+				w.appendChild(mk('dd', dd));
+				dl.appendChild(w);
+			};
+			row('유심 받는 방법', r.quick ? '퀵 배송을 받을 수 있어요. 주문 10:00~22:00, 배송비 무료이고 대부분 2시간 이내예요. 일부 지역은 제외될 수 있어 상담 때 확인해 드려요. 가까운 편의점에서 사도 돼요.' : '퀵 배송 지역이 아니라서 가까운 편의점에서 유심을 구매해요. 유심비는 8,800원이에요.');
+			row('외국인, 미성년자 대면 개통', r.centers.length ? '방문할 수 있는 곳: ' + r.centers.join(', ') + '. 방문 전에 반드시 예약해 주세요.' : '이 지역에는 방문 사업장이 없어요. 가까운 지역 사업장을 안내해 드려요.');
+			row('셀프개통', '만 19세 이상 내국인은 전국 어디서나 비대면으로 할 수 있어요.');
+			panel.appendChild(dl);
+			const a = mk('a', r.name + ' 안내 자세히 보기 ›', 'rm-go') as HTMLAnchorElement;
+			a.href = '/region/' + r.slug + '/';
+			panel.appendChild(a);
+			const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+			if (g) g('event', 'region_map_pick', { page_path: location.pathname, region: r.slug });
+		}
+		tiles.forEach((t) => t.addEventListener('click', () => show(t.dataset.slug ?? '')));
+	}
+</script>
