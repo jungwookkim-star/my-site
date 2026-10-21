@@ -53,6 +53,7 @@ const schemas = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonL
 <link rel="icon" type="image/png" sizes="192x192" href="/logo-512.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="theme-color" content="#2337ff" />
+<meta name="color-scheme" content="light dark" />
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -94,6 +95,7 @@ const schemas = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonL
 <!-- Google Analytics (실제 사이트에서만 동작) -->
 <script is:inline>
 	try { if (localStorage.getItem('bigtext') === '1') document.documentElement.classList.add('bigtext'); } catch (e) {}
+	try { var th = localStorage.getItem('theme'); if (th === 'dark' || th === 'light') document.documentElement.setAttribute('data-theme', th); } catch (e) {}
 </script>
 <script is:inline define:vars={{ GA_ID }}>
 	if (location.hostname === 'connectmobile.kr' || location.hostname === 'www.connectmobile.kr') {

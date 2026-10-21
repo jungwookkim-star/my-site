@@ -56,7 +56,7 @@ function dataPct(text: string): number {
 
 <style>
 	.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1rem; }
-	.plan { display: flex; flex-direction: column; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+	.plan { display: flex; flex-direction: column; background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
 	.plan header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
 	.plan h3 { margin: 0 0 0.6rem; font-size: 1.1rem; line-height: 1.35; }
 	.pbadge { background: #d92d20; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; white-space: nowrap; }
@@ -65,9 +65,9 @@ function dataPct(text: string): number {
 	dt { width: 3.2rem; flex-shrink: 0; color: rgb(var(--gray)); font-weight: 700; }
 	dd { margin: 0; line-height: 1.5; }
 	dd small { display: block; color: rgb(var(--gray)); font-size: 0.78rem; }
-	.dbar { display: block; height: 6px; margin-top: 0.35rem; border-radius: 999px; background: #e8ecff; overflow: hidden; }
+	.dbar { display: block; height: 6px; margin-top: 0.35rem; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 	.dbar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #5b6bff, #2337ff); }
-	.pnote { margin: 0.5rem 0 0; font-size: 0.8rem; color: #c2410c; }
+	.pnote { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--warn); }
 	.plan footer { display: flex; justify-content: space-between; align-items: baseline; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 2px solid rgb(var(--gray-light)); }
 	.plan footer strong { font-size: 1.3rem; color: var(--accent); }
 	.plan footer span { font-size: 0.8rem; color: rgb(var(--gray)); }
@@ -120,11 +120,11 @@ function dataPct(text: string): number {
 	.cmp-tray button { border: 0; font: inherit; font-weight: 700; cursor: pointer; border-radius: 999px; padding: 0.45rem 1rem; }
 	.cmp-tray .go { background: #fff; color: #0f1219; }
 	.cmp-tray .go:disabled { opacity: 0.4; cursor: not-allowed; }
-	.cmp-tray .clr { background: transparent; color: #cbd2e6; padding: 0.45rem 0.4rem; }
+	.cmp-tray .clr { background: transparent; color: var(--line); padding: 0.45rem 0.4rem; }
 	@media (max-width: 720px) { .cmp-tray { bottom: 4.6rem; } }
 	.cmp-dialog { border: 0; border-radius: 18px; padding: 0; width: min(920px, calc(100% - 1.5rem)); max-height: 88vh; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
 	.cmp-dialog::backdrop { background: rgba(15, 18, 25, 0.55); }
-	.cmp-head { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.3rem; border-bottom: 1px solid rgb(var(--gray-light)); position: sticky; top: 0; background: #fff; z-index: 2; }
+	.cmp-head { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.3rem; border-bottom: 1px solid rgb(var(--gray-light)); position: sticky; top: 0; background: var(--surface); z-index: 2; }
 	.cmp-head h3 { margin: 0; font-size: 1.15rem; }
 	.cmp-head button { border: 0; background: rgb(var(--gray-light)); border-radius: 999px; padding: 0.4rem 1rem; font: inherit; font-weight: 700; cursor: pointer; }
 	.cmp-scroll { overflow-x: auto; padding: 0.5rem 1rem 1.2rem; }
@@ -134,9 +134,9 @@ function dataPct(text: string): number {
 	.cmp-table tbody th { width: 5.5rem; color: rgb(var(--gray)); font-weight: 700; white-space: nowrap; }
 	.cmp-table td small { display: block; color: rgb(var(--gray)); font-size: 0.78rem; margin-top: 0.15rem; }
 	.cmp-table td.price { font-size: 1.15rem; font-weight: 800; color: var(--accent); }
-	.cmp-table td.best { background: #f1f4ff; }
+	.cmp-table td.best { background: var(--surface-3); }
 	.cmp-table .tag { display: inline-block; margin-left: 0.4rem; background: #d92d20; color: #fff; font-size: 0.68rem; padding: 0.05rem 0.5rem; border-radius: 999px; vertical-align: middle; }
-	.cmp-table td.note { color: #c2410c; font-size: 0.82rem; }
+	.cmp-table td.note { color: var(--warn); font-size: 0.82rem; }
 	.cmp-table .ask { margin-top: 0; width: 100%; }
 </style>
 

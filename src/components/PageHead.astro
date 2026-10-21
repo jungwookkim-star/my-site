@@ -38,8 +38,8 @@ const { title, sub, mascot = true } = Astro.props;
 		.ph .stars i:nth-child(1) { left: 80%; top: 6%; animation-delay: 1.5s; }
 		.ph .stars i:nth-child(2) { left: 55%; top: 2%; animation-delay: 6s; animation-duration: 15s; width: 120px; }
 		.ph .stars i:nth-child(3) { left: 95%; top: 30%; animation-delay: 9.5s; animation-duration: 12s; width: 170px; }
-		.ph .stars::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: phtwinkle 4s ease-in-out infinite;
-			box-shadow: 54px 20px 0 #fff, 190px 120px 0 #cfe4ff, 340px 36px 0 #fff, 470px 150px 0 #cfe4ff, 600px 60px 0 #fff, 700px 160px 0 #fff, 790px 24px 0 #cfe4ff, 860px 110px 0 #fff; }
+		.ph .stars::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 2px; border-radius: 50%; background: var(--surface); animation: phtwinkle 4s ease-in-out infinite;
+			box-shadow: 54px 20px 0 #fff, 190px 120px 0 var(--line), 340px 36px 0 #fff, 470px 150px 0 var(--line), 600px 60px 0 #fff, 700px 160px 0 #fff, 790px 24px 0 var(--line), 860px 110px 0 #fff; }
 	}
 	@keyframes phtwinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.9; } }
 	@keyframes phshoot {

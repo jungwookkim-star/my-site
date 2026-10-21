@@ -14,20 +14,20 @@
 
 <style>
 	.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-	.sb { border: 0; padding: 0; border-radius: 18px; width: min(560px, calc(100vw - 1.4rem)); max-height: min(78vh, 640px); margin: 8vh auto auto; background: #fff; box-shadow: 0 24px 60px rgba(10, 20, 70, 0.35); overflow: hidden; }
+	.sb { border: 0; padding: 0; border-radius: 18px; width: min(560px, calc(100vw - 1.4rem)); max-height: min(78vh, 640px); margin: 8vh auto auto; background: var(--surface); box-shadow: 0 24px 60px rgba(10, 20, 70, 0.35); overflow: hidden; }
 	.sb[open] { display: flex; flex-direction: column; }
 	.sb::backdrop { background: rgba(8, 16, 50, 0.55); backdrop-filter: blur(2px); }
 	.sb-top { display: flex; gap: 0.5rem; padding: 0.9rem; border-bottom: 1px solid #e8ecff; }
-	.sb-top input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; padding: 0.7rem 1rem; border: 1.5px solid #cfd6ff; border-radius: 999px; outline: none; }
+	.sb-top input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; padding: 0.7rem 1rem; border: 1.5px solid var(--line); border-radius: 999px; outline: none; }
 	.sb-top input:focus { border-color: #2337ff; }
-	.sb-x { border: 0; background: #eef1ff; width: 40px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: #333a6b; }
+	.sb-x { border: 0; background: var(--surface-2); width: 40px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; color: var(--ink); }
 	.sb-res { list-style: none; margin: 0; padding: 0.4rem; overflow: auto; }
-	.sb-res :global(a) { display: block; padding: 0.65rem 0.8rem; border-radius: 12px; text-decoration: none; color: #14183a; }
-	.sb-res :global(a:hover), .sb-res :global(a:focus-visible) { background: #f1f4ff; }
-	.sb-res :global(b) { font-size: 0.95rem; font-weight: 700; color: #14183a; }
-	.sb-res :global(small) { display: block; color: #5b6180; font-size: 0.8rem; font-weight: 400; line-height: 1.45; margin-top: 0.1rem; }
-	.sb-res :global(i) { font-style: normal; font-size: 0.66rem; font-weight: 700; color: #2337ff; background: #e8ecff; border-radius: 999px; padding: 0.08rem 0.5rem; margin-right: 0.4rem; vertical-align: middle; }
-	.sb-empty { margin: 0; padding: 1rem 1.2rem 1.2rem; font-size: 0.85rem; color: #5b6180; }
+	.sb-res :global(a) { display: block; padding: 0.65rem 0.8rem; border-radius: 12px; text-decoration: none; color: var(--ink); }
+	.sb-res :global(a:hover), .sb-res :global(a:focus-visible) { background: var(--surface-3); }
+	.sb-res :global(b) { font-size: 0.95rem; font-weight: 700; color: var(--ink); }
+	.sb-res :global(small) { display: block; color: var(--muted); font-size: 0.8rem; font-weight: 400; line-height: 1.45; margin-top: 0.1rem; }
+	.sb-res :global(i) { font-style: normal; font-size: 0.66rem; font-weight: 700; color: #2337ff; background: var(--surface-2); border-radius: 999px; padding: 0.08rem 0.5rem; margin-right: 0.4rem; vertical-align: middle; }
+	.sb-empty { margin: 0; padding: 1rem 1.2rem 1.2rem; font-size: 0.85rem; color: var(--muted); }
 	.sb-empty[hidden] { display: none; }
 </style>
 

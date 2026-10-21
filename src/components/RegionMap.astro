@@ -57,17 +57,17 @@ const tiles = REGIONS.map((r) => ({
 	.rmap { max-width: 520px; margin: 1.2rem auto 0; }
 	.rm-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem 0.9rem; font-size: 0.78rem; color: rgb(var(--gray-dark)); margin-bottom: 0.7rem; }
 	.rm-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
-	.rm-legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 4px; background: #fff; box-shadow: inset 0 0 0 1.5px #cfd6ff; }
+	.rm-legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 4px; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line); }
 	.rm-legend i.q { background: var(--accent); box-shadow: none; }
 	.rm-legend i.d { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #ff7a29; box-shadow: none; }
 	.rm-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(7, auto); gap: 6px; }
-	.rm-t { position: relative; aspect-ratio: 1; border: 0; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1.5px #cfd6ff; color: inherit; font: inherit; cursor: pointer; display: grid; place-items: center; padding: 0; transition: transform 0.12s, box-shadow 0.12s; }
+	.rm-t { position: relative; aspect-ratio: 1; border: 0; border-radius: 12px; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line); color: inherit; font: inherit; cursor: pointer; display: grid; place-items: center; padding: 0; transition: transform 0.12s, box-shadow 0.12s; }
 	.rm-t b { font-size: 0.82rem; }
 	.rm-t.q { background: var(--accent); color: #fff; box-shadow: none; }
 	.rm-t:hover { transform: translateY(-2px); }
 	.rm-t[aria-pressed='true'] { box-shadow: 0 0 0 3px #ffd54a; transform: translateY(-2px); }
 	.rm-t .dot { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; border-radius: 50%; background: #ff7a29; box-shadow: 0 0 0 2px #fff; }
-	.rm-panel { margin-top: 0.9rem; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem; min-height: 4.5rem; }
+	.rm-panel { margin-top: 0.9rem; background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem; min-height: 4.5rem; }
 	.rm-hint { margin: 0; text-align: center; color: rgb(var(--gray)); font-size: 0.9rem; }
 	.rm-panel h3 { margin: 0 0 0.5rem; font-size: 1.1rem; }
 	.rm-panel dl { margin: 0; display: grid; gap: 0.5rem; font-size: 0.9rem; line-height: 1.55; }

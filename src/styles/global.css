@@ -11,7 +11,25 @@
 	--gray: 84, 102, 146;
 	--gray-light: 229, 233, 240;
 	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
+	--gray-gradient: rgba(var(--gray-light), 50%), var(--surface);
+	--surface: #fff;
+	--surface-2: #eef1ff;
+	--surface-3: #f6f8ff;
+	--page: #f6f8ff;
+	--band: #eaf0ff;
+	--line: #cfd6ff;
+	--line-green: #d7e8dc;
+	--line-amber: #f1e3a2;
+	--tint-green: #eefbf4;
+	--tint-amber: #fffbe6;
+	--tint-warn: #fff4f2;
+	--muted: #5b6180;
+	--ink: #333a6b;
+	--teal: #0b7a70;
+	--green: #1a7f4b;
+	--warn: #c2410c;
+	--amber: #8a6d00;
+	--header-bg: rgba(255, 255, 255, 0.78);
 	--box-shadow:
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
@@ -176,7 +194,7 @@ a:focus-visible, summary:focus-visible, button:focus-visible, input:focus-visibl
 .skip { position: absolute; left: 0.5rem; top: -4rem; z-index: 100; background: #0e2150; color: #fff; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 700; text-decoration: none; }
 .skip:focus { top: 0.5rem; }
 details[open] summary { color: var(--accent); }
-body { background: #f5f7fb; }
+body { background: var(--surface-3); }
 
 /* 아이콘 */
 .ic { width: 1.1em; height: 1.1em; vertical-align: -0.2em; margin-right: 0.4em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
@@ -198,20 +216,20 @@ body {
 		radial-gradient(44rem 26rem at 8% -6%, rgba(35, 55, 255, 0.13), transparent 62%),
 		radial-gradient(38rem 24rem at 96% 2%, rgba(168, 85, 247, 0.11), transparent 62%),
 		radial-gradient(30rem 20rem at 60% 22rem, rgba(56, 189, 248, 0.08), transparent 65%),
-		#f6f8ff;
+		var(--page);
 	background-repeat: no-repeat;
 }
 /* 화면 전체 폭으로 깔리는 띠 배경 */
 .band {
 	position: relative;
 	padding: 3rem 0;
-	box-shadow: 0 0 0 100vmax #eaf0ff;
+	box-shadow: 0 0 0 100vmax var(--band);
 	clip-path: inset(0 -100vmax);
-	background: #eaf0ff;
+	background: var(--band);
 }
 .band-white {
-	box-shadow: 0 0 0 100vmax #fff;
-	background: #fff;
+	box-shadow: 0 0 0 100vmax var(--surface);
+	background: var(--surface);
 }
 .band .plan, .band .card, .band details { box-shadow: 0 1px 2px rgba(var(--gray), 10%), 0 6px 18px rgba(var(--gray), 12%); }
 .hero h1 { background: linear-gradient(90deg, #1b2bd6, #6d3df0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
@@ -230,7 +248,7 @@ p, li { text-wrap: pretty; }
 @media (min-width: 721px) {
 	header {
 		position: sticky; top: 0; z-index: 40;
-		background: rgba(255, 255, 255, 0.78);
+		background: var(--header-bg);
 		-webkit-backdrop-filter: saturate(180%) blur(14px);
 		backdrop-filter: saturate(180%) blur(14px);
 		border-bottom: 1px solid rgba(var(--gray), 0.14);
@@ -270,3 +288,66 @@ h2.sec + .sub { margin-top: 0.8rem; }
 /* 글자 크게 보기 (푸터 버튼으로 켜고 끕니다) */
 html.bigtext { font-size: 112.5%; }
 html.bigtext body { font-size: 22.5px; }
+
+/* 다크 모드: 사용자가 고르면 html[data-theme='dark'], 고르지 않았으면 기기 설정(prefers-color-scheme)을 따릅니다. */
+html[data-theme='dark'] {
+	color-scheme: dark;
+	--accent: #5a6bff;
+	--accent-dark: #b7c2ff;
+	--black: 240, 243, 252;
+	--gray: 150, 163, 198;
+	--gray-light: 46, 54, 84;
+	--gray-dark: 214, 221, 238;
+	--surface: #171d33;
+	--surface-2: #212a4d;
+	--surface-3: #1b2240;
+	--page: #0d1224;
+	--band: #121936;
+	--line: #323d6b;
+	--line-green: #24493f;
+	--line-amber: #5a4d1a;
+	--tint-green: #12302a;
+	--tint-amber: #332d12;
+	--tint-warn: #3a2119;
+	--muted: #9aa6cc;
+	--ink: #dfe5ff;
+	--teal: #4fd1c0;
+	--green: #4fd68a;
+	--warn: #ff9b6e;
+	--amber: #f0cc55;
+	--header-bg: rgba(23, 29, 51, 0.82);
+	--box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+@media (prefers-color-scheme: dark) {
+	html:not([data-theme='light']) {
+		color-scheme: dark;
+		--accent: #5a6bff;
+		--accent-dark: #b7c2ff;
+	--accent-dark: #b7c2ff;
+		--black: 240, 243, 252;
+		--gray: 150, 163, 198;
+		--gray-light: 46, 54, 84;
+		--gray-dark: 214, 221, 238;
+		--surface: #171d33;
+		--surface-2: #212a4d;
+		--surface-3: #1b2240;
+		--page: #0d1224;
+		--band: #121936;
+		--line: #323d6b;
+		--line-green: #24493f;
+		--line-amber: #5a4d1a;
+		--tint-green: #12302a;
+		--tint-amber: #332d12;
+		--tint-warn: #3a2119;
+		--muted: #9aa6cc;
+		--ink: #dfe5ff;
+		--teal: #4fd1c0;
+		--green: #4fd68a;
+		--warn: #ff9b6e;
+		--amber: #f0cc55;
+		--header-bg: rgba(23, 29, 51, 0.82);
+		--box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px rgba(0, 0, 0, 0.35);
+	}
+}
+/* 어두운 배경에서 이미지가 너무 번쩍이지 않게 살짝만 낮춥니다. 마스코트와 로고는 그대로 둡니다. */
+html[data-theme='dark'] img:not([src*='/brand/']):not([src*='/guide/']) { filter: brightness(0.92); }

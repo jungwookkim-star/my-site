@@ -31,41 +31,41 @@ const minPrice = Math.min(...items.map((i) => i.price)).toLocaleString('ko-KR');
 			.sv-head { text-align: center; padding: 2rem 0 1rem; }
 			.sv-head h1 { margin-bottom: 0.5rem; }
 			.sv-head p { color: rgb(var(--gray)); margin: 0; font-size: 0.95rem; }
-			.sv { background: #fff; border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.6rem 1.4rem; max-width: 680px; margin: 1rem auto 0; border: 1px solid rgba(var(--gray), 0.1); }
+			.sv { background: var(--surface); border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.6rem 1.4rem; max-width: 680px; margin: 1rem auto 0; border: 1px solid rgba(var(--gray), 0.1); }
 			.sv label.sv-l { display: block; font-weight: 800; margin: 0 0 0.5rem; }
 			.sv-sub { display: block; font-weight: 500; font-size: 0.82rem; color: rgb(var(--gray)); margin-top: 0.1rem; }
 			.sv-amt { display: flex; align-items: center; gap: 0.5rem; }
-			.sv-amt input { flex: 1; min-width: 0; font: inherit; font-size: 1.4rem; font-weight: 800; padding: 0.6rem 1rem; border: 2px solid #dfe3f0; border-radius: 14px; background: #fff; text-align: right; }
+			.sv-amt input { flex: 1; min-width: 0; font: inherit; font-size: 1.4rem; font-weight: 800; padding: 0.6rem 1rem; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); text-align: right; }
 			.sv-amt input:focus { outline: none; border-color: var(--accent); }
 			.sv-amt span { font-weight: 800; font-size: 1.1rem; }
 			.sv-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.7rem 0 1.4rem; }
-			.sv-chips button { font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 999px; border: 1px solid #d9defa; background: #f6f8ff; color: var(--accent); cursor: pointer; }
-			.sv-chips button:hover { background: #eef1ff; }
+			.sv-chips button { font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-3); color: var(--accent); cursor: pointer; }
+			.sv-chips button:hover { background: var(--surface-2); }
 			.sv-tiers { display: grid; gap: 0.5rem; margin-bottom: 1.4rem; }
-			.sv-tiers label { display: flex; gap: 0.7rem; align-items: flex-start; padding: 0.75rem 0.9rem; border: 2px solid #e3e7f5; border-radius: 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
-			.sv-tiers label:has(input:checked) { border-color: var(--accent); background: #f3f5ff; }
+			.sv-tiers label { display: flex; gap: 0.7rem; align-items: flex-start; padding: 0.75rem 0.9rem; border: 2px solid var(--line); border-radius: 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+			.sv-tiers label:has(input:checked) { border-color: var(--accent); background: var(--surface-3); }
 			.sv-tiers input { margin-top: 0.3rem; accent-color: var(--accent); }
 			.sv-tiers b { display: block; }
 			.sv-tiers small { color: rgb(var(--gray)); font-size: 0.8rem; }
-			.sv-out { border-top: 1px dashed #d9defa; padding-top: 1.2rem; }
+			.sv-out { border-top: 1px dashed var(--line); padding-top: 1.2rem; }
 			.sv-empty { text-align: center; color: rgb(var(--gray)); margin: 0.5rem 0; }
 			.sv-cards { display: grid; gap: 0.8rem; }
-			.sv-card { border-radius: 16px; padding: 1.1rem 1.2rem; background: #f6f8ff; border: 2px solid transparent; }
-			.sv-card.good { background: #eefbf4; border-color: #bfe9d0; }
-			.sv-card .sv-k { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 0.12rem 0.65rem; border-radius: 999px; background: #fff; color: var(--accent); }
-			.sv-card.good .sv-k { color: #0b7a4b; }
+			.sv-card { border-radius: 16px; padding: 1.1rem 1.2rem; background: var(--surface-3); border: 2px solid transparent; }
+			.sv-card.good { background: var(--tint-green); border-color: var(--line-green); }
+			.sv-card .sv-k { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 0.12rem 0.65rem; border-radius: 999px; background: var(--surface); color: var(--accent); }
+			.sv-card.good .sv-k { color: var(--green); }
 			.sv-card h3 { margin: 0.5rem 0 0.2rem; font-size: 1.08rem; }
 			.sv-meta { margin: 0 0 0.7rem; font-size: 0.85rem; color: rgb(var(--gray-dark)); }
 			.sv-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 			.sv-price { font-size: 1.35rem; font-weight: 800; color: var(--accent); }
-			.sv-save { font-weight: 800; color: #0b7a4b; }
+			.sv-save { font-weight: 800; color: var(--green); }
 			.sv-save small { display: block; font-weight: 600; color: rgb(var(--gray)); font-size: 0.8rem; text-align: right; }
 			.sv-no { font-weight: 700; color: rgb(var(--gray)); font-size: 0.9rem; }
-			.sv-msg { margin: 0.2rem 0 0.9rem; padding: 0.8rem 1rem; border-radius: 12px; background: #fff7e6; font-size: 0.9rem; }
+			.sv-msg { margin: 0.2rem 0 0.9rem; padding: 0.8rem 1rem; border-radius: 12px; background: var(--tint-amber); font-size: 0.9rem; }
 			.sv-cta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
 			.sv-cta .btn { display: inline-block; font-size: 0.9rem; font-weight: 700; padding: 0.6rem 1.1rem; border-radius: 999px; text-decoration: none; text-align: center; background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(35, 55, 255, 0.22); }
 			.sv-cta .btn.alt { background: #fee500; color: #191919; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.45); }
-			.sv-cta .btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.sv-cta .btn.ghost { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 			.sv-cta .btn .ic { margin-right: 0.35em; }
 			.sv-notes { max-width: 680px; margin: 1.5rem auto 0; font-size: 0.85rem; color: rgb(var(--gray-dark)); }
 			.sv-notes h2 { font-size: 1rem; margin: 0 0 0.5rem; }

@@ -109,14 +109,14 @@ const people = [
 		.wp-chips { grid-template-columns: repeat(5, 1fr); }
 		.wp-chips .wp-chip:last-child { grid-column: auto; }
 	}
-	.wp-chip { border: 2px solid rgb(var(--gray-light)); background: #fff; border-radius: 14px; padding: 0.65rem 0.8rem; font: inherit; text-align: left; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+	.wp-chip { border: 2px solid rgb(var(--gray-light)); background: var(--surface); border-radius: 14px; padding: 0.65rem 0.8rem; font: inherit; text-align: left; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
 	.wp-chip strong { display: block; font-size: 0.95rem; }
 	.wp-chip small { display: block; margin-top: 0.1rem; font-size: 0.76rem; color: rgb(var(--gray)); }
-	.wp-chip:hover { border-color: var(--accent); background: #f3f5ff; }
-	.wp-chip[aria-pressed='true'] { border-color: var(--accent); background: #eef1ff; box-shadow: 0 0 0 1px var(--accent) inset; }
+	.wp-chip:hover { border-color: var(--accent); background: var(--surface-3); }
+	.wp-chip[aria-pressed='true'] { border-color: var(--accent); background: var(--surface-2); box-shadow: 0 0 0 1px var(--accent) inset; }
 	.wp-honest { margin: 0.6rem 0 0; text-align: center; font-size: 0.82rem; }
 	.wp-honest a { color: var(--accent); font-weight: 700; text-decoration: none; }
-	.wp-card { margin-top: 0.8rem; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem 1.1rem; animation: wpin 0.22s ease-out; }
+	.wp-card { margin-top: 0.8rem; background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem 1.1rem; animation: wpin 0.22s ease-out; }
 	.wp-card[hidden] { display: none; }
 	.wp-route { margin: 0 0 0.5rem; font-weight: 800; font-size: 1rem; color: var(--accent); }
 	.wp-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.6; color: rgb(var(--gray-dark)); }

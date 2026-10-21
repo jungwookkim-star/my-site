@@ -22,18 +22,18 @@ const counts = Object.fromEntries(CATEGORIES.map((c) => [c, posts.filter((p) => 
 			h1 { text-align: center; margin-bottom: 0.3rem; }
 			.lead { text-align: center; color: rgb(var(--gray)); margin: 0 0 1.5rem; font-size: 0.95rem; }
 			.tools { max-width: 640px; margin: 0 auto 1.6rem; }
-			#bq { width: 100%; padding: 0.7rem 1.1rem; border: 2px solid #dfe3f0; border-radius: 999px; font-size: 1rem; background: #fff; }
+			#bq { width: 100%; padding: 0.7rem 1.1rem; border: 2px solid var(--line); border-radius: 999px; font-size: 1rem; background: var(--surface); }
 			#bq:focus { outline: none; border-color: var(--accent); }
 			.cats { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.9rem; }
-			.cats button { border: 0; padding: 0.45rem 1rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; color: rgb(var(--gray-dark)); }
+			.cats button { border: 0; padding: 0.45rem 1rem; border-radius: 999px; background: var(--surface); box-shadow: var(--box-shadow); font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; color: rgb(var(--gray-dark)); }
 			.cats button.on { background: var(--accent); color: #fff; }
 			.cats small { opacity: 0.7; margin-left: 0.25em; }
 			ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; list-style: none; margin: 0; padding: 0; }
 			li { display: flex; }
 			li[hidden] { display: none; }
-			li a { display: flex; flex-direction: column; flex: 1; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; text-decoration: none; transition: transform 0.15s; }
+			li a { display: flex; flex-direction: column; flex: 1; background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; text-decoration: none; transition: transform 0.15s; }
 			li a:hover { transform: translateY(-3px); }
-			.tag { align-self: flex-start; margin: 0 0 0.6rem; padding: 0.15rem 0.65rem; border-radius: 999px; background: #eef1ff; color: var(--accent); font-size: 0.72rem; font-weight: 800; }
+			.tag { align-self: flex-start; margin: 0 0 0.6rem; padding: 0.15rem 0.65rem; border-radius: 999px; background: var(--surface-2); color: var(--accent); font-size: 0.72rem; font-weight: 800; }
 			.title { margin: 0 0 0.6rem; color: rgb(var(--black)); font-size: 1.1rem; line-height: 1.4; }
 			.desc { margin: 0 0 0.8rem; color: rgb(var(--gray-dark)); font-size: 0.88rem; line-height: 1.55; flex: 1; }
 			.date { margin: 0; color: rgb(var(--gray)); font-size: 0.8rem; }

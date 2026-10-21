@@ -47,29 +47,29 @@ const topics = [
 </dialog>
 
 <style>
-	.ask-sheet { box-sizing: border-box; border: 0; padding: 1.2rem 1.2rem 1rem; border-radius: 22px; width: min(440px, calc(100vw - 1.6rem)); max-height: calc(100vh - 2rem); overflow: auto; background: #fff; color: #14183a; box-shadow: 0 24px 60px rgba(10, 20, 70, 0.35); margin: auto; }
+	.ask-sheet { box-sizing: border-box; border: 0; padding: 1.2rem 1.2rem 1rem; border-radius: 22px; width: min(440px, calc(100vw - 1.6rem)); max-height: calc(100vh - 2rem); overflow: auto; background: var(--surface); color: var(--ink); box-shadow: 0 24px 60px rgba(10, 20, 70, 0.35); margin: auto; }
 	.ask-sheet::backdrop { background: rgba(8, 16, 50, 0.55); backdrop-filter: blur(2px); }
 	.as-head { display: flex; justify-content: space-between; align-items: center; }
 	.as-head h2 { margin: 0; font-size: 1.25rem; }
-	.as-close { border: 0; background: #eef1ff; width: 34px; height: 34px; border-radius: 50%; font-size: 1.4rem; line-height: 1; cursor: pointer; color: #333a6b; }
-	.as-sub { margin: 0.3rem 0 0.8rem; font-size: 0.88rem; color: #5b6180; }
-	.as-status { margin: 0 0 0.8rem; font-size: 0.82rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: 10px; background: #f1f4ff; color: #333a6b; }
-	.as-status.on { background: #e8f5ee; color: #0b7a70; }
+	.as-close { border: 0; background: var(--surface-2); width: 34px; height: 34px; border-radius: 50%; font-size: 1.4rem; line-height: 1; cursor: pointer; color: var(--ink); }
+	.as-sub { margin: 0.3rem 0 0.8rem; font-size: 0.88rem; color: var(--muted); }
+	.as-status { margin: 0 0 0.8rem; font-size: 0.82rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: 10px; background: var(--surface-3); color: var(--ink); }
+	.as-status.on { background: var(--tint-green); color: var(--teal); }
 	.as-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
-	.as-list a { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.8rem; border-radius: 14px; background: #f4f6ff; text-decoration: none; color: inherit; box-shadow: inset 0 0 0 1px #e1e6ff; transition: background 0.15s, transform 0.15s; }
-	.as-list a:hover, .as-list a:focus-visible { background: #e8ecff; transform: translateY(-1px); }
+	.as-list a { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.8rem; border-radius: 14px; background: var(--surface-3); text-decoration: none; color: inherit; box-shadow: inset 0 0 0 1px var(--line); transition: background 0.15s, transform 0.15s; }
+	.as-list a:hover, .as-list a:focus-visible { background: var(--surface-2); transform: translateY(-1px); }
 	.as-list .e { font-size: 1.4rem; width: 2rem; text-align: center; }
 	.as-list .t { flex: 1; display: grid; }
 	.as-list strong { font-size: 0.98rem; }
 	.as-list li.rec strong::after { content: '지금 보는 내용'; margin-left: 0.4rem; font-size: 0.65rem; font-weight: 700; color: #fff; background: #2337ff; padding: 0.1rem 0.45rem; border-radius: 999px; vertical-align: middle; }
-	.as-list li.rec a { background: #e8ecff; box-shadow: inset 0 0 0 1.5px #2337ff; }
-	.as-list small { color: #5b6180; font-size: 0.78rem; }
+	.as-list li.rec a { background: var(--surface-2); box-shadow: inset 0 0 0 1.5px #2337ff; }
+	.as-list small { color: var(--muted); font-size: 0.78rem; }
 	.as-list .go { color: #8a91b8; font-size: 1.3rem; }
 	.as-foot { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
 	.as-foot a { flex: 1; display: inline-flex; justify-content: center; align-items: center; gap: 0.35rem; padding: 0.75rem 0.5rem; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: 0.92rem; }
 	.as-foot .kk { background: #fee500; color: #191919; }
-	.as-foot .tel { background: #fff; color: #2337ff; box-shadow: inset 0 0 0 1.5px #2337ff; }
-	.as-note { margin: 0.6rem 0 0; min-height: 1.1em; font-size: 0.8rem; color: #1a7f4b; text-align: center; }
+	.as-foot .tel { background: var(--surface); color: #2337ff; box-shadow: inset 0 0 0 1.5px #2337ff; }
+	.as-note { margin: 0.6rem 0 0; min-height: 1.1em; font-size: 0.8rem; color: var(--green); text-align: center; }
 	@media (max-width: 720px) {
 		.ask-sheet { margin: auto auto 0; width: 100%; max-width: 100%; border-radius: 22px 22px 0 0; padding-bottom: calc(1rem + env(safe-area-inset-bottom)); animation: askup 0.22s ease-out; }
 	}

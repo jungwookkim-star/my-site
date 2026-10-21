@@ -78,30 +78,30 @@ const howTo = {
 			.head h1 { margin-bottom: 0.5rem; }
 			.head p { color: rgb(var(--gray)); margin: 0; }
 			.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin: 2rem 0 0; padding: 0; list-style: none; }
-			.summary li { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.9rem 1rem; font-size: 0.9rem; }
+			.summary li { background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.9rem 1rem; font-size: 0.9rem; }
 			.summary strong { display: block; color: var(--accent); font-size: 0.8rem; }
 			h2.sec { text-align: center; margin: 3.5rem 0 1.5rem; }
 			.tl { list-style: none; margin: 0; padding: 0; position: relative; }
 			.tl::before { content: ''; position: absolute; left: 1.15rem; top: 0.5rem; bottom: 0.5rem; width: 2px; background: linear-gradient(#2337ff, #7c3aed); opacity: 0.25; }
 			.tl > li { position: relative; padding-left: 3.4rem; margin-bottom: 1.4rem; }
 			.num { position: absolute; left: 0; top: 0; width: 2.3rem; height: 2.3rem; border-radius: 50%; background: linear-gradient(135deg, #2337ff, #7c3aed); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(35, 55, 255, 0.3); }
-			.step { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+			.step { background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
 			.step h3 { margin: 0 0 0.2rem; font-size: 1.15rem; }
-			.time { display: inline-block; font-size: 0.78rem; font-weight: 700; color: var(--accent); background: #eef1ff; padding: 0.1rem 0.6rem; border-radius: 999px; margin-bottom: 0.6rem; }
+			.time { display: inline-block; font-size: 0.78rem; font-weight: 700; color: var(--accent); background: var(--surface-2); padding: 0.1rem 0.6rem; border-radius: 999px; margin-bottom: 0.6rem; }
 			.step p { margin: 0 0 0.6rem; font-size: 0.95rem; }
 			.step ul { margin: 0; padding-left: 1.1rem; }
 			.step li { font-size: 0.88rem; color: rgb(var(--gray-dark)); }
-			.resultbox { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); border-left: 5px solid #12b76a; padding: 1rem 1.3rem; margin-top: 1.2rem; }
+			.resultbox { background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); border-left: 5px solid #12b76a; padding: 1rem 1.3rem; margin-top: 1.2rem; }
 			.resultbox p { margin: 0.4rem 0 0.8rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 			.resultbox .rb { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 			.resultbox .btn { padding: 0.55rem 1.1rem; font-size: 0.9rem; }
-			.selfsteps { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.3rem; margin-top: 1.4rem; }
+			.selfsteps { background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.3rem; margin-top: 1.4rem; }
 			.selfsteps summary { cursor: pointer; font-weight: 700; }
 			.selfsteps ol { margin: 0.8rem 0 0.4rem; padding-left: 1.3rem; }
 			.selfsteps li { font-size: 0.93rem; margin-bottom: 0.35rem; }
 			.selfsteps p { margin: 0.5rem 0 0; font-size: 0.85rem; color: rgb(var(--gray)); }
 			.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
-			.box { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
+			.box { background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 1.2rem 1.3rem; }
 			.box h3 { margin: 0 0 0.6rem; font-size: 1.1rem; }
 			.simphoto { margin: 0 auto; max-width: 720px; }
 			.simphoto img { width: 100%; height: auto; border-radius: 14px; box-shadow: var(--box-shadow); margin: 0; }
@@ -113,26 +113,26 @@ const howTo = {
 			.check.tick li { padding-left: 0; }
 			.check.tick li::before { display: none; }
 			.check.tick label { display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; padding: 0.35rem 0.2rem; border-radius: 10px; }
-			.check.tick label:hover { background: #f4f6ff; }
-			.check.tick input { width: 1.25rem; height: 1.25rem; margin: 0.1rem 0 0; accent-color: #0b7a70; flex-shrink: 0; }
+			.check.tick label:hover { background: var(--surface-3); }
+			.check.tick input { width: 1.25rem; height: 1.25rem; margin: 0.1rem 0 0; accent-color: var(--teal); flex-shrink: 0; }
 			.check.tick input:checked + span { color: rgb(var(--gray)); text-decoration: line-through; }
-			.prep-prog { margin: 0.6rem 0 0; font-size: 0.85rem; font-weight: 700; color: #0b7a70; }
+			.prep-prog { margin: 0.6rem 0 0; font-size: 0.85rem; font-weight: 700; color: var(--teal); }
 			.prep-go { margin-top: 0.6rem; }
 			.prep-go[hidden] { display: none; }
-			.check li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #e8f5ee; color: #0b7a70; font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+			.check li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--tint-green); color: var(--teal); font-weight: 800; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
 			.cases dt { font-weight: 700; margin-top: 0.7rem; font-size: 0.93rem; }
 			.cases dt:first-child { margin-top: 0; }
 			.cases dd { margin: 0.15rem 0 0; font-size: 0.88rem; color: rgb(var(--gray-dark)); }
 			.more { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
-			.more a { display: block; background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.1rem; text-decoration: none; font-weight: 700; font-size: 0.93rem; color: rgb(var(--black)); }
+			.more a { display: block; background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 1rem 1.1rem; text-decoration: none; font-weight: 700; font-size: 0.93rem; color: rgb(var(--black)); }
 			.more a:hover { color: var(--accent); }
-			.help { text-align: center; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 2rem 1rem; margin-top: 3rem; }
+			.help { text-align: center; background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 2rem 1rem; margin-top: 3rem; }
 			.help h2 { margin: 0 0 0.4rem; font-size: 1.4rem; }
-			.gp { display: block; width: fit-content; max-width: 100%; margin: 1rem auto 0; padding: 0.6rem 1.2rem; border-radius: 999px; background: #e8f5ee; color: #0b7a70; font-weight: 700; font-size: 0.92rem; text-decoration: none; box-sizing: border-box; }
+			.gp { display: block; width: fit-content; max-width: 100%; margin: 1rem auto 0; padding: 0.6rem 1.2rem; border-radius: 999px; background: var(--tint-green); color: var(--teal); font-weight: 700; font-size: 0.92rem; text-decoration: none; box-sizing: border-box; }
 			.gp[hidden] { display: none; }
-			.stepdone { margin-top: 0.8rem; border: 1.5px solid #cfd6ff; background: #fff; color: var(--accent); font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.4rem 1rem; border-radius: 999px; cursor: pointer; }
-			.stepdone[aria-pressed='true'] { background: #0b7a70; border-color: #0b7a70; color: #fff; }
-			.tl li.done .num { background: #0b7a70; }
+			.stepdone { margin-top: 0.8rem; border: 1.5px solid var(--line); background: var(--surface); color: var(--accent); font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.4rem 1rem; border-radius: 999px; cursor: pointer; }
+			.stepdone[aria-pressed='true'] { background: var(--teal); border-color: var(--teal); color: #fff; }
+			.tl li.done .num { background: var(--teal); }
 			.help p { color: rgb(var(--gray)); margin: 0 0 1rem; font-size: 0.92rem; }
 			.cta { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
 			.btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }

@@ -76,7 +76,7 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 </div>
 
 <style is:global>
-	.elig { background: #fff; border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.5rem 1.4rem; max-width: 680px; margin: 0 auto; border: 1px solid rgba(var(--gray), 0.1); }
+	.elig { background: var(--surface); border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.5rem 1.4rem; max-width: 680px; margin: 0 auto; border: 1px solid rgba(var(--gray), 0.1); }
 	.e-head { display: flex; align-items: center; justify-content: space-between; min-height: 1.8rem; }
 	.e-step { font-size: 0.8rem; font-weight: 800; color: var(--accent); letter-spacing: 0.04em; }
 	.e-back, .e-retry { background: none; border: 0; font: inherit; font-size: 0.88rem; font-weight: 700; color: rgb(var(--gray)); cursor: pointer; padding: 0.3rem 0.2rem; }
@@ -84,17 +84,17 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 	.e-q { margin: 0.4rem 0 0.3rem; font-size: 1.2rem; text-align: center; }
 	.e-hint { margin: 0 0 1rem; text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); min-height: 1.2em; }
 	.e-opts { display: grid; gap: 0.6rem; }
-	.e-opts button { text-align: left; background: #fff; border: 2px solid #e3e7f5; border-radius: 14px; padding: 0.9rem 1rem; font: inherit; font-weight: 700; cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.15s; }
-	.e-opts button:hover { border-color: var(--accent); background: #f3f5ff; transform: translateY(-1px); }
+	.e-opts button { text-align: left; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 0.9rem 1rem; font: inherit; font-weight: 700; cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.15s; }
+	.e-opts button:hover { border-color: var(--accent); background: var(--surface-3); transform: translateY(-1px); }
 	.e-opts button small { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: 500; color: rgb(var(--gray)); }
 	.e-card { border-radius: 16px; padding: 1.2rem 1.2rem 1.3rem; margin-top: 0.6rem; border: 2px solid transparent; }
 	.e-card[hidden], .e-note[hidden], .e-result[hidden], .e-back[hidden] { display: none; }
-	.e-card.self { background: #fff4f2; border-color: #ffd6d1; }
-	.e-card.visit { background: #eefbf8; border-color: #bfeee6; }
-	.e-card.consult { background: #fffbe6; border-color: #ffec99; }
-	.e-tag { display: inline-block; font-size: 0.78rem; font-weight: 800; padding: 0.15rem 0.7rem; border-radius: 999px; background: #fff; color: var(--accent); }
+	.e-card.self { background: var(--tint-warn); border-color: #ffd6d1; }
+	.e-card.visit { background: var(--tint-green); border-color: #bfeee6; }
+	.e-card.consult { background: var(--tint-amber); border-color: #ffec99; }
+	.e-tag { display: inline-block; font-size: 0.78rem; font-weight: 800; padding: 0.15rem 0.7rem; border-radius: 999px; background: var(--surface); color: var(--accent); }
 	.e-card.self .e-tag { color: #d92d20; }
-	.e-card.visit .e-tag { color: #0b7a70; }
+	.e-card.visit .e-tag { color: var(--teal); }
 	.e-card h3 { margin: 0.6rem 0 0.5rem; font-size: 1.15rem; }
 	.e-card p { margin: 0 0 0.6rem; font-size: 0.92rem; }
 	.e-why { font-weight: 700; }
@@ -106,10 +106,10 @@ import { SELF_ACTIVATION_URL, KAKAO_URL, PHONE, PHONE_LINK } from '../consts';
 	.e-actions .btn .ic { margin-right: 0.35em; }
 	.e-actions .btn.alt { background: #fee500; color: #191919; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.45); }
 	.e-actions .btn.self { background: #d92d20; color: #fff; box-shadow: 0 4px 12px rgba(255, 59, 48, 0.32); }
-	.e-actions .btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+	.e-actions .btn.ghost { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 	.e-actions .btn.ghost .ic { margin: 0 0 0 0.35em; }
 	.e-actions .btn.ghost:has(.ic:first-child) .ic { margin: 0 0.35em 0 0; }
-	.e-note { margin: 0.8rem 0 0; padding: 0.8rem 1rem; background: #f3f5ff; border-radius: 12px; font-size: 0.88rem; line-height: 1.6; }
+	.e-note { margin: 0.8rem 0 0; padding: 0.8rem 1rem; background: var(--surface-3); border-radius: 12px; font-size: 0.88rem; line-height: 1.6; }
 	.e-foot { margin: 0.9rem 0 0.3rem; text-align: center; font-size: 0.78rem; color: rgb(var(--gray)); }
 	.e-retry { display: block; margin: 0 auto; }
 	@media (max-width: 720px) {

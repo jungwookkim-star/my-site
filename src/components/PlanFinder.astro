@@ -32,15 +32,15 @@ import { items } from '../lib/planItems';
 </template>
 
 <style is:global>
-	.finder { background: #fff; border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.6rem 1.4rem; max-width: 640px; margin: 0 auto; }
+	.finder { background: var(--surface); border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.6rem 1.4rem; max-width: 640px; margin: 0 auto; }
 	.f-head { display: flex; justify-content: space-between; align-items: center; min-height: 1.6rem; }
 	.f-step { font-size: 0.8rem; font-weight: 700; color: var(--accent); }
 	.f-back { border: 0; background: none; font: inherit; font-size: 0.85rem; color: rgb(var(--gray)); cursor: pointer; }
 	.f-q { margin: 0.4rem 0 1rem; font-size: 1.25rem; line-height: 1.4; text-align: center; }
 	.f-opts { display: grid; gap: 0.6rem; }
-	.f-opts button { border: 2px solid rgb(var(--gray-light)); background: #fff; border-radius: 14px; padding: 0.9rem 1rem; font: inherit; font-weight: 700; font-size: 0.98rem; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; }
+	.f-opts button { border: 2px solid rgb(var(--gray-light)); background: var(--surface); border-radius: 14px; padding: 0.9rem 1rem; font: inherit; font-weight: 700; font-size: 0.98rem; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; }
 	.f-opts button small { display: block; font-weight: 400; color: rgb(var(--gray)); font-size: 0.8rem; margin-top: 0.15rem; }
-	.f-opts button:hover { border-color: var(--accent); background: #f3f5ff; }
+	.f-opts button:hover { border-color: var(--accent); background: var(--surface-3); }
 	.f-msg { text-align: center; margin: 0.4rem 0 1rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 	.f-cards { display: grid; gap: 0.9rem; }
 	.f-actions { text-align: center; margin-top: 1.2rem; }

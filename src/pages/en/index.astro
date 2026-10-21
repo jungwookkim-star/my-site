@@ -62,7 +62,7 @@ const msgLines = ['외국인 방문 개통 예약 문의드립니다.', '성함:
 			jsonLd={[faqSchema]}
 		/>
 		<style is:global>
-			.en-top { background: #fff; box-shadow: 0 2px 8px rgba(var(--black), 5%); }
+			.en-top { background: var(--surface); box-shadow: 0 2px 8px rgba(var(--black), 5%); }
 			.en-top > div { max-width: 960px; margin: 0 auto; padding: 0.7rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 			.en-top a.brand { display: inline-flex; align-items: center; gap: 0.55rem; text-decoration: none; color: rgb(var(--black)); font-weight: 800; letter-spacing: -0.01em; }
 			.en-top a.brand img { width: 2.2rem; height: 2.2rem; margin: 0; border-radius: 10px; }
@@ -70,33 +70,33 @@ const msgLines = ['외국인 방문 개통 예약 문의드립니다.', '성함:
 			.en { width: auto; max-width: 860px; margin: 0 auto; padding: 1rem 1rem 3rem; font-size: 1rem; line-height: 1.65; word-break: normal; }
 			.en h1, .en h2, .en h3 { word-break: normal; text-wrap: balance; }
 			.en-hero { text-align: center; padding: 2.2rem 0 1rem; }
-			.en-hero .tag { display: inline-block; background: #eef1ff; color: var(--accent); font-weight: 800; font-size: 0.82rem; padding: 0.3rem 0.9rem; border-radius: 999px; }
+			.en-hero .tag { display: inline-block; background: var(--surface-2); color: var(--accent); font-weight: 800; font-size: 0.82rem; padding: 0.3rem 0.9rem; border-radius: 999px; }
 			.en-hero h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0.8rem 0 0.6rem; background: linear-gradient(90deg, #1b2bd6, #6d3df0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 			.en-hero p { color: rgb(var(--gray-dark)); margin: 0 auto; max-width: 560px; }
 			.en-cta { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 1.4rem; }
 			.en-cta .btn { display: inline-block; padding: 0.75rem 1.4rem; border-radius: 999px; font-weight: 800; text-decoration: none; background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(35, 55, 255, 0.25); }
 			.en-cta .btn.alt { background: #fee500; color: #191919; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.45); }
-			.en-cta .btn.ghost { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.en-cta .btn.ghost { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 			.en-sec { margin-top: 3rem; }
 			.en-sec h2 { font-size: 1.5rem; text-align: center; margin-bottom: 1rem; }
-			.en-card { background: #fff; border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; border: 1px solid rgba(var(--gray), 0.1); }
+			.en-card { background: var(--surface); border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; border: 1px solid rgba(var(--gray), 0.1); }
 			.en-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; }
 			.en-facts .en-card strong { display: block; font-size: 1.05rem; margin-bottom: 0.25rem; }
 			.en-facts .en-card p { margin: 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 			.en-steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
-			.en-steps li { counter-increment: s; position: relative; padding: 1rem 1.2rem 1rem 3.6rem; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); }
+			.en-steps li { counter-increment: s; position: relative; padding: 1rem 1.2rem 1rem 3.6rem; background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); }
 			.en-steps li::before { content: counter(s); position: absolute; left: 1rem; top: 1rem; width: 2rem; height: 2rem; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; }
 			.en-steps b { display: block; }
-			.en-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: var(--box-shadow); font-size: 0.92rem; }
+			.en-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: var(--box-shadow); font-size: 0.92rem; }
 			.en-table th, .en-table td { text-align: left; padding: 0.7rem 0.9rem; border-bottom: 1px solid rgb(var(--gray-light)); vertical-align: top; }
-			.en-table th { background: #f3f5ff; font-size: 0.82rem; }
+			.en-table th { background: var(--surface-3); font-size: 0.82rem; }
 			.en-table td.price { font-weight: 800; color: var(--accent); white-space: nowrap; }
 			.en-note { font-size: 0.85rem; color: rgb(var(--gray)); margin: 0.8rem 0 0; }
-			.en-msg { background: #f6f8ff; border: 1px dashed #b9c4ff; border-radius: 14px; padding: 1rem 1.2rem; font-size: 0.95rem; white-space: pre-line; margin: 0 0 0.8rem; }
+			.en-msg { background: var(--surface-3); border: 1px dashed var(--line); border-radius: 14px; padding: 1rem 1.2rem; font-size: 0.95rem; white-space: pre-line; margin: 0 0 0.8rem; }
 			.en-copy { font: inherit; font-weight: 800; border: 0; border-radius: 999px; padding: 0.55rem 1.2rem; background: var(--accent); color: #fff; cursor: pointer; }
 			.en-regions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
-			.en-regions a { padding: 0.35rem 0.9rem; border-radius: 999px; background: #fff; box-shadow: var(--box-shadow); font-size: 0.88rem; font-weight: 700; text-decoration: none; color: rgb(var(--gray-dark)); }
-			.en details { background: #fff; border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.85rem 1.2rem; margin-bottom: 0.7rem; }
+			.en-regions a { padding: 0.35rem 0.9rem; border-radius: 999px; background: var(--surface); box-shadow: var(--box-shadow); font-size: 0.88rem; font-weight: 700; text-decoration: none; color: rgb(var(--gray-dark)); }
+			.en details { background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.85rem 1.2rem; margin-bottom: 0.7rem; }
 			.en summary { cursor: pointer; font-weight: 700; }
 			.en details p { margin: 0.6rem 0 0; font-size: 0.93rem; }
 			.en-foot { background: linear-gradient(rgba(var(--gray-light), 50%), #fff); padding: 2rem 1rem 3rem; text-align: center; color: rgb(var(--gray)); font-size: 0.85rem; }

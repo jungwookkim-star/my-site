@@ -49,7 +49,7 @@ const today = new Date();
 		</nav>
 	</div>
 	<div class="ft-bottom">
-		<div class="ft-btns"><button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">가 글자 크게 보기</button> <button type="button" class="fs-btn" id="pwa-btn" hidden>홈 화면에 추가</button></div>
+		<div class="ft-btns"><button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">가 글자 크게 보기</button> <button type="button" class="fs-btn" id="theme-btn" aria-pressed="false">어두운 화면으로 보기</button> <button type="button" class="fs-btn" id="pwa-btn" hidden>홈 화면에 추가</button></div>
 		<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 	</div>
 </footer>
@@ -64,6 +64,7 @@ const today = new Date();
 <style>
 	.fs-btn { border: 1.5px solid rgb(var(--gray)); background: transparent; color: inherit; font: inherit; font-weight: 700; padding: 0.35rem 1rem; border-radius: 999px; cursor: pointer; margin: 0.4rem 0; }
 	.fs-btn[aria-pressed='true'] { background: #0f1219; color: #fff; border-color: #0f1219; }
+	html[data-theme='dark'] .fs-btn[aria-pressed='true'] { background: #dfe5ff; color: #0d1224; border-color: #dfe5ff; }
 	.to-top { position: fixed; right: 1rem; bottom: 1.2rem; z-index: 45; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #0f1219; color: #fff; font-size: 1.2rem; font-weight: 800; cursor: pointer; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); opacity: 0.9; }
 	.to-top:hover { opacity: 1; transform: translateY(-2px); }
 	@media (max-width: 720px) { .to-top { bottom: 5.4rem; right: 0.8rem; width: 40px; height: 40px; } }
@@ -72,7 +73,7 @@ const today = new Date();
 		footer { padding-bottom: 6em !important; }
 		.sticky-cta {
 			display: flex; gap: 0.5rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-			padding: 0.6rem 0.8rem calc(0.6rem + env(safe-area-inset-bottom)); background: #fff;
+			padding: 0.6rem 0.8rem calc(0.6rem + env(safe-area-inset-bottom)); background: var(--surface);
 			box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
 		}
 		.sticky-cta a { flex: 1; text-align: center; padding: 0.75rem 0; border-radius: 999px; font-weight: 700; text-decoration: none; color: #fff; }
@@ -83,13 +84,13 @@ const today = new Date();
 	footer {
 		margin-top: 2rem;
 		padding: 2.4rem 1rem 3rem;
-		background: #f1f4ff;
+		background: var(--surface-3);
 		color: rgb(var(--gray-dark));
 		font-size: 0.85rem;
 		line-height: 1.6;
 	}
 	.ft-wrap { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: 1.25fr 2fr; gap: 2rem 3rem; text-align: left; }
-	.ft-name { display: block; font-size: 1.05rem; color: var(--black, #14183a); margin-bottom: 0.5rem; }
+	.ft-name { display: block; font-size: 1.05rem; color: var(--black, var(--ink)); margin-bottom: 0.5rem; }
 	footer p { margin: 0.15em 0; color: rgb(var(--gray)); }
 	footer a { color: inherit; }
 	.ft-brand a { text-decoration: underline; }
@@ -97,7 +98,7 @@ const today = new Date();
 	.ft-links h3 { margin: 0 0 0.5rem; font-size: 0.82rem; color: var(--accent); letter-spacing: 0.02em; }
 	.ft-links a { display: block; padding: 0.22rem 0; text-decoration: none; color: rgb(var(--gray-dark)); }
 	.ft-links a:hover { color: var(--accent); text-decoration: underline; }
-	.ft-bottom { max-width: 960px; margin: 1.8rem auto 0; padding-top: 1.2rem; border-top: 1px solid #dfe4ff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem; }
+	.ft-bottom { max-width: 960px; margin: 1.8rem auto 0; padding-top: 1.2rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem; }
 	.ft-bottom p { margin: 0; }
 	.ft-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 	@media (max-width: 720px) {
@@ -207,6 +208,28 @@ const today = new Date();
 </script>
 
 <script>
+	// 어두운 화면 켜기/끄기: 고른 적이 없으면 기기 설정을 따르고, 고르면 이 브라우저에 기억합니다.
+	const tb = document.getElementById('theme-btn');
+	if (tb) {
+		const root = document.documentElement;
+		const isDark = () => (root.getAttribute('data-theme') ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+		const paint = () => {
+			tb.setAttribute('aria-pressed', String(isDark()));
+			tb.textContent = isDark() ? '밝은 화면으로 보기' : '어두운 화면으로 보기';
+		};
+		paint();
+		tb.addEventListener('click', () => {
+			const next = isDark() ? 'light' : 'dark';
+			root.setAttribute('data-theme', next);
+			try { localStorage.setItem('theme', next); } catch { /* 저장 못 해도 이번 방문에는 적용됩니다 */ }
+			paint();
+			const g = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+			if (g) g('event', 'theme_toggle', { page_path: location.pathname, theme: next });
+		});
+	}
+</script>
+
+<script>
 	// 글자 크게 보기 켜기/끄기 (선택은 이 브라우저에 기억됩니다)
 	const fs = document.getElementById('fs-btn');
 	if (fs) {
@@ -268,7 +291,7 @@ const today = new Date();
 
 <style is:global>
 	.fb { margin-top: 0.8rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.85rem; color: rgb(var(--gray)); }
-	.fb button { border: 1.5px solid #cfd6ff; background: #fff; font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 999px; cursor: pointer; color: rgb(var(--gray-dark)); }
+	.fb button { border: 1.5px solid var(--line); background: var(--surface); font: inherit; font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.9rem; border-radius: 999px; cursor: pointer; color: rgb(var(--gray-dark)); }
 	.fb button:hover { border-color: var(--accent); color: var(--accent); }
 	.fb a { color: var(--accent); font-weight: 700; }
 </style>

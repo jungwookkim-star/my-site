@@ -16,30 +16,30 @@ import { STEPS, KIND_LABEL } from '../data/statusSteps';
 			main.st { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; width: auto; }
 			.st h1 { font-size: 1.6rem; margin: 0 0 0.3rem; }
 			.st .sub { margin: 0 0 1.2rem; color: rgb(var(--gray)); font-size: 0.92rem; }
-			.st-kind { display: inline-block; font-size: 0.78rem; font-weight: 800; color: var(--accent); background: #eef1ff; padding: 0.2rem 0.7rem; border-radius: 999px; margin-bottom: 0.5rem; }
+			.st-kind { display: inline-block; font-size: 0.78rem; font-weight: 800; color: var(--accent); background: var(--surface-2); padding: 0.2rem 0.7rem; border-radius: 999px; margin-bottom: 0.5rem; }
 			.st-list { list-style: none; margin: 0 0 1.2rem; padding: 0; display: grid; gap: 0; }
 			.st-list li { position: relative; padding: 0.55rem 0 0.55rem 2.6rem; color: rgb(var(--gray)); }
-			.st-list li::before { content: attr(data-n); position: absolute; left: 0; top: 0.5rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: #e4e8f5; color: #6b7390; display: grid; place-items: center; font-weight: 800; font-size: 0.88rem; }
-			.st-list li::after { content: ''; position: absolute; left: 0.93rem; top: 2.5rem; bottom: -0.45rem; width: 2px; background: #e4e8f5; }
+			.st-list li::before { content: attr(data-n); position: absolute; left: 0; top: 0.5rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--surface-2); color: #6b7390; display: grid; place-items: center; font-weight: 800; font-size: 0.88rem; }
+			.st-list li::after { content: ''; position: absolute; left: 0.93rem; top: 2.5rem; bottom: -0.45rem; width: 2px; background: var(--surface-2); }
 			.st-list li:last-child::after { display: none; }
-			.st-list li.done { color: #1a7f4b; }
-			.st-list li.done::before { content: '✓'; background: #1a7f4b; color: #fff; }
-			.st-list li.done::after { background: #1a7f4b; }
+			.st-list li.done { color: var(--green); }
+			.st-list li.done::before { content: '✓'; background: var(--green); color: #fff; }
+			.st-list li.done::after { background: var(--green); }
 			.st-list li.now { color: inherit; font-weight: 800; }
 			.st-list li.now::before { background: var(--accent); color: #fff; box-shadow: 0 0 0 4px rgba(35, 55, 255, 0.18); }
 			.st-list .t { display: block; font-size: 1rem; }
-			.card { background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.1rem 1.3rem; margin-bottom: 1rem; }
+			.card { background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.1rem 1.3rem; margin-bottom: 1rem; }
 			.card h2 { margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--accent); }
 			.card p { margin: 0 0 0.5rem; font-size: 0.92rem; }
 			.card ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.65; }
 			.card a.more { display: inline-block; margin-top: 0.6rem; font-weight: 700; font-size: 0.88rem; color: var(--accent); }
-			.memo { background: #fffbe6; box-shadow: inset 0 0 0 1.5px #f1e3a2; }
-			.memo h2 { color: #8a6d00; }
+			.memo { background: var(--tint-amber); box-shadow: inset 0 0 0 1.5px var(--line-amber); }
+			.memo h2 { color: var(--amber); }
 			.when { font-size: 0.8rem; color: rgb(var(--gray)); margin: 0 0 1rem; }
 			.acts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 			.acts a { flex: 1 1 140px; text-align: center; padding: 0.75rem 1rem; border-radius: 999px; font-weight: 800; text-decoration: none; }
 			.acts .kk { background: #fee500; color: #191919; }
-			.acts .tel { background: #fff; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.acts .tel { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
 			.note { font-size: 0.78rem; color: rgb(var(--gray)); margin-top: 1rem; line-height: 1.6; }
 			[hidden] { display: none !important; }
 		</style>
