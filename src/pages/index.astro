@@ -10,6 +10,7 @@ import Reviews from '../components/Reviews.astro';
 import ChannelAdd from '../components/ChannelAdd.astro';
 import TrustStrip from '../components/TrustStrip.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
+import WhoPicker from '../components/WhoPicker.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
@@ -372,6 +373,7 @@ const faqSchema = {
 			<section id="tools">
 				<div class="sec-mascot" aria-hidden="true"><span>어떤 게 맞을지<br />같이 골라봐요!</span><img src="/brand/mascot.webp" alt="" width="104" height="179" loading="lazy" /></div>
 				<h2 class="sec">내게 맞게 골라 드릴게요</h2>
+					<WhoPicker />
 				<div class="ttabs" role="tablist" aria-label="도우미 선택">
 					<button type="button" role="tab" aria-selected="true" data-tt="finder" class="on">내게 맞는 요금제 찾기</button>
 					<button type="button" role="tab" aria-selected="false" data-tt="check">나는 셀프개통이 될까?</button>
