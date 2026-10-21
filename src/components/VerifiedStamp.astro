@@ -1,5 +1,5 @@
 ---
-import { PRICES_VERIFIED } from '../consts';
+import { PRICES_VERIFIED, LATEST_NEWS } from '../consts';
 // "이 요금, 지금도 맞나요?"에 답하는 한 줄. 요금제 이름과 월 요금을 공식 페이지와 대조한 날짜를 보여 줍니다.
 interface Props { align?: 'left' | 'center' }
 const { align = 'center' } = Astro.props;
@@ -7,10 +7,11 @@ const [y, m, d] = PRICES_VERIFIED.split('-').map(Number);
 ---
 
 <p class="vs" style={`text-align:${align}`}>
-	<span class="vs-dot" aria-hidden="true"></span>요금제 이름과 월 요금을 <time datetime={PRICES_VERIFIED}>{y}년 {m}월 {d}일</time>에 앤텔레콤 공식 요금제 페이지와 대조했어요.
+	<span class="vs-dot" aria-hidden="true"></span>요금제 이름과 월 요금을 <time datetime={PRICES_VERIFIED}>{y}년 {m}월 {d}일</time>에 앤텔레콤 공식 요금제 페이지와 대조했어요. <a href={LATEST_NEWS}>이번 달 소식 보기</a>
 </p>
 
 <style>
 	.vs { margin: 0.5rem 0 0; font-size: 0.82rem; color: var(--green); font-weight: 700; line-height: 1.5; }
+	.vs a { color: inherit; text-decoration: underline; margin-left: 0.3em; white-space: nowrap; }
 	.vs-dot { display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; background: var(--green); margin-right: 0.45em; vertical-align: 0.05em; }
 </style>

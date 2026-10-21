@@ -14,6 +14,8 @@ const MAP: Record<string, Category> = {
 	'visit-activation-reservation': '개통 방법',
 	'after-activation-checklist': '개통 방법',
 	'after-activation-account': '개통 방법',
+	'after-buying-unlocked-phone': '개통 방법',
+	'news-2026-10': '알뜰폰 기초',
 	'self-activation-time-over': '개통 방법',
 	'self-activation-already-has-line': '개통 방법',
 	'self-activation-number-choice': '개통 방법',
