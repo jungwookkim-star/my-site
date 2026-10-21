@@ -13,6 +13,7 @@ import EligibilityCheck from '../components/EligibilityCheck.astro';
 import WhoPicker from '../components/WhoPicker.astro';
 import Welcome from '../components/Welcome.astro';
 import VerifiedStamp from '../components/VerifiedStamp.astro';
+import SimCheck from '../components/SimCheck.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
@@ -380,6 +381,7 @@ const faqSchema = {
 				<div class="ttabs" role="tablist" aria-label="도우미 선택">
 					<button type="button" role="tab" aria-selected="true" data-tt="finder" class="on">내게 맞는 요금제 찾기</button>
 					<button type="button" role="tab" aria-selected="false" data-tt="check">나는 셀프개통이 될까?</button>
+					<button type="button" role="tab" aria-selected="false" data-tt="sim">내 폰은 eSIM? 유심?</button>
 				</div>
 				<div class="tpanel" id="finder" data-tp="finder" role="tabpanel">
 					<p class="sub">질문 3개에 답하면 알맞은 요금제를 추천해 드려요.</p>
@@ -399,6 +401,10 @@ const faqSchema = {
 					<div><strong><Icon name="badge" />약정이 부담돼요</strong><p>약정과 위약금 없이 필요한 기간만 사용할 수 있습니다.</p></div>
 				</div>
 				</details>
+				</div>
+				<div class="tpanel" id="sim" data-tp="sim" role="tabpanel" hidden>
+					<p class="sub">질문 3개로 실물 유심과 eSIM 중 맞는 쪽을 알려 드려요.</p>
+					<SimCheck />
 				</div>
 			</section>
 
@@ -601,7 +607,7 @@ const faqSchema = {
 				if (scroll) document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 			}
 			ttabs.forEach((b) => b.addEventListener('click', () => openTool(b.dataset.tt ?? 'finder', false)));
-			const fromHash = () => { const h = location.hash; if (h === '#check' || h === '#finder') openTool(h.slice(1), true); };
+			const fromHash = () => { const h = location.hash; if (h === '#check' || h === '#finder' || h === '#sim') openTool(h.slice(1), true); };
 			window.addEventListener('hashchange', fromHash);
 			fromHash();
 			const tabs = document.querySelectorAll<HTMLButtonElement>('.ftabs button');

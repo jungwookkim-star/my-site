@@ -1,0 +1,146 @@
+---
+// "내 폰은 실물 유심? eSIM?" 3문답. 기준은 사이트 글(esim-vs-usim)에 적힌 앤텔레콤 안내만 씁니다.
+// 기종 목록은 확인된 자료가 없어서 쓰지 않고, 폰에서 직접 확인하는 방법(*#06#)을 안내합니다.
+import { KAKAO_URL } from '../consts';
+---
+
+<div class="sc" id="sc">
+	<div class="sc-head"><span class="sc-step" aria-live="polite"></span><button type="button" class="sc-back" hidden>← 이전</button></div>
+	<h3 class="sc-q"></h3>
+	<p class="sc-hint"></p>
+	<div class="sc-opts"></div>
+	<div class="sc-res" hidden>
+		<span class="sc-tag"></span>
+		<h3 class="sc-rt"></h3>
+		<ul class="sc-rl"></ul>
+		<div class="sc-act">
+			<a class="sc-b main" id="sc-link" href="/blog/esim-vs-usim/">자세히 보기</a>
+			<a class="sc-b" href={KAKAO_URL} target="_blank" rel="noopener">카톡으로 물어보기</a>
+			<button type="button" class="sc-b sc-again">다시 해보기</button>
+		</div>
+	</div>
+</div>
+
+<style is:global>
+	.sc { background: var(--surface); border-radius: 18px; box-shadow: var(--box-shadow); padding: 1.5rem 1.3rem; max-width: 640px; margin: 0 auto; }
+	.sc-head { display: flex; justify-content: space-between; align-items: center; min-height: 1.6rem; }
+	.sc-step { font-size: 0.8rem; font-weight: 700; color: var(--accent); }
+	.sc-back { border: 0; background: none; font: inherit; font-size: 0.85rem; color: rgb(var(--gray)); cursor: pointer; }
+	.sc-q { margin: 0.4rem 0 0.3rem; font-size: 1.2rem; line-height: 1.4; text-align: center; }
+	.sc-hint { margin: 0 0 1rem; text-align: center; font-size: 0.85rem; color: var(--muted); }
+	.sc-opts { display: grid; gap: 0.6rem; }
+	.sc-opts button { border: 2px solid var(--line); background: var(--surface); color: inherit; border-radius: 14px; padding: 0.85rem 1rem; font: inherit; font-weight: 700; font-size: 0.97rem; cursor: pointer; text-align: left; }
+	.sc-opts button:hover { border-color: var(--accent); background: var(--surface-3); }
+	.sc-opts small { display: block; font-weight: 400; color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
+	.sc-res[hidden], .sc-back[hidden] { display: none; }
+	.sc-tag { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.7rem; border-radius: 999px; background: var(--tint-green); color: var(--green); }
+	.sc-tag.warn { background: var(--tint-amber); color: var(--amber); }
+	.sc-rt { margin: 0.6rem 0 0.5rem; font-size: 1.15rem; line-height: 1.4; }
+	.sc-rl { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.65; }
+	.sc-act { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+	.sc-b { border: 0; font: inherit; font-weight: 800; font-size: 0.86rem; text-decoration: none; padding: 0.55rem 1.1rem; border-radius: 999px; cursor: pointer; background: var(--surface-2); color: var(--ink); }
+	.sc-b.main { background: var(--accent); color: #fff; }
+</style>
+
+<script>
+	type Opt = { v: string; label: string; sub?: string };
+	type Step = { key: 'net' | 'esim' | 'contract'; q: string; hint?: string; opts: Opt[] };
+	const steps: Step[] = [
+		{
+			key: 'net', q: '어떤 요금제로 개통하실 건가요?',
+			opts: [
+				{ v: 'ktpre', label: 'KT망 선불' },
+				{ v: 'lgpre', label: 'LG망 선불' },
+				{ v: 'post', label: '알뜰(후불) 요금제' },
+				{ v: 'idk', label: '아직 몰라요', sub: '일단 내 폰부터 확인할게요' },
+			],
+		},
+		{
+			key: 'esim', q: '전화 앱 키패드에서 *#06# 을 눌러 보세요', hint: '화면에 EID 번호와 IMEI 번호 2개가 나오면 eSIM을 쓸 수 있는 폰이에요.',
+			opts: [
+				{ v: 'yes', label: 'EID와 IMEI가 나와요' },
+				{ v: 'no', label: 'IMEI만 나오거나 아무것도 안 나와요' },
+				{ v: 'idk', label: '아직 못 눌러 봤어요' },
+			],
+		},
+		{
+			key: 'contract', q: '통신사 약정으로 산 폰인가요?', hint: '약정으로 산 폰은 eSIM 조회가 안 되는 경우가 있어요.',
+			opts: [
+				{ v: 'no', label: '아니요, 자급제나 공기계예요' },
+				{ v: 'yes', label: '네, 통신사 약정 폰이에요' },
+				{ v: 'idk', label: '잘 모르겠어요' },
+			],
+		},
+	];
+	const root = document.getElementById('sc');
+	if (root) {
+		const $ = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
+		const stepEl = $('.sc-step'), backEl = $('.sc-back'), qEl = $('.sc-q'), hintEl = $('.sc-hint'), optsEl = $('.sc-opts'), resEl = $('.sc-res');
+		let i = 0;
+		let ans: Record<string, string> = {};
+		const track = (p: Record<string, string>) => {
+			const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+			if (g) g('event', 'sim_check', { page_path: location.pathname, ...p });
+		};
+		function show() {
+			const s = steps[i];
+			resEl.hidden = true;
+			[qEl, hintEl, optsEl].forEach((e) => (e.hidden = false));
+			stepEl.textContent = `${i + 1} / ${steps.length}`;
+			backEl.hidden = i === 0;
+			qEl.textContent = s.q;
+			hintEl.textContent = s.hint ?? '';
+			hintEl.hidden = !s.hint;
+			optsEl.innerHTML = '';
+			s.opts.forEach((o) => {
+				const b = document.createElement('button');
+				b.type = 'button';
+				b.textContent = o.label;
+				if (o.sub) { const sm = document.createElement('small'); sm.textContent = o.sub; b.appendChild(sm); }
+				b.addEventListener('click', () => { ans[s.key] = o.v; if (i < steps.length - 1) { i++; show(); } else result(); });
+				optsEl.appendChild(b);
+			});
+		}
+		function result() {
+			[qEl, hintEl, optsEl, backEl].forEach((e) => (e.hidden = true));
+			stepEl.textContent = '확인 결과';
+			resEl.hidden = false;
+			const tag = $('.sc-tag'), rt = $('.sc-rt'), rl = $('.sc-rl'), link = $<HTMLAnchorElement>('#sc-link');
+			rl.innerHTML = '';
+			const add = (t: string) => { const li = document.createElement('li'); li.textContent = t; rl.appendChild(li); };
+			tag.className = 'sc-tag';
+			link.href = '/blog/esim-vs-usim/';
+			const physical = ans.net === 'ktpre' || ans.contract === 'yes' || ans.esim === 'no';
+			if (ans.net === 'ktpre') {
+				tag.textContent = '실물 유심'; rt.textContent = 'KT망 선불은 실물 유심(바로유심)으로 개통해요';
+				add('앤텔레콤 안내 기준으로 선불 eSIM은 LG망에서만 가능하고, KT망 선불은 실물 유심으로 진행해요.');
+				add('유심은 편의점에서 8,800원에 사거나, 서울, 수도권, 광역시, 제주는 퀵 배송을 받을 수 있어요.');
+				link.href = '/blog/usim-delivery/'; link.textContent = '유심 받는 방법 보기';
+			} else if (physical) {
+				tag.textContent = '실물 유심 추천'; tag.classList.add('warn'); rt.textContent = '이 폰은 실물 유심으로 하시는 게 안전해요';
+				if (ans.contract === 'yes') add('통신사 약정으로 산 폰은 eSIM 조회가 안 되는 경우가 있어서 실물 유심으로 진행하라고 안내돼요.');
+				if (ans.esim === 'no') add('*#06# 화면에 EID와 IMEI 2개가 나오지 않으면 eSIM 개통은 어려워요.');
+				add('실물 유심은 대부분의 스마트폰에서 쓸 수 있어요. 편의점이나 퀵 배송으로 준비하세요.');
+				link.href = '/blog/usim-delivery/'; link.textContent = '유심 받는 방법 보기';
+			} else if (ans.esim === 'idk' || ans.contract === 'idk') {
+				tag.textContent = '확인이 더 필요해요'; tag.classList.add('warn'); rt.textContent = '먼저 폰에서 두 가지만 확인해 주세요';
+				if (ans.esim === 'idk') add('전화 앱 키패드에서 *#06# 을 눌러 EID와 IMEI 2개가 나오는지 보세요.');
+				if (ans.contract === 'idk') add('약정으로 산 폰이면 eSIM 조회가 안 될 수 있어요. 구매처나 통신사 앱에서 확인해 주세요.');
+				add('확인이 어려우면 실물 유심으로 하면 대부분 문제없이 쓸 수 있어요. 폰 모델명을 카톡으로 보내 주셔도 안내해 드려요.');
+				link.textContent = 'eSIM 확인 방법 보기';
+			} else {
+				tag.textContent = 'eSIM 가능성이 높아요'; rt.textContent = 'eSIM으로 개통해 볼 수 있어요';
+				if (ans.net === 'lgpre') add('LG망은 선불과 후불 모두 eSIM을 지원해요. eSIM 발급비는 2,750원이에요.');
+				else if (ans.net === 'post') add('후불 eSIM은 K망과 L망 모두 지원돼요. 발급비는 2,750원이에요.');
+				else add('eSIM은 LG망 선불과 후불, KT망 후불에서 가능해요. KT망 선불은 실물 유심만 돼요. 발급비는 2,750원이에요.');
+				add('eSIM은 만 19세 이상 내국인만 신청할 수 있고, 외국인과 미성년자는 실물 유심과 방문 개통을 이용해요.');
+				add('기기 정보를 잘못 입력하면 eSIM을 다시 내려받아야 할 수 있으니 접수 전에 한 번 더 확인하세요.');
+				link.textContent = 'eSIM 접수 순서 보기';
+			}
+			track({ net: ans.net, esim: ans.esim, contract: ans.contract, result: tag.textContent ?? '' });
+		}
+		backEl.addEventListener('click', () => { if (i > 0) { i--; show(); } });
+		root.querySelector('.sc-again')?.addEventListener('click', () => { i = 0; ans = {}; show(); });
+		show();
+	}
+</script>
