@@ -72,6 +72,7 @@ const people = [
 			))
 		}
 	</div>
+	<p class="wp-honest"><a href="/blog/prepaid-not-for-you/">선불폰이 나에게 맞는지 궁금하세요? 맞지 않는 경우도 솔직하게 정리했어요 ›</a></p>
 	{
 		people.map((p) => (
 			<div class="wp-card" data-card={p.key} hidden>
@@ -113,6 +114,8 @@ const people = [
 	.wp-chip small { display: block; margin-top: 0.1rem; font-size: 0.76rem; color: rgb(var(--gray)); }
 	.wp-chip:hover { border-color: var(--accent); background: #f3f5ff; }
 	.wp-chip[aria-pressed='true'] { border-color: var(--accent); background: #eef1ff; box-shadow: 0 0 0 1px var(--accent) inset; }
+	.wp-honest { margin: 0.6rem 0 0; text-align: center; font-size: 0.82rem; }
+	.wp-honest a { color: var(--accent); font-weight: 700; text-decoration: none; }
 	.wp-card { margin-top: 0.8rem; background: #fff; border-radius: 16px; box-shadow: var(--box-shadow); padding: 1rem 1.2rem 1.1rem; animation: wpin 0.22s ease-out; }
 	.wp-card[hidden] { display: none; }
 	.wp-route { margin: 0 0 0.5rem; font-weight: 800; font-size: 1rem; color: var(--accent); }
