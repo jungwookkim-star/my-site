@@ -11,6 +11,7 @@ import ChannelAdd from '../components/ChannelAdd.astro';
 import TrustStrip from '../components/TrustStrip.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
 import WhoPicker from '../components/WhoPicker.astro';
+import Welcome from '../components/Welcome.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
 import { ktPrepaidMore, lgPrepaidMore, ktPostpaid, lgPostpaid } from '../data/morePlans';
@@ -335,6 +336,7 @@ const faqSchema = {
 	<body>
 		<Header />
 		<main id="main" class="wide">
+			<Welcome />
 			<div class="hero hb hc">
 				<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 				<div class="hero-text">

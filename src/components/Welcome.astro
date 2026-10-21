@@ -1,0 +1,55 @@
+---
+// 홈에서 "어디서 오셨는지"에 맞춰 환영 한 줄을 보여 줍니다. 주소의 utm_source가 아래 목록에 있을 때만 나타납니다.
+// 목록에 없는 값은 화면에 쓰지 않습니다(주소로 임의의 문구를 넣을 수 없게). 개인정보는 쓰지 않습니다.
+const WHO = {
+	naver_blog: { text: '네이버 블로그에서 오셨군요. 글 보다가 궁금했던 걸 바로 찾아 드릴게요.', cta: '내게 맞는 요금제 찾기', href: '#finder' },
+	naver: { text: '네이버 블로그에서 오셨군요. 글 보다가 궁금했던 걸 바로 찾아 드릴게요.', cta: '내게 맞는 요금제 찾기', href: '#finder' },
+	card: { text: '명함 보고 오셨군요. 반갑습니다. 내 폰으로 개통이 되는지부터 확인해 보세요.', cta: '셀프개통 가능 확인', href: '#check' },
+	flyer: { text: '전단지 보고 오셨군요. 반갑습니다. 내 폰으로 개통이 되는지부터 확인해 보세요.', cta: '셀프개통 가능 확인', href: '#check' },
+	sign: { text: '간판 보고 오셨군요. 반갑습니다. 내 폰으로 개통이 되는지부터 확인해 보세요.', cta: '셀프개통 가능 확인', href: '#check' },
+	sms: { text: '문자 보고 오셨군요. 궁금하신 걸 바로 찾아 드릴게요.', cta: '내게 맞는 요금제 찾기', href: '#finder' },
+	kakao: { text: '카톡으로 안내받고 오셨군요. 상담받으신 내용을 이어서 확인해 보세요.', cta: '요금제 보기', href: '/plans/' },
+};
+---
+
+<div class="welcome" id="welcome" role="status" hidden>
+	<span class="w-t" id="welcome-t"></span>
+	<a class="w-go" id="welcome-go" href="#finder"></a>
+	<button type="button" class="w-x" id="welcome-x" aria-label="닫기">×</button>
+</div>
+
+<style>
+	.welcome { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin: 0.8rem 0 0; padding: 0.55rem 0.6rem 0.55rem 1.1rem; border-radius: 16px; background: #fff; box-shadow: var(--box-shadow), inset 0 0 0 1.5px #d7dcff; font-size: 0.9rem; }
+	.welcome[hidden] { display: none; }
+	.w-t { flex: 1 1 14rem; font-weight: 700; color: rgb(var(--gray-dark)); line-height: 1.5; }
+	.w-go { flex: 0 0 auto; background: var(--accent); color: #fff; font-weight: 800; font-size: 0.84rem; padding: 0.45rem 1rem; border-radius: 999px; text-decoration: none; }
+	.w-x { flex: 0 0 auto; border: 0; background: #eef1ff; color: #333a6b; width: 30px; height: 30px; border-radius: 50%; font-size: 1.2rem; line-height: 1; cursor: pointer; }
+</style>
+
+<script define:vars={{ WHO }}>
+	(function () {
+		var box = document.getElementById('welcome');
+		if (!box) return;
+		var src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase();
+		var KEY = 'welcome_closed';
+		try {
+			if (src && Object.prototype.hasOwnProperty.call(WHO, src)) sessionStorage.setItem('welcome_src', src);
+			else src = sessionStorage.getItem('welcome_src') || '';
+			if (sessionStorage.getItem(KEY) === '1') return;
+		} catch (e) { /* 저장소를 못 써도 이번 방문에는 보여 줍니다 */ }
+		if (!src || !Object.prototype.hasOwnProperty.call(WHO, src)) return;
+		var w = WHO[src];
+		document.getElementById('welcome-t').textContent = w.text;
+		var go = document.getElementById('welcome-go');
+		go.textContent = w.cta + ' ›';
+		go.setAttribute('href', w.href);
+		box.hidden = false;
+		var ev = function (name) { if (window.gtag) window.gtag('event', name, { page_path: location.pathname, src: src }); };
+		ev('welcome_show');
+		go.addEventListener('click', function () { ev('welcome_click'); });
+		document.getElementById('welcome-x').addEventListener('click', function () {
+			box.hidden = true;
+			try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* 무시 */ }
+		});
+	})();
+</script>
