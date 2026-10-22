@@ -1,0 +1,120 @@
+---
+import { terms } from '../data/glossaryTerms';
+// 본문 속 어려운 말에 점선 밑줄을 긋고, 눌러서 한 줄 뜻을 바로 보여 줍니다. (용어집 페이지와 같은 설명을 씁니다)
+// 한 페이지에서 용어마다 처음 한 번만, 최대 8개까지 적용합니다. 링크, 제목, 버튼 안의 글자에는 적용하지 않습니다.
+interface Props { scope?: string }
+const { scope = 'main' } = Astro.props;
+// [본문에서 찾을 말, 용어집의 용어 이름] (긴 말을 먼저 둡니다)
+const MATCH: [string, string][] = [
+	['결합 요금제', '결합 요금제'], ['선불 요금제', '선불 요금제'], ['비대면 개통', '비대면 개통'], ['일 기본료', '일 기본료'],
+	['번호이동', '번호이동'], ['속도제어', '속도제어'], ['기본제공', '기본제공'], ['셀프개통', '셀프개통'],
+	['알뜰폰', '알뜰폰'], ['위약금', '위약금'], ['eSIM', 'eSIM'], ['APN', 'APN'], ['약정', '약정'], ['미납', '미납 · 연체'], ['Mbps', 'Mbps · Kbps'],
+];
+const short = (d: string) => {
+	const first = d.split(/(?<=[.!?])\s|(?<=다\.)\s?/)[0] ?? d;
+	return first.length > 110 ? first.slice(0, 108) + '…' : first;
+};
+const data = MATCH.flatMap(([m, name]) => {
+	const t = terms.find((x) => x.term === name);
+	return t ? [{ m, name: t.term, d: short(t.desc), id: `t-${t.term.replace(/[^가-힣a-zA-Z0-9]+/g, '-')}` }] : [];
+});
+---
+
+<script type="application/json" id="gt-data" set:html={JSON.stringify(data)} />
+<script is:inline define:vars={{ scope }}>
+	(function () {
+		var root = document.querySelector(scope);
+		var dataEl = document.getElementById('gt-data');
+		if (!root || !dataEl) return;
+		var list = [];
+		try { list = JSON.parse(dataEl.textContent); } catch (e) { return; }
+		var SKIP = 'a,button,summary,h1,h2,h3,h4,h5,h6,code,pre,script,style,textarea,input,select,dialog,nav,header,footer,.g-term,.no-gloss';
+		var used = {};
+		var count = 0;
+		var MAX = 8;
+		function wrapIn(node) {
+			var text = node.nodeValue;
+			for (var i = 0; i < list.length; i++) {
+				var t = list[i];
+				if (used[t.name]) continue;
+				var at = text.indexOf(t.m);
+				if (at < 0) continue;
+				// 영문 약어는 단어 경계를 확인합니다. (예: APN이 다른 글자 속에 있으면 건너뜀)
+				if (/^[A-Za-z]/.test(t.m)) {
+					var prev = text.charAt(at - 1), next = text.charAt(at + t.m.length);
+					if (/[A-Za-z0-9]/.test(prev) || /[A-Za-z0-9]/.test(next)) continue;
+				}
+				used[t.name] = 1;
+				count++;
+				var after = node.splitText(at + t.m.length);
+				var mid = node.splitText(at);
+				var b = document.createElement('button');
+				b.type = 'button';
+				b.className = 'g-term';
+				b.dataset.name = t.name;
+				b.dataset.d = t.d;
+				b.dataset.id = t.id;
+				b.setAttribute('aria-haspopup', 'dialog');
+				b.textContent = t.m;
+				mid.parentNode.replaceChild(b, mid);
+				return after; // 남은 글자에서 다음 용어를 계속 찾습니다
+			}
+			return null;
+		}
+		function run() {
+			var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+				acceptNode: function (n) {
+					if (!n.nodeValue || n.nodeValue.trim().length < 2) return NodeFilter.FILTER_REJECT;
+					var p = n.parentElement;
+					if (!p || p.closest(SKIP)) return NodeFilter.FILTER_REJECT;
+					if (!p.closest('p,li,td,dd,blockquote')) return NodeFilter.FILTER_REJECT;
+					return NodeFilter.FILTER_ACCEPT;
+				}
+			});
+			var nodes = [];
+			while (w.nextNode()) nodes.push(w.currentNode);
+			for (var k = 0; k < nodes.length && count < MAX; k++) {
+				var n = nodes[k];
+				while (n && count < MAX) n = wrapIn(n);
+			}
+		}
+		var pop = null, cur = null;
+		function close() { if (pop) { pop.remove(); pop = null; } if (cur) { cur.setAttribute('aria-expanded', 'false'); cur = null; } }
+		function open(btn) {
+			close();
+			cur = btn;
+			btn.setAttribute('aria-expanded', 'true');
+			pop = document.createElement('div');
+			pop.className = 'g-pop';
+			pop.setAttribute('role', 'dialog');
+			var h = document.createElement('strong'); h.textContent = btn.dataset.name;
+			var p = document.createElement('p'); p.textContent = btn.dataset.d;
+			var a = document.createElement('a'); a.href = '/glossary/#' + btn.dataset.id; a.textContent = '용어집에서 자세히 보기';
+			pop.append(h, p, a);
+			document.body.appendChild(pop);
+			var r = btn.getBoundingClientRect();
+			var w = pop.offsetWidth;
+			var left = Math.min(Math.max(8, r.left + scrollX + r.width / 2 - w / 2), scrollX + document.documentElement.clientWidth - w - 8);
+			pop.style.left = left + 'px';
+			pop.style.top = (r.bottom + scrollY + 8) + 'px';
+			if (window.gtag) window.gtag('event', 'gloss_open', { page_path: location.pathname, term: btn.dataset.name });
+		}
+		document.addEventListener('click', function (e) {
+			var b = e.target.closest ? e.target.closest('.g-term') : null;
+			if (b) { if (cur === b) close(); else open(b); return; }
+			if (pop && !(e.target.closest && e.target.closest('.g-pop'))) close();
+		});
+		document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+		window.addEventListener('resize', close);
+		run();
+	})();
+</script>
+
+<style is:global>
+	.g-term { border: 0; padding: 0; margin: 0; background: none; font: inherit; color: inherit; cursor: help; text-decoration: underline dotted var(--accent); text-underline-offset: 0.22em; text-decoration-thickness: 2px; }
+	.g-term:hover, .g-term[aria-expanded='true'] { background: var(--surface-2); border-radius: 4px; }
+	.g-pop { position: absolute; z-index: 90; width: min(300px, calc(100vw - 16px)); box-sizing: border-box; background: var(--surface); color: rgb(var(--gray-dark)); border-radius: 14px; padding: 0.8rem 1rem; box-shadow: 0 10px 30px rgba(10, 20, 70, 0.28), inset 0 0 0 1.5px var(--line); font-size: 0.88rem; line-height: 1.55; text-align: left; font-weight: 400; }
+	.g-pop strong { display: block; color: var(--accent); font-size: 0.82rem; margin-bottom: 0.15rem; }
+	.g-pop p { margin: 0 0 0.45rem; }
+	.g-pop a { font-weight: 800; font-size: 0.82rem; color: var(--accent); }
+</style>

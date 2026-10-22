@@ -13,6 +13,7 @@ const schema = {
 	'@type': 'FAQPage',
 	mainEntity: all.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
+import GlossTips from '../components/GlossTips.astro';
 ---
 
 <!doctype html>
@@ -85,6 +86,7 @@ const schema = {
 				</div>
 			</div>
 		</main>
+		<GlossTips scope="main" />
 		<Footer />
 		<script>
 			const q = document.getElementById('fq') as HTMLInputElement;

@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL } from '../consts';
 import { categoryOf } from '../data/blogCategories';
 import ShareButton from '../components/ShareButton.astro';
+import GlossTips from '../components/GlossTips.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & { id?: string; seoTitle?: string; headings?: { depth: number; slug: string; text: string }[] };
 
@@ -232,6 +233,7 @@ const ld = isPost
 				</div>
 			</article>
 		</main>
+		<GlossTips scope=".prose" />
 		<Footer />
 	</body>
 </html>
