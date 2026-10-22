@@ -1,0 +1,106 @@
+---
+import { guideSteps } from '../data/guideSteps';
+// 개통 중에 와이파이나 데이터가 불안해도 가이드를 볼 수 있게, 이 폰에 저장해 두는 버튼입니다. (사용자가 누를 때만 저장합니다)
+const images = [...new Set(guideSteps.flatMap((s) => s.imgs))].map((f) => `/guide/${f}`);
+---
+
+<div class="og" id="og" data-images={JSON.stringify(images)} hidden>
+	<div class="og-t">
+		<strong>인터넷이 끊겨도 보이게 저장해 두기</strong>
+		<span>개통 중에 와이파이나 데이터가 불안하면 가이드가 안 열릴 수 있어요. 이 폰에 저장해 두면 연결이 없어도 가이드와 내 개통 노트를 볼 수 있어요.</span>
+	</div>
+	<div class="og-act">
+		<button type="button" class="og-b main" id="og-save">이 폰에 저장해 두기</button>
+		<button type="button" class="og-b" id="og-del" hidden>저장한 것 지우기</button>
+	</div>
+	<p class="og-note" id="og-note" role="status" aria-live="polite"></p>
+</div>
+
+<style is:global>
+	.og { background: var(--tint-green); box-shadow: inset 0 0 0 1.5px var(--line-green); border-radius: 16px; padding: 1rem 1.2rem; max-width: 640px; margin: 0 auto; }
+	.og[hidden] { display: none; }
+	.og-t { display: grid; gap: 0.25rem; }
+	.og-t strong { color: var(--teal); font-size: 1.02rem; }
+	.og-t span { font-size: 0.86rem; color: rgb(var(--gray-dark)); line-height: 1.55; }
+	.og-act { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+	.og-b { border: 0; font: inherit; font-weight: 800; font-size: 0.88rem; padding: 0.55rem 1.2rem; border-radius: 999px; cursor: pointer; background: var(--surface); color: var(--ink); }
+	.og-b.main { background: var(--accent); color: #fff; }
+	.og-b[hidden] { display: none; }
+	.og-note { margin: 0.6rem 0 0; font-size: 0.8rem; color: var(--green); min-height: 1.1em; font-weight: 700; }
+</style>
+
+<script>
+	const root = document.getElementById('og');
+	if (root && 'serviceWorker' in navigator && 'caches' in window) {
+		const CACHE = 'cm-offline-v1';
+		const images: string[] = JSON.parse(root.dataset.images ?? '[]');
+		const save = document.getElementById('og-save') as HTMLButtonElement;
+		const del = document.getElementById('og-del') as HTMLButtonElement;
+		const note = document.getElementById('og-note')!;
+		const track = (name: string, p: Record<string, string> = {}) => {
+			const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+			if (g) g('event', name, { page_path: location.pathname, ...p });
+		};
+		const PAGES = ['/guide/', '/my-note/', '/offline/'];
+		root.hidden = false;
+		async function status() {
+			try {
+				const c = await caches.open(CACHE);
+				const has = !!(await c.match('/guide/'));
+				save.textContent = has ? '최신으로 다시 저장' : '이 폰에 저장해 두기';
+				del.hidden = !has;
+				if (has) note.textContent = '저장되어 있어요. 인터넷이 끊겨도 이 가이드를 볼 수 있어요.';
+			} catch { /* 저장 공간을 못 쓰면 기능만 숨깁니다 */ root.hidden = true; }
+		}
+		save.addEventListener('click', async () => {
+			save.disabled = true;
+			note.textContent = '저장하는 중이에요. 잠시만 기다려 주세요…';
+			try {
+				if (!navigator.serviceWorker.controller) await navigator.serviceWorker.register('/sw.js').then(() => navigator.serviceWorker.ready);
+				const c = await caches.open(CACHE);
+				// 페이지가 쓰는 스크립트와 스타일도 함께 저장해야 저장본에서 슬라이드가 움직입니다.
+				const assets = new Set<string>();
+				for (const p of PAGES) {
+					const res = await fetch(p, { cache: 'reload' });
+					if (!res.ok) continue;
+					const copy = res.clone();
+					await c.put(p, res);
+					const html = await copy.text();
+					for (const m of html.matchAll(/["'(](\/_astro\/[^"')\s]+\.(?:js|css))/g)) assets.add(m[1]);
+				}
+				// 스크립트가 불러오는 다른 조각 파일(같은 폴더의 ./이름.js)도 함께 찾아 저장 목록에 넣습니다.
+				const queue = [...assets].filter((u) => u.endsWith('.js'));
+				for (let q = 0; q < queue.length && q < 30; q++) {
+					try {
+						const js = await (await fetch(queue[q])).text();
+						for (const m of js.matchAll(/["'`]\.\/([^"'`\s]+\.js)["'`]/g)) {
+							const u = '/_astro/' + m[1];
+							if (!assets.has(u)) { assets.add(u); queue.push(u); }
+						}
+					} catch { /* 못 읽으면 건너뜁니다 */ }
+				}
+				const urls = [...images, '/guide/sim-input-card.webp', '/brand/mascot.webp', '/brand/mark.png', ...assets];
+				let done = 0;
+				for (const u of urls) {
+					try { const r = await fetch(u); if (r.ok) await c.put(u, r); } catch { /* 한 장 실패해도 계속 */ }
+					done++;
+					if (done % 5 === 0) note.textContent = `저장하는 중이에요 (${done}/${urls.length})`;
+				}
+				note.textContent = '저장했어요. 인터넷이 끊겨도 이 가이드와 내 개통 노트를 볼 수 있어요.';
+				track('offline_guide_save', { files: String(urls.length) });
+			} catch {
+				note.textContent = '저장하지 못했어요. 저장 공간이나 인터넷 연결을 확인하고 다시 눌러 주세요.';
+			}
+			save.disabled = false;
+			status();
+		});
+		del.addEventListener('click', async () => {
+			await caches.delete(CACHE);
+			note.textContent = '저장한 것을 지웠어요.';
+			save.textContent = '이 폰에 저장해 두기';
+			del.hidden = true;
+			track('offline_guide_delete');
+		});
+		status();
+	}
+</script>

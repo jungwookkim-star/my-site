@@ -1,0 +1,29 @@
+---
+// 인터넷이 끊겼을 때 저장해 둔 것이 없는 페이지를 열면 보여 주는 안내입니다.
+import BaseHead from '../components/BaseHead.astro';
+import { PHONE, PHONE_LINK } from '../consts';
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="인터넷에 연결되어 있지 않아요 | 커넥트모바일" description="인터넷 연결을 확인해 주세요." noindex={true} />
+		<style is:global>
+			body { display: grid; min-height: 100vh; place-items: center; padding: 1.5rem; }
+			.off { max-width: 460px; background: var(--surface); border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.6rem; text-align: center; }
+			.off h1 { font-size: 1.4rem; margin: 0 0 0.6rem; }
+			.off p { margin: 0 0 0.8rem; font-size: 0.95rem; }
+			.off a { display: inline-block; margin: 0.2rem; background: var(--accent); color: #fff; text-decoration: none; font-weight: 800; padding: 0.6rem 1.2rem; border-radius: 999px; }
+			.off a.alt { background: var(--surface-2); color: var(--ink); }
+		</style>
+	</head>
+	<body>
+		<div class="off">
+			<h1>인터넷에 연결되어 있지 않아요</h1>
+			<p>와이파이나 데이터를 확인한 뒤 다시 열어 주세요. 미리 저장해 둔 개통 가이드는 아래에서 볼 수 있어요.</p>
+			<a href="/guide/">개통 가이드 열기</a>
+			<a class="alt" href="/my-note/">내 개통 노트</a>
+			<p style="margin-top:1rem">급하면 전화 <a class="alt" href={PHONE_LINK}>{PHONE}</a></p>
+		</div>
+	</body>
+</html>
