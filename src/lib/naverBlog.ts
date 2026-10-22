@@ -7,7 +7,9 @@ export type NaverPost = { title: string; link: string; date: Date };
 // 홈페이지에는 선불폰·통신 관련 글만 보여 줍니다. IT 글(방문자 유입용)은 제외합니다.
 // 1) 네이버 블로그 카테고리 이름이 아래 목록에 있으면 제외합니다. (IT 글을 'IT' 카테고리에 올리면 가장 확실합니다)
 // 2) 제목에 통신 관련 단어가 하나도 없으면 제외합니다.
-const EXCLUDE_CATEGORIES = ['IT', 'IT꿀팁', 'IT 정보', '아이티', '휴대폰 IT 정보'];
+// 비교할 때는 모든 공백(특수 공백 포함)을 없애서, 카테고리 이름의 띄어쓰기가 달라도 같은 이름으로 봅니다.
+const squash = (t: string) => t.replace(/\s+/g, '');
+const EXCLUDE_CATEGORIES = ['IT', 'IT꿀팁', 'IT 정보', '아이티', '휴대폰 IT 정보', '휴대폰 IT정보'].map(squash);
 const TELECOM = /선불|후불|알뜰|유심|개통|요금제|번호이동|앤텔레콤|멤버십/;
 
 const pick = (xml: string, tag: string) => {
@@ -33,7 +35,7 @@ export async function getNaverPosts(limit = 6, filter = true): Promise<NaverPost
 				category: pick(item, 'category'),
 			}))
 			.filter((p) => p.title && p.link)
-			.filter((p) => !filter || (!EXCLUDE_CATEGORIES.includes(p.category) && TELECOM.test(p.title)))
+			.filter((p) => !filter || (!EXCLUDE_CATEGORIES.includes(squash(p.category)) && TELECOM.test(p.title)))
 			.slice(0, limit)
 			.map(({ title, link, date }) => ({ title, link, date }));
 	} catch {
