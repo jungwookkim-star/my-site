@@ -8,4 +8,6 @@
 /go/:src/r /region/?utm_source=:src&utm_medium=short 302
 /go/:src/b /blog/?utm_source=:src&utm_medium=short 302
 /go/:src/e /blog/esim-vs-usim/?utm_source=:src&utm_medium=short 302
+/go/:src/v /visit/?utm_source=:src&utm_medium=short 302
+/go/:src/c /saving/?utm_source=:src&utm_medium=short 302
 /go/:src /?utm_source=:src&utm_medium=short 302

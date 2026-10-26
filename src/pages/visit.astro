@@ -1,0 +1,244 @@
+---
+// "셀프개통이 안 된다고 들었다면" 입구. 정말 방문 개통이 필요한 경우와, 다시 셀프개통을 해 볼 수 있는 경우를 나눠 보여 주고
+// 방문 개통 예약 내용을 정리해 카카오톡으로 보내게 합니다. (이름, 연락처는 사이트에서 받지 않고 채팅에서 받습니다)
+import PageHead from '../components/PageHead.astro';
+import VerifiedStamp from '../components/VerifiedStamp.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
+import { PHONE, PHONE_LINK, KAKAO_CHAT_URL, HOURS } from '../consts';
+
+// 방문(대면) 개통으로 진행하는 경우. id는 주소 뒤 #으로 바로 열 때 씁니다. (예: /visit/#foreign)
+const visitCases = [
+	{
+		id: 'foreign',
+		t: '외국인이에요',
+		d: '구비서류를 직접 확인해야 해서 대면 개통만 가능해요. 1회선까지 개통할 수 있어요.',
+		links: [
+			{ t: '외국인 개통 안내', href: '/blog/foreigner-minor-activation/' },
+			{ t: 'English', href: '/en/' },
+			{ t: '中文', href: '/zh/' },
+			{ t: 'Tiếng Việt', href: '/vi/' },
+		],
+	},
+	{
+		id: 'minor',
+		t: '만 19세 미만이에요',
+		d: '미성년자는 대면 개통만 가능해요. 선불과 후불 각 1회선까지(신용도에 따라 달라질 수 있어요)이고, 법정대리인 서류가 필요해요.',
+		links: [{ t: '미성년자 필요 서류', href: '/blog/foreigner-minor-activation/' }],
+	},
+	{
+		id: 'line',
+		t: '앤텔레콤 회선을 이미 1개 쓰고 있어요',
+		d: '이미 쓰는 회선이 있으면 온라인 셀프개통은 안 되고, 방문 개통으로만 진행돼요.',
+		links: [{ t: '자세히 보기', href: '/blog/self-activation-already-has-line/' }],
+	},
+	{
+		id: 'auth',
+		t: '간편인증 수단이 하나도 없어요',
+		d: '카카오, 토스, 네이버, PASS, 국민, 신한 중 하나도 없으면 셀프개통이 어려워 방문 개통으로 진행할 수 있어요.',
+		links: [{ t: '본인 확인 방법 보기', href: '/blog/self-activation-face-auth/' }],
+	},
+];
+
+// "안 된다"는 말을 들었지만 다시 셀프개통을 해 볼 수 있는 경우
+const retryCases = [
+	{
+		t: '다른 통신사에 미납이 있어요',
+		d: '선불 요금제는 다른 통신사 미납이 있어도 개통할 수 있는 것으로 안내되어 있어요. 알뜰(후불)은 다른 통신사 체납이 있으면 어렵고, 앤텔레콤 자체 미납은 요금제와 관계없이 어려워요.',
+		href: '/blog/unpaid-overdue-activation/',
+	},
+	{
+		t: '접수 시간이 지났다고 나와요',
+		d: '신규가입은 08:00~21:50, 번호이동은 10:00~19:50에 접수돼요. 번호이동은 일요일과 신정, 설, 추석 당일에는 접수되지 않아요. 다음 접수 시간에 다시 하면 돼요.',
+		href: '/blog/self-activation-time-over/',
+	},
+	{
+		t: '안면인증에 실패했어요',
+		d: '인증 링크는 3분 동안 1회 접속할 수 있고, 실패해도 최대 3회까지 다시 시도할 수 있어요. 선글라스, 모자, 마스크를 벗고 정면으로 찍어 주세요.',
+		href: '/blog/self-activation-face-auth/',
+	},
+	{
+		t: '유심번호가 틀렸다고 나와요',
+		d: 'KT 바로유심은 유심번호 숫자 19자리, LG 모두의 유심 원칩은 모델코드 5자리와 일련번호 8자리를 입력해요. 고른 통신망과 유심이 같은지도 확인해 주세요.',
+		href: '/blog/usim-number-input/',
+	},
+	{
+		t: '원하는 번호가 안 나와요',
+		d: '신규가입은 전화번호 뒤 4자리로 조회해서 예약하는 방식이에요. 특별한 번호는 검색되지 않을 수 있으니 다른 조합으로 조회해 보세요.',
+		href: '/blog/self-activation-number-choice/',
+	},
+];
+
+const situations = [
+	{ v: 'foreign', label: '외국인' },
+	{ v: 'minor', label: '미성년자' },
+	{ v: 'line', label: '앤텔레콤 회선이 이미 있음' },
+	{ v: 'auth', label: '간편인증 수단 없음' },
+	{ v: 'etc', label: '기타 (상담 때 말씀드릴게요)' },
+];
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead
+			title="셀프개통이 안 된다고 들었다면 | 방문 개통으로 되는 경우와 다시 해 볼 경우 | 커넥트모바일"
+			description="외국인, 미성년자, 이미 앤텔레콤 회선이 있는 경우, 간편인증 수단이 없는 경우는 방문 개통으로 진행해요. 미납, 접수 시간, 안면인증, 유심번호처럼 다시 셀프개통을 해 볼 수 있는 경우도 함께 정리했습니다."
+		/>
+		<style is:global>
+			.vs { max-width: 760px; margin: 0 auto; display: grid; gap: 1.2rem; }
+			.vs-box { background: var(--surface); border-radius: 20px; box-shadow: var(--box-shadow); padding: 1.4rem 1.3rem; }
+			.vs-box h2 { margin: 0 0 0.3rem; font-size: 1.3rem; }
+			.vs-box > p.lead { margin: 0 0 1rem; color: rgb(var(--gray)); font-size: 0.93rem; }
+			.vs-list { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; }
+			.vs-item { border-radius: 14px; padding: 0.85rem 1rem; background: var(--surface-3); scroll-margin-top: 90px; }
+			.vs-item.go { background: var(--tint-green); box-shadow: inset 0 0 0 1px var(--line-green); }
+			.vs-item.hit { box-shadow: inset 0 0 0 2px var(--accent); }
+			.vs-item b { display: block; font-size: 1rem; margin-bottom: 0.25rem; }
+			.vs-item p { margin: 0; font-size: 0.9rem; line-height: 1.6; color: rgb(var(--gray-dark)); }
+			.vs-links { display: flex; flex-wrap: wrap; gap: 0.35rem 0.8rem; margin-top: 0.45rem; font-size: 0.85rem; font-weight: 700; }
+			.vs-tag { display: inline-block; font-size: 0.75rem; font-weight: 800; padding: 0.15rem 0.6rem; border-radius: 999px; margin-bottom: 0.6rem; }
+			.vs-tag.visit { background: var(--tint-amber); color: var(--amber); }
+			.vs-tag.retry { background: var(--tint-green); color: var(--green); }
+			.vs-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.4rem 0 0; }
+			.vs-table th, .vs-table td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+			.vs-table th { width: 32%; white-space: nowrap; }
+			.vs-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; margin-top: 0.4rem; }
+			.vs-form label { display: grid; gap: 0.3rem; font-weight: 800; font-size: 0.88rem; }
+			.vs-form select, .vs-form input { font: inherit; font-size: 0.95rem; padding: 0.55rem 0.8rem; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: inherit; min-width: 0; }
+			.vs-note { font-size: 0.82rem; color: rgb(var(--gray)); line-height: 1.65; margin: 0.8rem 0 0; }
+			.vs-act { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+			.vs-act a { flex: 1 1 170px; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.75rem 1rem; border-radius: 999px; font-weight: 800; text-decoration: none; }
+			.vs-act .kk { background: #fee500; color: #191919; }
+			.vs-act .tel { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.vs-act svg { width: 1.1em; height: 1.1em; }
+			.vs-toast { position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%); z-index: 50; background: #191919; color: #fff; font-weight: 700; font-size: 0.9rem; padding: 0.7rem 1.1rem; border-radius: 999px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25); max-width: calc(100% - 2rem); text-align: center; }
+			.vs-steps { margin: 0.4rem 0 0; padding-left: 1.3rem; display: grid; gap: 0.35rem; font-size: 0.92rem; line-height: 1.6; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="wide" id="main">
+			<PageHead title="셀프개통이 안 된다고 들었다면" sub="정말 방문 개통으로 해야 하는 경우와, 다시 셀프개통을 해 볼 수 있는 경우를 나눠서 알려 드려요." />
+
+			<div class="vs">
+				<section class="vs-box" aria-labelledby="vs-visit">
+					<span class="vs-tag visit">방문 개통으로 진행해요</span>
+					<h2 id="vs-visit">이런 경우는 방문 개통으로 할 수 있어요</h2>
+					<p class="lead">셀프개통은 안 되지만, 예약하고 가까운 사업장에 방문하면 개통할 수 있어요.</p>
+					<ul class="vs-list">
+						{
+							visitCases.map((c) => (
+								<li class="vs-item" id={c.id}>
+									<b>{c.t}</b>
+									<p>{c.d}</p>
+									<div class="vs-links">
+										{c.links.map((l) => (
+											<a href={l.href}>{l.t}</a>
+										))}
+									</div>
+								</li>
+							))
+						}
+					</ul>
+				</section>
+
+				<section class="vs-box" aria-labelledby="vs-retry">
+					<span class="vs-tag retry">다시 해 볼 수 있어요</span>
+					<h2 id="vs-retry">이런 경우는 셀프개통을 다시 해 보세요</h2>
+					<p class="lead">"안 된다"는 말을 들었어도, 원인을 고치면 셀프개통으로 끝나는 경우가 많아요.</p>
+					<ul class="vs-list">
+						{
+							retryCases.map((c) => (
+								<li class="vs-item go">
+									<b>{c.t}</b>
+									<p>{c.d}</p>
+									<div class="vs-links">
+										<a href={c.href}>자세히 보기</a>
+									</div>
+								</li>
+							))
+						}
+					</ul>
+				</section>
+
+				<section class="vs-box" aria-labelledby="vs-book">
+					<h2 id="vs-book">방문 개통 예약하기</h2>
+					<p class="lead">방문 개통은 반드시 예약이 먼저예요. 예약 없이 가면 개통이 어려울 수 있어요.</p>
+					<ol class="vs-steps">
+						<li>아래 내용을 고르고 "예약 내용 복사하고 카톡 열기"를 눌러요.</li>
+						<li>카카오톡 채팅창에 붙여넣고, 성함과 연락처를 함께 보내 주세요.</li>
+						<li>가까운 사업장과 상세 주소를 안내해 드리고, 예약이 확정되면 방문해요.</li>
+					</ol>
+					<div class="vs-form" style="margin-top:1rem">
+						<label>상황
+							<select id="vs-sit">{situations.map((s) => <option value={s.v}>{s.label}</option>)}</select>
+						</label>
+						<label>방문 희망 지역
+							<input id="vs-area" type="text" maxlength="30" placeholder="예: 경기 수원" autocomplete="off" />
+						</label>
+						<label>희망 날짜와 시간
+							<input id="vs-when" type="text" maxlength="40" placeholder="예: 토요일 오후 2시" autocomplete="off" />
+						</label>
+						<label>요금제
+							<input id="vs-plan" type="text" maxlength="40" placeholder="정하지 않았으면 비워 두세요" autocomplete="off" />
+						</label>
+					</div>
+					<div class="vs-act">
+						<a class="kk" href={KAKAO_CHAT_URL} target="_blank" rel="noopener" id="vs-ask"><Icon name="chat" />예약 내용 복사하고 카톡 열기</a>
+						<a class="tel" href={PHONE_LINK}><Icon name="phone" />전화 예약 {PHONE}</a>
+					</div>
+					<p class="vs-note">이 페이지는 이름이나 연락처를 저장하지 않아요. 상담 시간은 {HOURS}이고, 명절 연휴에는 개통이 일부 제한될 수 있어요.</p>
+				</section>
+
+				<section class="vs-box" aria-labelledby="vs-bring">
+					<h2 id="vs-bring">방문할 때 준비물</h2>
+					<table class="vs-table">
+						<tbody>
+							<tr><th>신분증</th><td>외국인과 미성년자는 필요한 서류가 달라서 예약할 때 안내해 드려요.</td></tr>
+							<tr><th>유심비 1만원</th><td>유심은 방문 지점에서 준비돼요. 편의점에서 따로 사 오지 않아도 돼요.</td></tr>
+							<tr><th>요금 충전비</th><td>선불 요금제는 개통한 날 충전이 필요해요.</td></tr>
+							<tr><th>사용할 휴대폰</th><td>유심을 끼울 기기를 가져오세요.</td></tr>
+						</tbody>
+					</table>
+					<p class="vs-note">
+						대면 개통 사업장은 서울, 경기, 인천, 부산, 대구, 대전, 광주, 울산, 강원, 충북, 충남, 전북, 전남, 경북, 경남, 제주에 있어요(세종 제외).
+						<a href="/region/">지역별 안내</a>에서 가까운 곳을 확인하고, 상세 주소는 예약할 때 안내해 드려요.
+					</p>
+					<VerifiedStamp align="left" />
+				</section>
+			</div>
+		</main>
+		<Footer />
+		<script is:inline>
+			(function () {
+				var sit = document.getElementById('vs-sit');
+				// 주소 뒤 #foreign 같은 표시가 있으면 그 경우를 강조하고 예약 상황도 미리 골라 둡니다. (파트너용 QR에서 씁니다)
+				var h = (location.hash || '').slice(1);
+				var hit = h && document.getElementById(h);
+				if (hit && hit.classList.contains('vs-item')) {
+					hit.classList.add('hit');
+					if (sit.querySelector('option[value="' + h + '"]')) sit.value = h;
+				}
+				var val = function (id) { return (document.getElementById(id).value || '').trim(); };
+				document.getElementById('vs-ask').addEventListener('click', function () {
+					var label = sit.options[sit.selectedIndex].text;
+					var t = '방문 개통 예약 문의드려요.\n상황: ' + label +
+						'\n방문 희망 지역: ' + (val('vs-area') || '상담 때 말씀드릴게요') +
+						'\n희망 날짜와 시간: ' + (val('vs-when') || '상담 때 말씀드릴게요') +
+						'\n요금제: ' + (val('vs-plan') || '상담받고 정할게요') +
+						'\n성함과 연락처는 이 채팅으로 알려 드릴게요.';
+					try {
+						navigator.clipboard.writeText(t).then(function () {
+							var el = document.createElement('div'); el.className = 'vs-toast'; el.textContent = '예약 내용이 복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.';
+							document.body.appendChild(el); setTimeout(function () { el.remove(); }, 4000);
+						}, function () {});
+					} catch (e) { /* 복사를 못 해도 채팅창은 열립니다 */ }
+					if (window.gtag) window.gtag('event', 'visit_ask', { page_path: location.pathname, situation: sit.value });
+				});
+			})();
+		</script>
+	</body>
+</html>
