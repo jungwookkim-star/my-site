@@ -19,7 +19,7 @@ export const EMAIL = 'jungwook.kim01@gmail.com';
 export const BIZ_ADDRESS = '서울특별시 금천구 가산동 234-34 (두산로9길 66)';
 
 // 앤텔레콤 공식 요금제 페이지와 사이트 요금 데이터를 마지막으로 대조한 날(모두 같을 때만 scripts/stamp-verified.mjs가 갱신합니다)
-export const PRICES_VERIFIED = '2026-10-23';
+export const PRICES_VERIFIED = '2026-10-26';
 
 // 월간 소식 글의 최신 주소(매달 새 소식을 올릴 때 이 값을 바꿉니다)
 export const LATEST_NEWS = '/blog/news-2026-10/';
