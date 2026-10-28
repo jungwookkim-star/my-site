@@ -52,7 +52,7 @@ const today = new Date();
 		</nav>
 	</div>
 	<div class="ft-bottom">
-		<div class="ft-btns"><button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">가 글자 크게 보기</button> <button type="button" class="fs-btn" id="theme-btn" aria-pressed="false">어두운 화면으로 보기</button> <button type="button" class="fs-btn" id="pwa-btn" hidden>홈 화면에 추가</button></div>
+		<div class="ft-btns"><button type="button" class="fs-btn" id="fs-btn" aria-pressed="false">글자 크게 보기</button> <button type="button" class="fs-btn" id="theme-btn" aria-pressed="false">어두운 화면으로 보기</button> <button type="button" class="fs-btn" id="pwa-btn" hidden>홈 화면에 추가</button></div>
 		<p>&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.</p>
 	</div>
 </footer>
@@ -240,7 +240,7 @@ const today = new Date();
 		const paint = () => {
 			const on = root.classList.contains('bigtext');
 			fs.setAttribute('aria-pressed', String(on));
-			fs.textContent = on ? '가 글자 기본 크기로' : '가 글자 크게 보기';
+			fs.textContent = on ? '글자 기본 크기로' : '글자 크게 보기';
 		};
 		paint();
 		fs.addEventListener('click', () => {
