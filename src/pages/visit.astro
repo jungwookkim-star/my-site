@@ -8,6 +8,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Icon from '../components/Icon.astro';
 import { PHONE, PHONE_LINK, KAKAO_CHAT_URL, HOURS } from '../consts';
+import { naverBookings } from '../data/naverBooking';
 
 // 방문(대면) 개통으로 진행하는 경우. id는 주소 뒤 #으로 바로 열 때 씁니다. (예: /visit/#foreign)
 const visitCases = [
@@ -117,6 +118,12 @@ const situations = [
 			.vs-act svg { width: 1.1em; height: 1.1em; }
 			.vs-toast { position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%); z-index: 50; background: #191919; color: #fff; font-weight: 700; font-size: 0.9rem; padding: 0.7rem 1.1rem; border-radius: 999px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25); max-width: calc(100% - 2rem); text-align: center; }
 			.vs-steps { margin: 0.4rem 0 0; padding-left: 1.3rem; display: grid; gap: 0.35rem; font-size: 0.92rem; line-height: 1.6; }
+			.vs-nb { border-radius: 14px; padding: 0.95rem 1rem; background: var(--tint-green); box-shadow: inset 0 0 0 1px var(--line-green); scroll-margin-top: 90px; }
+			.vs-nb b { display: block; font-size: 1rem; }
+			.vs-nb p { margin: 0.25rem 0 0; font-size: 0.88rem; line-height: 1.6; color: rgb(var(--gray-dark)); }
+			.vs-nb-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 0.45rem; margin-top: 0.75rem; }
+			.vs-nb-list a { display: flex; align-items: center; justify-content: center; padding: 0.6rem 0.5rem; border-radius: 12px; background: var(--surface); color: var(--green); box-shadow: inset 0 0 0 1.5px var(--line-green); font-weight: 800; font-size: 0.92rem; text-decoration: none; }
+			.vs-sub { margin: 1.1rem 0 0; font-size: 1rem; }
 		</style>
 	</head>
 	<body>
@@ -168,6 +175,17 @@ const situations = [
 				<section class="vs-box" aria-labelledby="vs-book">
 					<h2 id="vs-book">방문 개통 예약하기</h2>
 					<p class="lead">방문 개통은 반드시 예약이 먼저예요. 예약 없이 가면 개통이 어려울 수 있어요.</p>
+					<div class="vs-nb" id="booking">
+						<b>네이버 예약으로 바로 신청하기</b>
+						<p>가까운 곳을 누르면 네이버 예약 화면이 열려요. 방문은 그 근처 제휴센터에서 하고, 예약이 확정되면 주소를 보내 드려요.</p>
+						<div class="vs-nb-list">
+							{naverBookings.map((b) => (
+								<a href={b.url} target="_blank" rel="noopener" data-nb={b.area}>{b.area}</a>
+							))}
+						</div>
+					</div>
+					<h3 class="vs-sub">카카오톡이나 전화로 예약하기</h3>
+					<p class="vs-note" style="margin-top:0.2rem">다른 지역이거나 네이버 예약이 어려우면 이렇게 예약해 주세요.</p>
 					<ol class="vs-steps">
 						<li>아래 내용을 고르고 "예약 내용 복사하고 카톡 열기"를 눌러요.</li>
 						<li>카카오톡 채팅창에 붙여넣고, 성함과 연락처를 함께 보내 주세요.</li>
@@ -238,6 +256,11 @@ const situations = [
 						}, function () {});
 					} catch (e) { /* 복사를 못 해도 채팅창은 열립니다 */ }
 					if (window.gtag) window.gtag('event', 'visit_ask', { page_path: location.pathname, situation: sit.value });
+				});
+				document.querySelectorAll('[data-nb]').forEach(function (a) {
+					a.addEventListener('click', function () {
+						if (window.gtag) window.gtag('event', 'naver_booking_click', { page_path: location.pathname, area: a.getAttribute('data-nb') });
+					});
 				});
 			})();
 		</script>
