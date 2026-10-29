@@ -1,0 +1,205 @@
+---
+// 네이버 예약을 받는 플레이스가 있는 동네 안내 페이지입니다. 목록은 src/data/visitAreas.ts 에서 고칩니다.
+// 사실은 사이트 FAQ, /visit/, 지역 데이터(regions.ts)와 같은 기준이고, 동네 정보(역, 상권)는 지어내지 않습니다.
+import PageHead from '../../../components/PageHead.astro';
+import Icon from '../../../components/Icon.astro';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import ShareButton from '../../../components/ShareButton.astro';
+import { REGIONS } from '../../../data/regions';
+import { VISIT_AREAS } from '../../../data/visitAreas';
+import { naverBookings } from '../../../data/naverBooking';
+import { getNaverPosts } from '../../../lib/naverBlog';
+import { eun } from '../../../lib/josa';
+import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS } from '../../../consts';
+
+export function getStaticPaths() {
+	return VISIT_AREAS.map((area) => ({ params: { slug: area.region, area: area.slug }, props: { area } }));
+}
+const { area } = Astro.props;
+const region = REGIONS.find((r) => r.slug === area.region)!;
+const bookings = area.bookings.map((b) => {
+	const nb = naverBookings.find((x) => x.area === b);
+	if (!nb) throw new Error(`naverBooking.ts에 "${b}" 예약 링크가 없습니다.`);
+	return nb;
+});
+// 예약처가 둘 이상이면 버튼에 동네 이름을 붙여 구분합니다. (예: 부천 소사, 부천 중동)
+const label = (b: { area: string }) => (bookings.length > 1 ? `네이버 예약 (${b.area.split(' ').pop()})` : '네이버로 방문 개통 예약');
+const localPosts = (await getNaverPosts(60)).filter((p) => area.posts.test(p.title)).slice(0, 4);
+const others = VISIT_AREAS.filter((a) => a.slug !== area.slug);
+const path = `/region/${region.slug}/${area.slug}/`;
+const n = area.name;
+
+const title = `${n} 선불폰 개통 | 셀프개통과 네이버 예약 방문 개통 | 커넥트모바일`;
+const description = `${n}에서 선불폰을 개통하는 방법입니다. 휴대폰으로 하는 셀프개통(신규 08:00~21:50, 번호이동 10:00~19:50)과, 셀프개통이 안 되는 외국인, 미성년자를 위한 네이버 예약 방문 개통(근처 제휴센터)을 안내합니다.`;
+const usim = region.quick
+	? `${eun(region.name)} 유심 퀵 배송 지역이에요. 주문 10:00~22:00, 배송비 무료, 지역에 따라 다르지만 대부분 2시간 안에 받아요. 가까운 편의점에서 사도 되고, 유심비는 8,800원이에요.`
+	: `${eun(region.name)} 퀵 배송 지역이 아니라서 가까운 편의점에서 유심을 사요. 유심비는 8,800원이에요.`;
+
+const faqs = [
+	{ q: `${n}에서 매장에 가지 않고 개통할 수 있나요?`, a: '네. 만 19세 이상 내국인은 간편인증 수단과 신분증만 있으면 휴대폰으로 셀프개통할 수 있어요. 신규가입은 08:00~21:50, 번호이동은 10:00~19:50에 접수되고, 번호이동은 일요일과 신정, 설, 추석 당일에는 접수되지 않아요.' },
+	{ q: `${n}에서 유심은 어떻게 준비하나요?`, a: `${usim} KT 바로유심은 CU, GS25, 세븐일레븐, 이마트24에서, LG 모두의 유심 원칩은 이마트24, 배민B마트 등에서 살 수 있어요.` },
+	{ q: `${n}에서 방문 개통은 어떻게 하나요?`, a: `네이버에서 커넥트모바일 ${n} 플레이스의 예약으로 신청하면, 담당자가 근처 제휴센터와 일정을 맞춘 뒤 예약을 확정하고 방문할 곳 주소를 보내 드려요. 준비물은 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰이에요.` },
+	{ q: '예약하고 플레이스에 적힌 주소로 가면 되나요?', a: '아니요. 방문 개통은 플레이스 주소가 아니라 근처 제휴센터에서 진행해요. 예약이 확정되면 보내 드리는 주소로 방문해 주세요. 확정 안내를 받기 전에는 방문하지 마세요.' },
+	{ q: `외국인이나 미성년자도 ${n}에서 개통할 수 있나요?`, a: '네. 외국인과 미성년자는 셀프개통이 안 되고 예약 후 방문 개통만 할 수 있어요. 외국인은 1회선, 미성년자는 선불과 후불 각 1회선까지이고, 미성년자는 법정대리인 신분증, 가족관계확인서 같은 서류가 필요해요.' },
+];
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const crumbs = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: '지역별 안내', item: 'https://connectmobile.kr/region/' },
+		{ '@type': 'ListItem', position: 2, name: region.name, item: `https://connectmobile.kr/region/${region.slug}/` },
+		{ '@type': 'ListItem', position: 3, name: n, item: `https://connectmobile.kr${path}` },
+	],
+};
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={title} description={description} jsonLd={[faqSchema, crumbs]} />
+		<style>
+			.crumb { font-size: 0.85rem; color: rgb(var(--gray)); margin: 1rem 0 0; }
+			.crumb a { color: inherit; }
+			.cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+			.btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 700; background: var(--accent); color: #fff; }
+			.btn.alt { background: #fee500; color: #191919; }
+			.btn.self { background: #d92d20; color: #fff; }
+			.btn.nb { background: var(--surface); color: var(--green); box-shadow: inset 0 0 0 2px var(--line-green); }
+			.btn.ghost { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			section { margin-top: 3rem; }
+			h2.sec { text-align: center; }
+			.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem; }
+			.box { background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; }
+			.box h3 { margin: 0 0 0.5rem; }
+			.box ul, .box ol { margin: 0; padding-left: 1.1rem; font-size: 0.93rem; color: rgb(var(--gray-dark)); }
+			.box li { margin-bottom: 0.3rem; }
+			.box.go { background: var(--tint-green); box-shadow: inset 0 0 0 1px var(--line-green); }
+			.warn { margin: 0.8rem 0 0; font-size: 0.88rem; font-weight: 700; color: rgb(var(--gray-dark)); }
+			.nbs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+			.note { text-align: center; font-size: 0.85rem; color: rgb(var(--gray)); margin-top: 0.8rem; }
+			details { background: var(--surface); border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.9rem 1.2rem; margin-bottom: 0.7rem; }
+			summary { cursor: pointer; font-weight: 700; }
+			details p { margin: 0.6rem 0 0; font-size: 0.92rem; }
+			.lposts { list-style: none; margin: 1rem 0 0; padding: 0; }
+			.lposts li { display: flex; justify-content: space-between; gap: 1rem; background: var(--surface); border-radius: 12px; box-shadow: var(--box-shadow); padding: 0.8rem 1.2rem; margin-bottom: 0.6rem; font-size: 0.95rem; }
+			.lposts a { color: var(--black); text-decoration: none; font-weight: 700; }
+			.lposts a:hover { color: var(--accent); }
+			.lposts time { color: rgb(var(--gray)); font-size: 0.8rem; white-space: nowrap; }
+			.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+			.chips a, .chips span { background: var(--surface); box-shadow: var(--box-shadow); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.9rem; text-decoration: none; color: var(--black); }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main id="main" class="wide">
+			<p class="crumb"><a href="/region/">지역별 안내</a> › <a href={`/region/${region.slug}/`}>{region.name}</a> › {n}</p>
+			<PageHead title={`${n} 선불폰 개통`} sub="휴대폰으로 10분 만에 셀프개통하거나, 셀프개통이 안 되면 네이버로 예약하고 근처 제휴센터에서 방문 개통하세요.">
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					{bookings.map((b) => <a class="btn nb" href={b.url} target="_blank" rel="noopener" data-nb={b.area}><Icon name="check" />{label(b)}</a>)}
+					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
+				</div>
+			</PageHead>
+
+			<section>
+				<h2 class="sec">나에게 맞는 개통 방법</h2>
+				<div class="two">
+					<div class="box">
+						<h3>셀프개통 (휴대폰으로)</h3>
+						<ul>
+							<li>만 19세 이상 내국인, 간편인증 수단 1가지와 신분증이 있으면 돼요</li>
+							<li>신규가입 08:00~21:50, 번호이동 10:00~19:50</li>
+							<li>번호이동은 일요일과 신정, 설, 추석 당일에는 접수되지 않아요</li>
+							<li>유심을 받으면 약 10분이면 끝나요</li>
+						</ul>
+					</div>
+					<div class="box go">
+						<h3>방문 개통 (네이버 예약)</h3>
+						<ul>
+							<li>외국인, 미성년자는 방문 개통만 할 수 있어요</li>
+							<li>앤텔레콤 회선을 이미 쓰거나, 간편인증 수단이 하나도 없어도 방문 개통으로 해요</li>
+							<li>준비물: 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰</li>
+						</ul>
+					</div>
+				</div>
+				<p class="note">내가 방문 개통 대상인지 헷갈리면 <a href="/visit/">셀프개통이 안 될 때</a>를 확인하세요.</p>
+			</section>
+
+			<section>
+				<h2 class="sec">{n}에서 방문 개통 예약하는 순서</h2>
+				<div class="box">
+					<ol>
+						<li>아래 버튼으로 네이버 예약에서 원하는 날짜와 시간을 신청해요.</li>
+						<li>담당자가 근처 제휴센터와 일정을 맞춘 뒤 예약을 확정하고, 방문할 곳 주소를 보내 드려요.</li>
+						<li>확정된 시간에 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰을 챙겨 방문해요.</li>
+					</ol>
+					<p class="warn">방문 장소는 플레이스에 적힌 주소가 아니라 근처 제휴센터예요. 꼭 확정 안내를 받은 뒤 방문해 주세요.</p>
+					<div class="nbs">
+						{bookings.map((b) => <a class="btn nb" href={b.url} target="_blank" rel="noopener" data-nb={b.area}><Icon name="check" />{label(b)}</a>)}
+						<a class="btn ghost" href={PHONE_LINK}><Icon name="phone" />전화 예약 {PHONE}</a>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="sec">{n}에서 유심 받기</h2>
+				<div class="box">
+					<p style="margin:0">{usim}</p>
+					<ul style="margin-top:0.6rem">
+						<li>KT 바로유심: CU, GS25, 세븐일레븐, 이마트24 (유심번호 숫자 19자리 입력)</li>
+						<li>LG 모두의 유심 원칩: 이마트24, 배민B마트 등 (모델코드 5자리와 일련번호 8자리 입력)</li>
+						<li>방문 개통은 유심을 현장에서 준비해서 따로 사지 않아도 돼요</li>
+					</ul>
+				</div>
+			</section>
+
+			{region.centers.length > 0 && (
+				<section>
+					<h2 class="sec">{region.name} 앤텔레콤 대면 개통 사업장</h2>
+					<p class="note" style="margin-top:0">앤텔레콤 센터 안내 기준으로 {region.name}에는 아래 시, 군, 구에 대면 개통 사업장이 있어요. 모두 예약 후 방문하고, 상세 주소는 예약할 때 안내해 드려요.</p>
+					<div class="chips" style="margin-top:0.8rem">{region.centers.map((c) => <span>{c}</span>)}</div>
+				</section>
+			)}
+
+			{localPosts.length > 0 && (
+				<section>
+					<h2 class="sec">{n} 지역 블로그 글</h2>
+					<ul class="lposts">
+						{localPosts.map((p) => <li><a href={p.link} target="_blank" rel="noopener">{p.title}</a><time>{p.date.toISOString().slice(0, 10)}</time></li>)}
+					</ul>
+				</section>
+			)}
+
+			<section>
+				<h2 class="sec">{n} 개통 자주 묻는 질문</h2>
+				{faqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+				<p class="note">상담 운영시간 {HOURS}</p>
+			</section>
+
+			<section>
+				<p style="text-align:center;margin-bottom:1.5rem"><ShareButton title={`${n} 선불폰 개통 안내 | 커넥트모바일`} /></p>
+				<h2 class="sec">다른 동네도 확인하세요</h2>
+				<div class="chips">
+					<a href="/region/seoul/gasan/">가산</a>
+					{others.map((a) => <a href={`/region/${a.region}/${a.slug}/`}>{a.name}</a>)}
+					<a href={`/region/${region.slug}/`}>{region.name} 전체</a>
+				</div>
+			</section>
+		</main>
+		<Footer />
+		<script is:inline>
+			document.querySelectorAll('[data-nb]').forEach(function (a) {
+				a.addEventListener('click', function () {
+					if (window.gtag) window.gtag('event', 'naver_booking_click', { page_path: location.pathname, area: a.getAttribute('data-nb') });
+				});
+			});
+		</script>
+	</body>
+</html>

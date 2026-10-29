@@ -4,6 +4,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { REGIONS } from '../../data/regions';
+import { VISIT_AREAS } from '../../data/visitAreas';
 import RegionMap from '../../components/RegionMap.astro';
 ---
 
@@ -25,6 +26,11 @@ import RegionMap from '../../components/RegionMap.astro';
 			<h2 style="text-align:center;margin-top:2rem;font-size:1.1rem">전체 지역 목록</h2>
 			<div class="grid">
 				{REGIONS.map((r) => <a href={`/region/${r.slug}/`}>{r.name}</a>)}
+			</div>
+			<h2 style="text-align:center;margin-top:2rem;font-size:1.1rem">네이버 예약으로 방문 개통할 수 있는 동네</h2>
+			<div class="grid">
+				<a href="/region/seoul/gasan/">가산</a>
+				{VISIT_AREAS.map((a) => <a href={`/region/${a.region}/${a.slug}/`}>{a.name}</a>)}
 			</div>
 		</main>
 		<Footer />

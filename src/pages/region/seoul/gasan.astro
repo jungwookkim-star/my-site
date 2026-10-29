@@ -7,6 +7,10 @@ import Header from '../../../components/Header.astro';
 import ShareButton from '../../../components/ShareButton.astro';
 import { getNaverPosts } from '../../../lib/naverBlog';
 import { PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS } from '../../../consts';
+import { naverBookings } from '../../../data/naverBooking';
+import { VISIT_AREAS } from '../../../data/visitAreas';
+
+const booking = naverBookings.find((b) => b.area === '서울 가산')!;
 
 const localPosts = (await getNaverPosts(60)).filter((p) => /가산|금천/.test(p.title)).slice(0, 4);
 
@@ -59,6 +63,7 @@ const crumbs = {
 			.btn.alt { background: #fee500; color: #191919; }
 			.btn.self { background: #d92d20; color: #fff; }
 			.btn.ghost { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+			.btn.nb { background: var(--surface); color: var(--green); box-shadow: inset 0 0 0 2px var(--line-green); }
 			section { margin-top: 3rem; }
 			h2.sec { text-align: center; }
 			.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem; }
@@ -90,6 +95,7 @@ const crumbs = {
 			<PageHead title="가산동 선불폰 개통" sub="가산디지털단지에서 점심시간·퇴근 후에 휴대폰으로 끝내거나, 예약 후 방문해서 개통하세요.">
 				<div class="cta">
 					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn nb" href={booking.url} target="_blank" rel="noopener" data-nb={booking.area}><Icon name="check" />네이버로 방문 개통 예약</a>
 					<a class="btn" href={PHONE_LINK}><Icon name="phone" />전화 {PHONE}</a>
 					<a class="btn alt" href={KAKAO_URL} target="_blank" rel="noopener"><Icon name="chat" />카카오톡 문의</a>
 				</div>
@@ -113,7 +119,8 @@ const crumbs = {
 							<li>외국인·미성년자는 대면 개통만 가능해요</li>
 							<li>간편인증 수단이 없거나 앤텔레콤 회선을 이미 쓰는 경우도 방문 개통</li>
 							<li>준비물: 신분증, 유심비 1만원, 요금 충전비, 사용할 휴대폰</li>
-							<li>예약 없이 방문하면 개통이 어려워요. 전화나 카카오톡으로 먼저 예약해 주세요</li>
+							<li>예약 없이 방문하면 개통이 어려워요. 네이버 예약, 전화, 카카오톡으로 먼저 예약해 주세요</li>
+							<li>네이버 예약은 확정될 때 방문할 곳 주소를 안내해 드려요</li>
 						</ul>
 					</div>
 				</div>
@@ -153,6 +160,7 @@ const crumbs = {
 				<h2 class="sec">다른 안내도 확인하세요</h2>
 				<div class="chips">
 					<a href="/region/seoul/">서울 전체</a>
+					{VISIT_AREAS.map((a) => <a href={`/region/${a.region}/${a.slug}/`}>{a.name}</a>)}
 					<a href="/guide/">개통 과정 안내</a>
 					<a href="/blog/self-activation-face-auth/">안면인증 요령</a>
 					<a href="/blog/usim-number-input/">유심번호 입력</a>
@@ -161,5 +169,12 @@ const crumbs = {
 			</section>
 		</main>
 		<Footer />
+		<script is:inline>
+			document.querySelectorAll('[data-nb]').forEach(function (a) {
+				a.addEventListener('click', function () {
+					if (window.gtag) window.gtag('event', 'naver_booking_click', { page_path: location.pathname, area: a.getAttribute('data-nb') });
+				});
+			});
+		</script>
 	</body>
 </html>
