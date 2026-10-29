@@ -577,7 +577,7 @@ const faqSchema = {
 				</section>
 			)}
 
-			<section>
+			<section id="contact">
 				<div class="final">
 					<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 					<div class="final-in">
@@ -681,6 +681,36 @@ const faqSchema = {
 				if (a) location.href = a.href;
 			});
 			document.addEventListener('click', (ev) => { if (res && !(ev.target as HTMLElement).closest('.rsearch')) res.hidden = true; });
+		</script>
+		<script>
+			// 홈을 줄이기 전에 데이터를 모읍니다. (2026-10-29)
+			// home_section_view: 각 칸이 화면 위쪽 절반까지 올라오면 한 번 기록 → 어디까지 내려 보는지
+			// home_click: 홈 안에서 누른 링크, 버튼, 펼치기가 어느 칸에 있었는지 → 어느 칸이 실제로 쓰이는지
+			const send = (name: string, params: Record<string, string>) => (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.('event', name, params);
+			const main = document.querySelector('main');
+			const keyOf = (el: Element) => el.id || el.classList[0] || el.tagName.toLowerCase();
+			const sectionOf = (el: Element) => {
+				let s: Element | null = el;
+				while (s && s.parentElement !== main) s = s.parentElement;
+				return s ? keyOf(s) : 'outside';
+			};
+			if (main && 'IntersectionObserver' in window) {
+				const io = new IntersectionObserver(
+					(entries) => entries.forEach((e) => {
+						if (!e.isIntersecting) return;
+						io.unobserve(e.target);
+						send('home_section_view', { section: keyOf(e.target) });
+					}),
+					{ rootMargin: '0px 0px -50% 0px' },
+				);
+				[...main.children].forEach((el) => { if ((el as HTMLElement).offsetHeight > 0) io.observe(el); });
+				main.addEventListener('click', (ev) => {
+					const t = (ev.target as HTMLElement).closest('a[href], button, summary');
+					if (!t) return;
+					const target = (t.getAttribute('href') || t.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+					send('home_click', { section: sectionOf(t), target });
+				});
+			}
 		</script>
 	</body>
 </html>
