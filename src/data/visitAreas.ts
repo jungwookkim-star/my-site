@@ -2,6 +2,8 @@
 // 플레이스 예약 링크가 있는 곳만 페이지를 만듭니다. 동네 이름만 바꾼 페이지를 늘리면 검색에서 도움이 되지 않아요.
 // 가산은 따로 만든 페이지(src/pages/region/seoul/gasan.astro)가 있어서 여기 넣지 않습니다.
 // 역, 상권 같은 동네 정보는 확인된 것이 없어서 쓰지 않습니다.
+// 동네를 더하면 글쓰기 프로그램(ChatGPT_전용_배포본/app/blog_writing_rules.py)의 SITE_AREAS에도 한 줄 더해야
+// 블로그 지역 글 끝의 홈페이지 링크가 이 페이지로 연결됩니다.
 
 export interface VisitArea {
 	slug: string;
