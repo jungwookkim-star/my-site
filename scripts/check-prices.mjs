@@ -74,10 +74,12 @@ for (const [group, p] of site) {
 
 // 반대로, 공식 페이지에는 있는데 사이트에 없는 요금제(약정·복지·패드 전용 등은 일부러 뺀 것이라 참고용입니다)
 const siteKeys = new Set(site.map(([, p]) => norm(p.lookup ?? p.name)));
+// 안내하지 않기로 한 표준 요금제 (2026-11-02 사용자 결정)
+const EXCLUDED = new Set(['LTE 선불표준', 'LTE 알뜰표준', 'L망 선불 LTE 알뜰표준'].map(norm));
 for (const o of official) {
 	const k = norm(o.name);
 	const onSite = siteKeys.has(k) || [...siteKeys].some((x) => x.length > 3 && (x.includes(k) || k.includes(x)));
-	if (!onSite) report.missingOnSite.push({ net: o.net, cat: o.cat, name: o.name, price: o.price, voice: o.voice, data: o.data });
+	if (!onSite && !EXCLUDED.has(k)) report.missingOnSite.push({ net: o.net, cat: o.cat, name: o.name, price: o.price, voice: o.voice, data: o.data });
 }
 
 if (process.argv.includes('--json')) {
