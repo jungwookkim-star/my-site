@@ -139,6 +139,9 @@ const today = new Date();
 <script>
 	import { SELF_ACTIVATION_URL, KAKAO_URL } from '../consts';
 
+	// 처음 들어온 경로를 기억해 방문 개통 준비 카드에 넣습니다.
+	try { const s = new URLSearchParams(location.search).get('utm_source'); if (s) sessionStorage.setItem('first_src', s); } catch { /* 저장 못 해도 사이트는 그대로 동작합니다 */ }
+
 	// 주요 버튼 클릭을 Google Analytics 이벤트로 기록합니다.
 	function track(name: string, params: Record<string, string> = {}) {
 		const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
