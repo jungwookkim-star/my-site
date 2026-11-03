@@ -250,6 +250,10 @@ const faqSchema = {
 			.hb-cta .btn.lg { text-align: center; }
 			.hb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
 			.hb-row .btn { text-align: center; box-shadow: none; }
+			.hb-who { margin-top: 0.6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: 460px; }
+			.hb-who a { display: flex; flex-direction: column; justify-content: center; gap: 0.15rem; padding: 0.6rem 0.75rem; border-radius: 12px; background: var(--surface-2); color: var(--accent); text-decoration: none; text-align: left; line-height: 1.3; }
+			.hb-who b { font-size: 0.86rem; }
+			.hb-who span { font-size: 0.72rem; color: rgb(var(--gray)); }
 			.hb-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: rgb(var(--gray)); }
 			.hb .hb-note { margin-top: 0.7rem; }
 			.hb :global(.hours) { display: flex; width: fit-content; max-width: 100%; margin-top: 0.8rem; }
@@ -273,6 +277,7 @@ const faqSchema = {
 				.hc .badge { margin-top: 0.2rem; }
 				.hc p { padding-right: 116px; font-size: 0.92rem; }
 				.hc .hb-cta { margin-top: 2.9rem; }
+				.hb-who { max-width: none; }
 				.mini-mascot { display: block; position: absolute; right: -2px; top: 1.5rem; width: 106px; text-decoration: none; }
 				.mini-mascot img { width: 100%; height: auto; margin: 0; display: block; filter: drop-shadow(0 6px 10px rgba(20, 40, 120, 0.22)); }
 				.mini-mascot span { position: absolute; right: 6px; top: -1.8rem; font-size: 0.72rem; background: #fff; color: #0e2150; font-size: 0.66rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(20, 40, 120, 0.18); white-space: nowrap; animation: bubblebob 3.4s ease-in-out infinite; }
@@ -321,6 +326,10 @@ const faqSchema = {
 				.hb .hb-note a { color: #fff; }
 				.hb-cta { max-width: 500px; margin-top: 1.5rem; }
 				.hb-cta .btn.lg { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28); }
+				.hb-who { max-width: 500px; }
+				.hb-who a { background: rgba(255, 255, 255, 0.14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3); color: #fff; }
+				.hb-who a:hover { background: rgba(255, 255, 255, 0.22); }
+				.hb-who span { color: rgba(255, 255, 255, 0.82); }
 				.hb :global(.hours) { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
 				.hero-big { display: block; position: relative; justify-self: center; align-self: end; width: min(100%, 330px); text-decoration: none; margin-bottom: -5.2rem; z-index: 1; }
 				.hero-big img { width: 100%; height: auto; display: block; margin: 0; filter: drop-shadow(0 18px 28px rgba(0, 10, 50, 0.45)); animation: bigwave 5s ease-in-out infinite; transform-origin: 50% 90%; }
@@ -355,6 +364,10 @@ const faqSchema = {
 							<a class="btn sm ghost" href={PHONE_LINK}><Icon name="phone" />전화 상담</a>
 						</div>
 					</div>
+					<nav class="hb-who" aria-label="내 상황으로 바로 가기">
+						<a href="/visit/#foreign" data-who="foreign"><b>외국인이에요</b><span>Foreigner, 예약 후 방문 개통</span></a>
+						<a href="/blog/unpaid-overdue-activation/" data-who="unpaid"><b>다른 통신사 미납이 있어요</b><span>선불과 후불 차이 보기</span></a>
+					</nav>
 					<HoursBadge />
 					<p class="hb-note"><a href="/about/#verified">앤텔레콤 사전승낙 판매점</a>이에요.<br />외국인과 미성년자는 예약 후 대면 개통이에요.</p>
 				</div>
@@ -602,6 +615,13 @@ const faqSchema = {
 			@media (hover: hover) and (min-width: 721px) { .hs-btn { display: block; } }
 		</style>
 		<script>
+			// 첫 화면 상황별 입구 클릭 수를 잽니다
+			document.querySelectorAll<HTMLAnchorElement>('.hb-who a').forEach((a) =>
+				a.addEventListener('click', () => {
+					const gtag = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+					if (gtag) gtag('event', 'hero_who_click', { page_path: location.pathname, target: a.dataset.who });
+				}),
+			);
 			// 선불/알뜰 탭 전환
 			const ttabs = document.querySelectorAll<HTMLButtonElement>('.ttabs button');
 			const tpanels = document.querySelectorAll<HTMLElement>('.tpanel');
