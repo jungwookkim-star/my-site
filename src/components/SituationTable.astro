@@ -1,0 +1,56 @@
+---
+// 홈의 상황별 개통 기준표. 사실 근거: /visit/ 안내, 사이트 FAQ, 글 foreigner-minor-activation, unpaid-overdue-activation.
+const VISIT_ITEMS = '신분증, 유심비 1만원, 충전비, 사용할 휴대폰';
+const rows = [
+	{ who: '만 19세 이상 내국인', how: '셀프개통, 약 10분', tone: 'self', need: '신분증, 간편인증 1가지, 안면인증이 되는 휴대폰, 유심 8,800원', href: '/guide/', go: '개통 과정 보기' },
+	{ who: '외국인', how: '예약 후 방문, 1회선', tone: 'visit', need: `여권이나 외국인 등록증 확인, ${VISIT_ITEMS.replace('신분증, ', '')}`, href: '/visit/#foreign', go: '방문 안내 보기' },
+	{ who: '미성년자', how: '예약 후 방문, 선불과 후불 각 1회선', tone: 'visit', need: `법정대리인 서류, ${VISIT_ITEMS.replace('신분증, ', '')}`, href: '/blog/foreigner-minor-activation/', go: '필요 서류 보기' },
+	{ who: '앤텔레콤 회선을 이미 1개 사용', how: '예약 후 방문', tone: 'visit', need: VISIT_ITEMS, href: '/visit/#line', go: '방문 안내 보기' },
+	{ who: '간편인증 수단이 없음', how: '예약 후 방문', tone: 'visit', need: VISIT_ITEMS, href: '/visit/#auth', go: '방문 안내 보기' },
+	{ who: '다른 통신사에 미납이 있음', how: '선불은 개통 가능, 알뜰(후불)은 어려움', tone: 'self', need: '선불은 위 기준과 같아요. 내 상황에 맞는 방법으로 진행해요', href: '/blog/unpaid-overdue-activation/', go: '선불과 후불 차이' },
+	{ who: '앤텔레콤 자체 미납이 있음', how: '개통이 어려움', tone: 'no', need: '개통 전에 상담으로 확인해 주세요', href: '/blog/unpaid-overdue-activation/', go: '자세히 보기' },
+];
+---
+
+<div class="st" id="situations">
+	<h3>내 상황별 개통 기준</h3>
+	<table>
+		<thead><tr><th scope="col">상황</th><th scope="col">개통 방법</th><th scope="col">준비할 것</th><th scope="col"><span class="st-blind">안내</span></th></tr></thead>
+		<tbody>
+			{rows.map((r) => (
+				<tr>
+					<th scope="row">{r.who}</th>
+					<td class={`st-how ${r.tone}`}>{r.how}</td>
+					<td>{r.need}</td>
+					<td class="st-go"><a href={r.href}>{r.go}</a></td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+	<p class="st-note">앤텔레콤 안내 기준이에요. 서류는 경우마다 달라서 예약할 때 안내해 드려요.</p>
+</div>
+
+<style>
+	.st { max-width: 860px; margin: 1.6rem auto 0; }
+	.st h3 { margin: 0 0 0.6rem; font-size: 1.1rem; }
+	.st table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: var(--box-shadow); font-size: 0.9rem; line-height: 1.5; }
+	.st thead th { padding: 0.65rem 0.8rem; background: var(--surface-2); text-align: left; font-size: 0.82rem; }
+	.st tbody th, .st td { padding: 0.7rem 0.8rem; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
+	.st tbody th { font-weight: 800; width: 24%; }
+	.st-how { font-weight: 700; width: 24%; }
+	.st-how.self { color: var(--green); }
+	.st-how.visit { color: var(--accent); }
+	.st-how.no { color: #d92d20; }
+	.st-go { white-space: nowrap; font-size: 0.84rem; }
+	.st-blind { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+	.st-note { margin: 0.6rem 0 0; font-size: 0.8rem; color: rgb(var(--gray)); }
+	@media (max-width: 720px) {
+		.st thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+		.st table, .st tbody, .st tr, .st tbody th, .st td { display: block; width: auto; }
+		.st tbody tr { padding: 0.75rem 0.9rem; border-top: 1px solid var(--line); }
+		.st tbody tr:first-child { border-top: 0; }
+		.st tbody th, .st td { padding: 0; border: 0; }
+		.st td { margin-top: 0.15rem; }
+		.st-go { margin-top: 0.3rem; }
+	}
+</style>
