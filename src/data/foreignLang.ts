@@ -16,8 +16,6 @@ export interface ForeignLang {
 	facts: { t: string; d: string }[];
 	howTitle: string;
 	steps: { b: string; d: string }[];
-	tmplTitle: string;
-	tmplNote: string;
 	copy: string;
 	copied: string;
 	copyManual: string;
@@ -65,13 +63,11 @@ export const zh: ForeignLang = {
 	],
 	howTitle: '办理流程',
 	steps: [
-		{ b: '给我们发消息', d: '通过KakaoTalk或电话联系，告诉我们地区、日期、时间和想办的套餐。下方有韩语消息模板。' },
+		{ b: '给我们发消息', d: '请填写下方的预约卡。系统会生成韩语消息，通过KakaoTalk发送即可。也可以致电。' },
 		{ b: '我们确认预约', d: '我们会告知办理地点和需要携带的证件。' },
 		{ b: '到店办理', d: '请带上证件、SIM卡费用（10,000韩元）、首次充值的钱和您要使用的手机。SIM卡在办理地点准备。' },
 		{ b: '开通当天充值', d: '预付费号码需要在开通当天充值，才能保持号码正常使用。' },
 	],
-	tmplTitle: '消息模板（韩语）',
-	tmplNote: '我们的服务使用韩语。请复制下面的消息，填写空白处后通过KakaoTalk发送。',
 	copy: '复制消息',
 	copied: '已复制！',
 	copyManual: '请按Ctrl+C复制',
@@ -106,7 +102,7 @@ export const zh: ForeignLang = {
 		{ q: '可以开几条号码？', a: '外国居民可以开通一条号码。' },
 		{ q: '有合约或解约金吗？', a: '没有。没有合约约束，也没有解约金。' },
 		{ q: '开通当天必须充值吗？', a: '是的。预付费套餐需要在开通当天充值。如果不充值，号码可能在第二天被停用或注销。号码注销后，剩余余额会失效且不予退还。' },
-		{ q: '使用什么语言服务？', a: '我们的服务使用韩语。请使用本页的韩语消息模板，或请会韩语的朋友帮您预约。' },
+		{ q: '使用什么语言服务？', a: '我们的服务使用韩语。请使用本页的预约卡生成韩语消息，或请会韩语的朋友帮您预约。' },
 	],
 	footBiz: '预付费手机卡 · N-Telecom (앤텔레콤) 事先批准的销售店',
 	footReg: '营业执照号 499-37-01511 · 代表：',
@@ -136,13 +132,11 @@ export const vi: ForeignLang = {
 	],
 	howTitle: 'Quy trình',
 	steps: [
-		{ b: 'Nhắn tin cho chúng tôi', d: 'Liên hệ qua KakaoTalk hoặc gọi điện. Cho biết khu vực, ngày giờ và gói cước. Bên dưới có mẫu tin nhắn tiếng Hàn.' },
+		{ b: 'Nhắn tin cho chúng tôi', d: 'Điền thẻ đặt lịch bên dưới để tạo tin nhắn tiếng Hàn, rồi gửi qua KakaoTalk. Bạn cũng có thể gọi điện.' },
 		{ b: 'Chúng tôi xác nhận lịch hẹn', d: 'Chúng tôi sẽ báo địa điểm và giấy tờ cần mang theo.' },
 		{ b: 'Đến và mở số', d: 'Mang theo giấy tờ tùy thân, phí SIM (10.000 won), tiền nạp lần đầu và điện thoại bạn sẽ dùng. SIM được chuẩn bị tại địa điểm.' },
 		{ b: 'Nạp tiền ngay trong ngày', d: 'Số trả trước cần nạp tiền vào đúng ngày mở số để giữ số hoạt động.' },
 	],
-	tmplTitle: 'Mẫu tin nhắn (tiếng Hàn)',
-	tmplNote: 'Dịch vụ của chúng tôi bằng tiếng Hàn. Hãy sao chép tin nhắn này, điền vào chỗ trống rồi gửi qua KakaoTalk.',
 	copy: 'Sao chép tin nhắn',
 	copied: 'Đã sao chép!',
 	copyManual: 'Nhấn Ctrl+C để sao chép',
@@ -177,7 +171,7 @@ export const vi: ForeignLang = {
 		{ q: 'Được mở bao nhiêu số?', a: 'Người nước ngoài cư trú được mở một số.' },
 		{ q: 'Có hợp đồng hay phí hủy không?', a: 'Không. Không ràng buộc hợp đồng và không có phí hủy.' },
 		{ q: 'Có phải nạp tiền ngay ngày mở số không?', a: 'Có. Gói trả trước cần nạp tiền vào ngày mở số. Nếu không nạp, số có thể bị tạm ngưng hoặc hủy vào ngày hôm sau. Khi số bị hủy, số dư còn lại sẽ hết hạn và không được hoàn lại.' },
-		{ q: 'Dịch vụ dùng ngôn ngữ nào?', a: 'Dịch vụ của chúng tôi bằng tiếng Hàn. Hãy dùng mẫu tin nhắn tiếng Hàn trong trang này, hoặc nhờ bạn bè biết tiếng Hàn giúp bạn đặt lịch.' },
+		{ q: 'Dịch vụ dùng ngôn ngữ nào?', a: 'Dịch vụ của chúng tôi bằng tiếng Hàn. Hãy dùng thẻ đặt lịch trong trang này để tạo tin nhắn tiếng Hàn, hoặc nhờ bạn bè biết tiếng Hàn giúp bạn đặt lịch.' },
 	],
 	footBiz: 'SIM trả trước · Đại lý bán hàng được N-Telecom (앤텔레콤) chấp thuận trước',
 	footReg: 'Mã số kinh doanh 499-37-01511 · Người đại diện: ',
@@ -207,13 +201,11 @@ export const ja: ForeignLang = {
 	],
 	howTitle: '手続きの流れ',
 	steps: [
-		{ b: 'メッセージを送る', d: 'KakaoTalkまたはお電話でご連絡ください。地域、希望日時、料金プランをお知らせください。下に韓国語のメッセージ例があります。' },
+		{ b: 'メッセージを送る', d: '下の予約カードに入力すると韓国語のメッセージが作成されます。KakaoTalkで送ってください。お電話でも受け付けます。' },
 		{ b: '予約の確定', d: '開通場所と、お持ちいただく書類をご案内します。' },
 		{ b: 'ご来店と開通', d: '身分証、SIM代（10,000ウォン）、初回チャージの代金、使用する携帯電話をお持ちください。SIMは店舗でご用意します。' },
 		{ b: '開通当日にチャージ', d: 'プリペイドの番号を使い続けるには、開通当日にチャージが必要です。' },
 	],
-	tmplTitle: 'メッセージ例（韓国語）',
-	tmplNote: 'サービスは韓国語で行っています。このメッセージをコピーし、空欄を埋めてKakaoTalkで送ってください。',
 	copy: 'メッセージをコピー',
 	copied: 'コピーしました！',
 	copyManual: 'Ctrl+Cでコピーしてください',
@@ -248,7 +240,7 @@ export const ja: ForeignLang = {
 		{ q: '何回線まで開通できますか？', a: '外国人居住者の方は1回線まで開通できます。' },
 		{ q: '契約の縛りや解約金はありますか？', a: 'ありません。契約期間の縛りも解約金もありません。' },
 		{ q: '開通当日にチャージが必要ですか？', a: 'はい。プリペイドプランは開通当日にチャージが必要です。チャージしないと、翌日に番号が停止または解約されることがあります。解約された場合、残高は失効し、返金されません。' },
-		{ q: '何語で対応していますか？', a: 'サービスは韓国語で行っています。このページの韓国語メッセージ例を使うか、韓国語ができるご友人に予約を手伝ってもらってください。' },
+		{ q: '何語で対応していますか？', a: 'サービスは韓国語で行っています。このページの予約カードで韓国語のメッセージを作成するか、韓国語ができるご友人に予約を手伝ってもらってください。' },
 	],
 	footBiz: 'プリペイドSIM、N-Telecom (앤텔레콤) 事前承諾販売店',
 	footReg: '事業者登録番号 499-37-01511、代表者：',

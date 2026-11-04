@@ -1,0 +1,114 @@
+---
+// 외국어 페이지의 방문 개통 예약 카드입니다. 손님은 자기 언어로 고르고, 사장님은 /visit/ 준비 카드와 같은 형식의 한국어 메시지를 받습니다.
+// 입력한 내용은 저장하지 않습니다. 복사 버튼과 카카오톡 버튼은 각 페이지에 있습니다. (#en-copy, #en-open)
+import { FOREIGN_CARD } from '../data/foreignCard';
+
+interface Props {
+	lang: keyof typeof FOREIGN_CARD;
+	regions: { ko: string; label: string }[];
+	plans: { ko: string; label: string }[];
+}
+const { lang, regions, plans } = Astro.props;
+const t = FOREIGN_CARD[lang];
+const ANY = '상담 때 말씀드릴게요';
+---
+
+<h2>{t.title}</h2>
+<p class="en-note" style="text-align:center;margin:0 0 0.8rem">{t.note}</p>
+<div class="fc-form" id="fc-form">
+	<label>{t.region}
+		<select data-line="희망 지역">
+			<option value={ANY}>{t.undecided}</option>
+			{regions.map((r) => <option value={r.ko}>{r.label}</option>)}
+		</select>
+	</label>
+	<label>{t.date}
+		<input type="date" data-line="희망 날짜" data-empty={ANY} />
+	</label>
+	<label>{t.time}
+		<select data-line="희망 시간">
+			<option value="상관없어요">{t.timeAny}</option>
+			<option value="오전">{t.timeAm}</option>
+			<option value="오후">{t.timePm}</option>
+		</select>
+	</label>
+	<label>{t.kind}
+		<select data-line="가입">
+			<option value="상담 후 결정">{t.undecided}</option>
+			<option value="새 번호">{t.kindNew}</option>
+			<option value="쓰던 번호 옮기기">{t.kindKeep}</option>
+		</select>
+	</label>
+	<label>{t.net}
+		<select data-line="통신망">
+			<option value="상담 후 결정">{t.undecided}</option>
+			<option value="KT망">KT</option>
+			<option value="LG망">LG</option>
+		</select>
+	</label>
+	<label>{t.plan}
+		<select data-line="요금제">
+			<option value="상담받고 정할게요">{t.undecided}</option>
+			{plans.map((p) => <option value={p.ko}>{p.label}</option>)}
+		</select>
+	</label>
+	<label>{t.phone}
+		<select data-line="사용할 휴대폰">
+			<option value="가져갈 수 있어요">{t.phoneYes}</option>
+			<option value="아직 없어요">{t.phoneNo}</option>
+		</select>
+	</label>
+	<label>{t.id}
+		<select data-line="여권이나 외국인 등록증">
+			<option value="있어요">{t.yes}</option>
+			<option value="없어요">{t.no}</option>
+			<option value="잘 모르겠어요">{t.notSure}</option>
+		</select>
+	</label>
+</div>
+<p class="en-note">{t.idNote}</p>
+<label class="fc-check"><input type="checkbox" id="fc-fee" /> {t.fee}</label>
+<p class="fc-prev">{t.preview}</p>
+<div class="en-msg" id="en-msg">[방문 개통 예약 / 외국인]</div>
+
+<style>
+	.fc-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; align-items: end; }
+	.fc-form label { display: grid; gap: 0.3rem; font-weight: 800; font-size: 0.88rem; min-width: 0; }
+	.fc-form select, .fc-form input { font: inherit; font-size: 0.95rem; padding: 0.55rem 0.8rem; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: inherit; min-width: 0; width: 100%; box-sizing: border-box; }
+	.fc-check { display: flex; gap: 0.5rem; align-items: flex-start; margin-top: 0.8rem; font-size: 0.9rem; font-weight: 700; }
+	.fc-check input { width: 1.1rem; height: 1.1rem; margin: 0.15rem 0 0; flex: none; }
+	.fc-prev { margin: 0.9rem 0 0.3rem; font-size: 0.82rem; font-weight: 800; }
+</style>
+
+<script>
+	import { visitSourceLabel } from '../lib/visitSource';
+
+	const form = document.getElementById('fc-form');
+	const fee = document.getElementById('fc-fee') as HTMLInputElement | null;
+	const msg = document.getElementById('en-msg');
+	const build = () => {
+		const lines = ['[방문 개통 예약 / 외국인]'];
+		form?.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-line]').forEach((el) => {
+			lines.push(`${el.dataset.line}: ${el.value || el.dataset.empty || ''}`);
+		});
+		lines.push(`유심비와 충전비 안내: ${fee?.checked ? '확인했어요' : '상담 때 들을게요'}`);
+		lines.push(`유입: ${visitSourceLabel()}`);
+		lines.push('성함과 연락처는 이 채팅으로 알려 드릴게요.');
+		return lines.join('\n');
+	};
+	const paint = () => { if (msg) msg.textContent = build(); };
+	form?.addEventListener('input', paint);
+	fee?.addEventListener('change', paint);
+	paint();
+
+	const ask = () => {
+		const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+		if (gtag) gtag('event', 'visit_ask', { page_path: location.pathname, situation: 'foreign', source: visitSourceLabel() });
+	};
+	document.getElementById('en-copy')?.addEventListener('click', ask);
+	// 복사를 잊고 카카오톡을 열어도 메시지가 복사되도록 합니다.
+	document.getElementById('en-open')?.addEventListener('click', () => {
+		ask();
+		navigator.clipboard?.writeText(build()).catch(() => { /* 복사를 못 해도 채팅창은 열립니다 */ });
+	});
+</script>

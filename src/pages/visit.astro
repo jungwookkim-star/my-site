@@ -268,7 +268,7 @@ const situations = [
 					if (sit.querySelector('option[value="' + h + '"]')) sit.value = h;
 				}
 				var val = function (id) { return (document.getElementById(id).value || '').trim(); };
-				// 손님이 들어온 경로를 메시지에 한 줄로 넣습니다. 목록에 없는 값은 그대로 쓰지 않습니다.
+				// 손님이 들어온 경로를 메시지에 한 줄로 넣습니다. 목록에 없는 값은 그대로 쓰지 않습니다. (src/lib/visitSource.ts 와 같은 목록)
 				var SRC = { place: '플레이스', naver_blog: '네이버 블로그', naver: '네이버 블로그', daangn: '당근', poster: '포스터 QR', a4: 'A4 안내문 QR', card: '명함', flyer: '전단지', sign: '간판', sms: '문자', kakao: '카카오 채널' };
 				var fromWhere = function () {
 					var s = '';

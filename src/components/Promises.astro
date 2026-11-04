@@ -1,0 +1,38 @@
+---
+// 홈의 "개통 전에 약속하는 것". 사이트와 약관에 이미 있는 사실만 담습니다.
+import { PRICES_VERIFIED } from '../consts';
+const [y, m, d] = PRICES_VERIFIED.split('-').map(Number);
+const items = [
+	{ t: '약정과 위약금이 없어요', d: '선불과 알뜰 요금제 모두 약정 없이 안내해요.' },
+	{ t: '요금은 공식 페이지와 대조해요', d: `${y}년 ${m}월 ${d}일에 앤텔레콤 공식 요금제 페이지와 맞춰 봤어요.`, href: '/plans/', link: '요금제 보기' },
+	{ t: '판매 자격과 사업자 정보를 공개해요', d: '앤텔레콤 사전승낙서와 사업자등록번호를 누구나 확인할 수 있어요.', href: '/about/#verified', link: '직접 확인하기' },
+	{ t: '서류 번호와 사진을 미리 받지 않아요', d: '방문 개통 서류는 예약할 때 안내하고, 방문한 날 직접 확인해요.' },
+	{ t: '불리한 조건도 먼저 말씀드려요', d: '선불은 개통 당일 충전이 필요하고, 해지하면 남은 잔액은 환불되지 않아요. 앤텔레콤 자체 미납이 있으면 개통이 어려워요.', href: '/terms/', link: '해지와 환불 안내' },
+];
+---
+
+<section id="promises">
+	<h2 class="sec">개통 전에 약속하는 것</h2>
+	<ul class="pm">
+		{items.map((i) => (
+			<li>
+				<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" /><path d="M5.5 10.3l3 3 6-6.3" /></svg>
+				<div>
+					<strong>{i.t}</strong>
+					<p>{i.d}{i.href && <Fragment> <a href={i.href}>{i.link}</a></Fragment>}</p>
+				</div>
+			</li>
+		))}
+	</ul>
+</section>
+
+<style>
+	.pm { list-style: none; margin: 1rem auto 0; padding: 0; max-width: 860px; display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 1.6rem; }
+	.pm li { display: flex; gap: 0.7rem; align-items: flex-start; min-width: 0; }
+	.pm svg { width: 1.3rem; height: 1.3rem; flex: none; margin-top: 0.15rem; }
+	.pm circle { fill: var(--accent); }
+	.pm path { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+	.pm strong { display: block; font-size: 1rem; }
+	.pm p { margin: 0.15rem 0 0; font-size: 0.88rem; color: rgb(var(--gray-dark)); line-height: 1.55; }
+	@media (max-width: 720px) { .pm { grid-template-columns: 1fr; gap: 0.9rem; } }
+</style>

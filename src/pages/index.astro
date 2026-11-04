@@ -9,6 +9,7 @@ import StuckHelp from '../components/StuckHelp.astro';
 import Reviews from '../components/Reviews.astro';
 import ChannelAdd from '../components/ChannelAdd.astro';
 import TrustStrip from '../components/TrustStrip.astro';
+import Promises from '../components/Promises.astro';
 import EligibilityCheck from '../components/EligibilityCheck.astro';
 import WhoPicker from '../components/WhoPicker.astro';
 import Welcome from '../components/Welcome.astro';
@@ -441,6 +442,7 @@ const faqSchema = {
 					<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
 			</section>
 
+			<Promises />
 			<TrustStrip />
 
 			<a class="svband" href="/saving/">
