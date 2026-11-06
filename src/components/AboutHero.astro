@@ -1,0 +1,198 @@
+---
+// 센터 소개 첫 화면: 견본 사진 대신 브랜드 색과 마스코트로 만든 그림 (2026-11-06)
+---
+
+<section class="ah" aria-label="커넥트모바일 소개">
+	<div class="ah-glow" aria-hidden="true"></div>
+	<div class="ah-grid" aria-hidden="true"></div>
+	<div class="ah-text">
+		<p class="ah-eyebrow">앤텔레콤 사전승낙 온라인 판매점</p>
+		<p class="ah-head">휴대폰 개통,<br />혼자서도 어렵지 않게</p>
+		<p class="ah-sub">KT망, LG망 선불 요금제와 KT망 알뜰 요금제를 비대면으로 안내해 드려요.</p>
+		<ul class="ah-chips">
+			<li><span>✓</span>약정, 위약금 없음</li>
+			<li><span>✓</span>약 10분 셀프개통</li>
+			<li><span>✓</span>유심 퀵 배송, 편의점 구매</li>
+		</ul>
+	</div>
+	<div class="ah-art" aria-hidden="true">
+		<div class="ah-ring r1"></div>
+		<div class="ah-ring r2"></div>
+		<div class="ah-sim">
+			<div class="ah-chip"></div>
+		</div>
+		<div class="ah-bubble b1">개통 완료!</div>
+		<div class="ah-bubble b2">유심 도착</div>
+		<img class="ah-mascot" src="/brand/mascot-lg.webp" alt="" width="374" height="640" />
+	</div>
+</section>
+
+<style>
+	.ah {
+		position: relative;
+		overflow: hidden;
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		align-items: center;
+		gap: 1rem;
+		max-width: 1020px;
+		min-height: 400px;
+		margin: 0 auto;
+		padding: 2.6rem 3rem;
+		border-radius: 22px;
+		color: #fff;
+		background: linear-gradient(135deg, #081538 0%, #0f2f7d 50%, #1a56d6 100%);
+		box-shadow: 0 18px 44px rgba(15, 40, 140, 0.28);
+		isolation: isolate;
+	}
+	.ah-glow {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background:
+			radial-gradient(380px 300px at 78% 45%, rgba(110, 180, 255, 0.45), transparent 70%),
+			radial-gradient(300px 220px at 8% 100%, rgba(120, 90, 255, 0.35), transparent 70%);
+	}
+	.ah-grid {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-image: radial-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px);
+		background-size: 22px 22px;
+		mask-image: linear-gradient(90deg, transparent, #000 40%, #000);
+	}
+	.ah-eyebrow {
+		display: inline-block;
+		margin: 0 0 1rem;
+		padding: 0.4rem 0.95rem;
+		border-radius: 999px;
+		background: #ffd84d;
+		color: #14214d;
+		font-size: 0.82rem;
+		font-weight: 800;
+	}
+	.ah-head {
+		margin: 0 0 0.8rem;
+		font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+		font-weight: 800;
+		line-height: 1.28;
+		letter-spacing: -0.02em;
+		animation: ah-up 0.7s ease-out both;
+	}
+	.ah-sub {
+		margin: 0 0 1.4rem;
+		color: rgba(255, 255, 255, 0.82);
+		font-size: 1rem;
+		line-height: 1.6;
+		animation: ah-up 0.7s 0.12s ease-out both;
+	}
+	.ah-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.ah-chips li {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.5rem 0.9rem;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.12);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+		backdrop-filter: blur(4px);
+		font-size: 0.9rem;
+		font-weight: 700;
+		animation: ah-up 0.6s ease-out both;
+	}
+	.ah-chips li:nth-child(1) { animation-delay: 0.25s; }
+	.ah-chips li:nth-child(2) { animation-delay: 0.35s; }
+	.ah-chips li:nth-child(3) { animation-delay: 0.45s; }
+	.ah-chips span { color: #7ef0c4; font-weight: 900; }
+
+	.ah-art {
+		position: relative;
+		height: 330px;
+	}
+	.ah-mascot {
+		position: absolute;
+		left: 50%;
+		bottom: 0;
+		height: 310px;
+		width: auto;
+		translate: -50% 0;
+		filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.35));
+		animation: ah-float 4s ease-in-out infinite;
+	}
+	.ah-ring {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		border-radius: 50%;
+		border: 1px solid rgba(255, 255, 255, 0.22);
+		translate: -50% -50%;
+	}
+	.ah-ring.r1 { width: 260px; height: 260px; animation: ah-pulse 4s ease-out infinite; }
+	.ah-ring.r2 { width: 340px; height: 340px; border-color: rgba(255, 255, 255, 0.1); animation: ah-pulse 4s 2s ease-out infinite; }
+	.ah-sim {
+		position: absolute;
+		left: 4%;
+		top: 18%;
+		width: 64px;
+		height: 82px;
+		border-radius: 8px 22px 8px 8px;
+		background: linear-gradient(160deg, #ffffff, #dfe7ff);
+		box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+		rotate: -14deg;
+		animation: ah-float 5s 0.6s ease-in-out infinite;
+	}
+	.ah-chip {
+		position: absolute;
+		left: 50%;
+		top: 54%;
+		width: 34px;
+		height: 28px;
+		translate: -50% -50%;
+		border-radius: 6px;
+		background: linear-gradient(135deg, #f5d36b, #c9971f);
+	}
+	.ah-bubble {
+		position: absolute;
+		padding: 0.45rem 0.8rem;
+		border-radius: 14px;
+		background: #fff;
+		color: #14214d;
+		font-size: 0.82rem;
+		font-weight: 800;
+		box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+		white-space: nowrap;
+	}
+	.ah-bubble.b1 { right: 0; top: 10%; border-bottom-left-radius: 4px; animation: ah-float 4.5s 0.3s ease-in-out infinite; }
+	.ah-bubble.b2 { right: 6%; bottom: 14%; border-top-left-radius: 4px; background: #7ef0c4; animation: ah-float 5.5s 1s ease-in-out infinite; }
+
+	@keyframes ah-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+	@keyframes ah-pulse { 0% { opacity: 0.9; scale: 0.85; } 100% { opacity: 0; scale: 1.15; } }
+	@keyframes ah-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+	@media (max-width: 760px) {
+		.ah {
+			grid-template-columns: 1fr;
+			min-height: 0;
+			margin-left: 1rem;
+			padding: 1.8rem 1.3rem 0;
+			border-radius: 18px;
+		}
+		.ah-art { height: 230px; }
+		.ah-mascot { height: 215px; }
+		.ah-ring.r1 { width: 190px; height: 190px; }
+		.ah-ring.r2 { width: 250px; height: 250px; }
+		.ah-sim { width: 48px; height: 62px; left: 8%; }
+		.ah-chip { width: 26px; height: 21px; }
+		.ah-bubble { font-size: 0.75rem; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.ah *, .ah { animation: none !important; }
+	}
+</style>

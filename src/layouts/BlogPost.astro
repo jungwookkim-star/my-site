@@ -12,9 +12,9 @@ import { categoryOf } from '../data/blogCategories';
 import ShareButton from '../components/ShareButton.astro';
 import GlossTips from '../components/GlossTips.astro';
 
-type Props = CollectionEntry<'blog'>['data'] & { id?: string; seoTitle?: string; headings?: { depth: number; slug: string; text: string }[] };
+type Props = CollectionEntry<'blog'>['data'] & { id?: string; seoTitle?: string; hideDate?: boolean; headings?: { depth: number; slug: string; text: string }[] };
 
-const { title, description, pubDate, updatedDate, heroImage, id: currentId, headings = [], category: explicitCat, seoTitle } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, id: currentId, headings = [], category: explicitCat, seoTitle, hideDate = false } = Astro.props;
 const isPost = !!currentId;
 const category = categoryOf(currentId ?? '', explicitCat);
 // 글 주제에 맞는 안내 문구와 바로가기 (카테고리별)
@@ -171,11 +171,11 @@ const ld = isPost
 		<main id="main">
 			<article>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
+					{Astro.slots.has('hero') ? <slot name="hero" /> : heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
 				</div>
 				<div class="prose">
 					<div class="title">
-						<div class="date">
+						{!hideDate && <div class="date">
 							<FormattedDate date={pubDate} />
 							{
 								updatedDate && (
@@ -184,7 +184,7 @@ const ld = isPost
 									</div>
 								)
 							}
-						</div>
+						</div>}
 						{isPost && <a class="cat" href={`/blog/#${encodeURIComponent(category)}`}>{category}</a>}
 						<h1>{title}</h1>
 						<hr />
