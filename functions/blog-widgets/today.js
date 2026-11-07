@@ -25,12 +25,23 @@ export function todayState(now = new Date()) {
 	const rest = restDay(kst);
 	const tomorrowRest = restDay(new Date(kst.getTime() + 24 * 60 * 60 * 1000));
 	const NEW_OPEN = 8 * 60, NEW_CLOSE = 21 * 60 + 50, MOVE_OPEN = 10 * 60, MOVE_CLOSE = 19 * 60 + 50;
+	const LAST_HOUR = 60; // 2026-11-07: 마감 1시간 전에는 "마감 임박" 그림을 보여 준다
 	if (min >= NEW_CLOSE) return tomorrowRest ? 'night-rest' : 'night';
-	if (rest) return min < NEW_OPEN ? `${rest}-early` : rest;
+	if (rest) {
+		if (min < NEW_OPEN) return `${rest}-early`;
+		return min >= NEW_CLOSE - LAST_HOUR ? 'new-closing' : rest;
+	}
 	if (min < NEW_OPEN) return 'early';
 	if (min < MOVE_OPEN) return 'morning';
-	if (min < MOVE_CLOSE) return 'open';
-	return 'evening';
+	if (min < MOVE_CLOSE - LAST_HOUR) return 'open';
+	if (min < MOVE_CLOSE) return 'move-closing';
+	if (min < NEW_CLOSE - LAST_HOUR) return 'evening';
+	return 'new-closing';
+}
+
+/** 지금 셀프개통을 접수하는 시간인지 (신규가입이라도 받으면 접수 중) */
+export function accepting(state) {
+	return ['morning', 'open', 'move-closing', 'evening', 'new-closing', 'sunday', 'holiday'].includes(state);
 }
 
 export async function onRequest({ request, env }) {
