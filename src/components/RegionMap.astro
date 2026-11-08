@@ -1,7 +1,8 @@
 ---
 import { REGIONS } from '../data/regions';
 // 시도를 실제 위치와 비슷하게 배치한 타일 지도입니다. (열 1~6, 행 1~7)
-// 색: 유심 퀵 배송 가능(서울, 수도권, 광역시, 제주)은 파랑, 그 밖은 흰색(편의점 유심). 점은 대면 개통 사업장이 있는 곳입니다.
+// 색: 셀프개통은 전국 어디서나 되므로 모든 칸을 파랑으로 칠한다. 점은 대면 개통 사업장이 있는 곳입니다.
+// 2026-11-08: 퀵 배송은 전국 가능으로 안내하고 내 지역이 궁금하면 문의로 안내한다(사용자 결정). 그래서 퀵 배송으로 칸 색을 나누지 않는다.
 const POS: Record<string, [number, number]> = {
 	gyeonggi: [3, 1],
 	gangwon: [4, 1],
@@ -33,14 +34,13 @@ const tiles = REGIONS.map((r) => ({
 
 <div class="rmap" id="rmap">
 	<div class="rm-legend" aria-hidden="true">
-		<span><i class="q"></i>유심 퀵 배송</span>
-		<span><i class="c"></i>편의점 유심</span>
+		<span><i class="q"></i>셀프개통 전국 가능</span>
 		<span><i class="d"></i>대면 개통 사업장</span>
 	</div>
 	<div class="rm-grid" role="group" aria-label="지역 선택">
 		{
 			tiles.map((t) => (
-				<button type="button" class:list={['rm-t', { q: t.quick }]} data-slug={t.slug} style={`grid-column:${t.col};grid-row:${t.row}`} aria-pressed="false">
+				<button type="button" class:list={['rm-t', 'q']} data-slug={t.slug} style={`grid-column:${t.col};grid-row:${t.row}`} aria-pressed="false">
 					<b>{t.name}</b>
 					{t.centers.length > 0 && <span class="dot" aria-hidden="true" />}
 				</button>
@@ -104,7 +104,7 @@ const tiles = REGIONS.map((r) => ({
 				w.appendChild(mk('dd', dd));
 				dl.appendChild(w);
 			};
-			row('유심 받는 방법', r.quick ? '퀵 배송을 받을 수 있어요. 주문 10:00~22:00, 배송비 무료이고 대부분 2시간 이내예요. 일부 지역은 제외될 수 있어 상담 때 확인해 드려요. 가까운 편의점에서 사도 돼요.' : '퀵 배송 지역이 아니라서 가까운 편의점에서 유심을 구매해요. 유심비는 8,800원이에요.');
+			row('유심 받는 방법', '퀵 배송(주문 10:00~22:00, 배송비 무료)으로 받거나 가까운 편의점에서 사서(8,800원) 바로 셀프개통할 수 있어요. 내 지역도 퀵 배송이 되는지 궁금하면 문의 주세요.');
 			row('외국인, 미성년자 대면 개통', r.centers.length ? '방문할 수 있는 곳: ' + r.centers.join(', ') + '. 방문 전에 반드시 예약해 주세요.' : '이 지역에는 방문 사업장이 없어요. 가까운 지역 사업장을 안내해 드려요.');
 			row('셀프개통', '만 19세 이상 내국인은 전국 어디서나 비대면으로 할 수 있어요.');
 			panel.appendChild(dl);
