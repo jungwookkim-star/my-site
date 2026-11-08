@@ -155,7 +155,7 @@ const today = new Date();
 		const a = el.closest<HTMLAnchorElement>('a[href]');
 		if (!a || a.hasAttribute('data-ask')) return;
 		const href = a.getAttribute('href') ?? '';
-		const where = a.closest('.post-tools') ? 'blog_tools' : a.closest('.elig') ? 'checker' : a.closest('.sv') ? 'calculator' : a.closest('.ask-sheet') ? 'ask_sheet' : a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.mascot-link') ? 'mascot' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
+		const where = a.closest('.today-now') ? 'today_widget' : a.closest('.post-tools') ? 'blog_tools' : a.closest('.elig') ? 'checker' : a.closest('.sv') ? 'calculator' : a.closest('.ask-sheet') ? 'ask_sheet' : a.closest('.sticky-cta') ? 'sticky_bar' : a.closest('.mascot-link') ? 'mascot' : a.closest('.hero') ? 'hero' : a.closest('.final') ? 'bottom' : 'page';
 		if (href.startsWith('/saving')) track('tool_click', { tool: 'calculator', from: where, from_page: location.pathname });
 		else if (href.startsWith('/#check')) track('tool_click', { tool: 'checker', from: where, from_page: location.pathname });
 		else if (href.startsWith(SELF_ACTIVATION_URL)) track('self_activation_click', { where });

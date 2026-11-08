@@ -141,12 +141,26 @@ const howTo = {
 			.btn.self { background: #d92d20; }
 			.btn.alt { background: #fee500; color: #191919; }
 			@media (max-width: 720px) { .cta { flex-direction: column; } .cta .btn { text-align: center; } }
+			/* 블로그 "오늘 접수" 위젯에서 접수 시간에 들어온 손님에게만 맨 위에 보여 줍니다 (2026-11-08) */
+			.today-now { margin: 0 0 1.4rem; padding: 1rem 1.1rem; border-radius: 14px; border: 1.5px solid #03c75a; background: #ebfbf1; }
+			.today-now[hidden] { display: none; }
+			.today-now p { margin: 0 0 0.8rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
+			.today-now strong { display: block; font-size: 1.08rem; color: #087f3c; margin-bottom: 0.2rem; }
+			.today-now .cta { justify-content: flex-start; }
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main id="main" class="wide">
 			<PageHead title="알뜰폰 개통 과정 안내" sub="상담부터 사용 시작까지, 어떤 순서로 진행되는지 미리 확인하세요." />
+
+			<div class="today-now" id="today-now" hidden>
+				<p><strong>지금 셀프개통 접수 중이에요</strong>신규가입은 21:50, 번호이동은 19:50까지 접수해요. 번호이동은 일요일과 신정, 설, 추석 당일에는 쉬어요.</p>
+				<div class="cta">
+					<a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a>
+					<a class="btn" href="#prep-list">준비물 먼저 확인하기</a>
+				</div>
+			</div>
 
 			<ul class="summary">
 				<li><strong>STEP 1</strong>상담·요금제 선택</li>
@@ -255,6 +269,9 @@ const howTo = {
 		</main>
 		<Footer />
 		<script>
+			// 블로그 "오늘 접수" 위젯은 접수 시간에만 이 페이지로 보냅니다(functions/blog/_middleware.js). 그때 맨 위 버튼을 보여 줍니다.
+			const todayNow = document.getElementById('today-now');
+			if (todayNow && new URLSearchParams(location.search).get('utm_campaign') === 'today-open') todayNow.hidden = false;
 			const stepBtns = [...document.querySelectorAll<HTMLButtonElement>('.stepdone')];
 			const gp = document.getElementById('gp');
 			let stepDone = 0;
