@@ -1,0 +1,41 @@
+---
+// 겨울 꾸밈: 첫 화면과 맨 아래 상담 상자에 눈이 천천히 내립니다. (2026-11-10)
+// 한국 날짜로 11월~2월에만 보이고, 3월이 되면 코드를 고치지 않아도 저절로 꺼져요.
+// 동작 줄이기 설정을 켠 분에게는 보이지 않아요.
+interface Props { tone?: 'auto' | 'light' }
+const { tone = 'auto' } = Astro.props;
+// 눈송이 18개: [왼쪽 %, 크기 px, 떨어지는 시간 s, 시작 지연 s, 흔들림 px]
+const flakes: [number, number, number, number, number][] = [
+	[4, 5, 13, 0, 18], [11, 3, 10, 3.5, -14], [18, 6, 15, 7, 22], [25, 4, 11, 1.8, -16], [32, 3, 9, 5.2, 12],
+	[39, 5, 14, 9, -20], [46, 4, 12, 2.6, 16], [53, 6, 16, 6.4, -18], [60, 3, 10, 0.8, 14], [67, 5, 13, 4.4, -22],
+	[74, 4, 11, 8.2, 18], [81, 6, 15, 3, -12], [88, 3, 9, 6.8, 16], [95, 5, 14, 1.2, -18], [14, 4, 12, 10.5, 20],
+	[42, 3, 10, 11.5, -14], [70, 4, 13, 12.2, 12], [91, 5, 11, 9.6, -16],
+];
+---
+
+<div class:list={['snow', `snow-${tone}`]} aria-hidden="true" hidden data-winter>
+	{flakes.map(([l, s, d, w, x]) => <i style={`left:${l}%;width:${s}px;height:${s}px;animation-duration:${d}s;animation-delay:-${w}s;--sway:${x}px`}></i>)}
+</div>
+
+<style is:global>
+	.snow { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; --flake: rgba(120, 165, 235, 0.55); }
+	.snow-light { --flake: rgba(255, 255, 255, 0.85); }
+	.snow i { position: absolute; top: -12px; border-radius: 50%; background: var(--flake); box-shadow: 0 0 6px var(--flake); animation-name: snowfall; animation-timing-function: linear; animation-iteration-count: infinite; }
+	@keyframes snowfall {
+		0% { transform: translate(0, 0); opacity: 0; }
+		8% { opacity: 1; }
+		50% { transform: translate(var(--sway), 260px); }
+		92% { opacity: 1; }
+		100% { transform: translate(0, 540px); opacity: 0; }
+	}
+	@media (prefers-reduced-motion: reduce) { .snow { display: none !important; } }
+</style>
+
+<script>
+	// 한국 날짜 기준 11, 12, 1, 2월에만 보여 줍니다.
+	const month = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', month: 'numeric' }).format(new Date()));
+	if ([11, 12, 1, 2].includes(month)) {
+		document.querySelectorAll<HTMLElement>('[data-winter]').forEach((el) => (el.hidden = false));
+		document.documentElement.classList.add('is-winter');
+	}
+</script>

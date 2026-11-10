@@ -2,19 +2,27 @@
 import { guideSteps } from '../data/guideSteps';
 // 홈의 "개통 절차" 아래에서 실제 셀프개통 화면 20장을 자동으로 넘겨 보여 줍니다. (이미지는 개인정보를 가린 것을 그대로 씁니다)
 // 일시정지, 점 눌러 이동, 동작 줄이기 설정이면 자동 재생 없이 직접 넘기기만 됩니다.
-const steps = guideSteps.map((s) => ({ n: s.n, title: s.title, src: `/guide/${s.imgs[0]}` }));
+const steps = guideSteps.map((s) => ({ n: s.n, title: s.title, desc: s.desc, src: `/guide/${s.imgs[0]}` }));
+// 2026-11-10: 단계마다 "이 화면에서 할 일" 설명, 진행 막대, 이전/다음 버튼을 더해 따라 하기 쉽게 했어요.
 ---
 
 <div class="gp" id="gp" aria-label="셀프개통 화면 미리보기">
 	<div class="gp-phone">
 		<div class="gp-screen">
-			{steps.map((s, i) => <img class:list={['gp-img', { on: i === 0 }]} data-i={i} data-src={s.src} src={i === 0 ? s.src : undefined} alt={`${s.n}단계: ${s.title}`} width="560" height="1000" decoding="async" />)}
+			{steps.map((s, i) => <img class:list={['gp-img', { on: i === 0 }]} data-i={i} data-src={s.src} data-desc={s.desc} src={i === 0 ? s.src : undefined} alt={`${s.n}단계: ${s.title}`} width="560" height="1000" decoding="async" />)}
 		</div>
 	</div>
 	<div class="gp-side">
-		<span class="gp-tag">실제 개통 화면 미리보기</span>
-		<h3 class="gp-t" id="gp-t">{steps[0].n}단계 {steps[0].title}</h3>
-		<p class="gp-sub">셀프개통은 이런 화면으로 진행돼요. 개인정보는 가려 두었어요.</p>
+		<span class="gp-tag">실제 개통 화면 따라하기</span>
+		<div class="gp-prog" aria-hidden="true"><span id="gp-bar" style={`width:${100 / steps.length}%`}></span></div>
+		<p class="gp-count"><b id="gp-n">1</b> / {steps.length}단계</p>
+		<h3 class="gp-t" id="gp-t">{steps[0].n}단계: {steps[0].title}</h3>
+		<p class="gp-do" id="gp-do" aria-live="polite"><span>이 화면에서 할 일</span>{steps[0].desc}</p>
+		<div class="gp-nav">
+			<button type="button" class="gp-b" id="gp-prev" aria-label="이전 단계">‹ 이전</button>
+			<button type="button" class="gp-b" id="gp-next" aria-label="다음 단계">다음 ›</button>
+		</div>
+		<p class="gp-sub">개인정보는 가려 두었어요. 점을 누르면 그 단계로 가요.</p>
 		<div class="gp-dots" id="gp-dots" role="group" aria-label="단계 선택">
 			{steps.map((s, i) => <button type="button" class:list={['gp-dot', { on: i === 0 }]} data-i={i} aria-label={`${s.n}단계 보기`} aria-pressed={i === 0 ? 'true' : 'false'}></button>)}
 		</div>
@@ -33,7 +41,15 @@ const steps = guideSteps.map((s) => ({ n: s.n, title: s.title, src: `/guide/${s.
 	.gp-img.on { opacity: 1; }
 	.gp-tag { display: inline-block; font-size: 0.74rem; font-weight: 800; color: var(--accent); background: var(--surface-2); padding: 0.15rem 0.7rem; border-radius: 999px; }
 	.gp-t { margin: 0.6rem 0 0.3rem; font-size: 1.25rem; line-height: 1.35; }
-	.gp-sub { margin: 0 0 0.9rem; font-size: 0.86rem; color: var(--muted); }
+	.gp-sub { margin: 0 0 0.6rem; font-size: 0.8rem; color: var(--muted); }
+	.gp-prog { height: 6px; margin-top: 0.7rem; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+	.gp-prog span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width 0.35s ease; }
+	.gp-count { margin: 0.35rem 0 0; font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+	.gp-count b { color: var(--accent); font-size: 0.95rem; }
+	.gp-do { min-height: 4.2em; margin: 0 0 0.8rem; padding: 0.65rem 0.85rem; border-radius: 12px; background: var(--surface-2); font-size: 0.9rem; line-height: 1.55; text-align: left; }
+	.gp-do span { display: block; margin-bottom: 0.15rem; font-size: 0.72rem; font-weight: 800; color: var(--accent); }
+	.gp-nav { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; }
+	.gp-nav .gp-b { flex: 1; }
 	.gp-dots { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
 	.gp-dot { width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; background: var(--line); cursor: pointer; }
 	.gp-dot.on { background: var(--accent); transform: scale(1.35); }
@@ -79,7 +95,21 @@ const steps = guideSteps.map((s) => ({ n: s.n, title: s.title, src: `/guide/${s.
 				d.setAttribute('aria-pressed', String(n === i));
 			});
 			title.textContent = imgs[i].alt;
+			if (doEl) {
+				doEl.textContent = '';
+				const lab = document.createElement('span');
+				lab.textContent = '이 화면에서 할 일';
+				doEl.append(lab, imgs[i].dataset.desc ?? '');
+			}
+			if (nEl) nEl.textContent = String(i + 1);
+			if (bar) bar.style.width = `${((i + 1) / imgs.length) * 100}%`;
 		}
+		const doEl = document.getElementById('gp-do');
+		const nEl = document.getElementById('gp-n');
+		const bar = document.getElementById('gp-bar');
+		const step = (d: number) => { userPaused = true; setPlaying(false); show(i + d); track('guide_preview_step', { dir: d > 0 ? 'next' : 'prev', step: String(i + 1) }); };
+		document.getElementById('gp-prev')?.addEventListener('click', () => step(-1));
+		document.getElementById('gp-next')?.addEventListener('click', () => step(1));
 		function setPlaying(on: boolean) {
 			playing = on;
 			clearInterval(timer);

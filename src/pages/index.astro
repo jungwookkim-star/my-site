@@ -17,6 +17,7 @@ import Welcome from '../components/Welcome.astro';
 import VerifiedStamp from '../components/VerifiedStamp.astro';
 import SimCheck from '../components/SimCheck.astro';
 import GuidePreview from '../components/GuidePreview.astro';
+import WinterSnow from '../components/WinterSnow.astro';
 import PrepCard from '../components/PrepCard.astro';
 import { ktPrepaid, lgPrepaid } from '../data/prepaidPlans';
 import { postpaidPartners } from '../data/postpaidPlans';
@@ -196,16 +197,17 @@ const faqSchema = {
 			.faq details > summary, details > summary { min-height: 2.6rem; }
 			details p { margin: 0.6rem 0 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 			.nposts { list-style: none; padding: 0; margin: 0 0 1.5rem; }
-			.nposts li { display: flex; align-items: center; gap: 0.8rem; background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.75rem 1.1rem; margin-bottom: 0.6rem; font-size: 0.95rem; transition: transform 0.15s; }
-			.nposts li:hover { transform: translateY(-2px); }
-			.nmark { flex: 0 0 auto; width: 1.7rem; height: 1.7rem; border-radius: 8px; background: #03c75a; color: #fff; font-weight: 900; font-size: 0.95rem; display: grid; place-items: center; }
-			.nposts a { flex: 1; min-width: 0; color: var(--black); text-decoration: none; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-			.nposts a:hover { color: var(--accent); }
+			.nposts :global(li) { display: flex; align-items: center; gap: 0.8rem; background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.75rem 1.1rem; margin-bottom: 0.6rem; font-size: 0.95rem; transition: transform 0.15s; }
+			.nposts :global(li:hover) { transform: translateY(-2px); }
+			.nposts :global(.nmark) { flex: 0 0 auto; width: 1.7rem; height: 1.7rem; border-radius: 8px; background: #03c75a; color: #fff; font-weight: 900; font-size: 0.95rem; display: grid; place-items: center; }
+			.nposts :global(a) { flex: 1; min-width: 0; color: var(--black); text-decoration: none; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+			.nposts :global(a:hover) { color: var(--accent); }
 			.nfollow { text-align: center; }
 			.nf-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #03c75a; color: #fff; font-weight: 800; text-decoration: none; padding: 0.75rem 1.6rem; border-radius: 999px; box-shadow: 0 6px 16px rgba(3, 199, 90, 0.3); transition: transform 0.15s; }
 			.nf-btn:hover { transform: translateY(-2px); }
 			.nfollow p { margin: 0.7rem 0 0; font-size: 0.86rem; color: rgb(var(--gray)); }
-			.nposts time { color: rgb(var(--gray)); font-size: 0.78rem; white-space: nowrap; flex: 0 0 auto; }
+			.nposts :global(.nnew) { display: inline-block; margin-right: 0.4rem; padding: 0.05rem 0.45rem; border-radius: 6px; background: #ff5a36; color: #fff; font-size: 0.7rem; font-weight: 800; vertical-align: 0.1em; }
+			.nposts :global(time) { color: rgb(var(--gray)); font-size: 0.78rem; white-space: nowrap; flex: 0 0 auto; }
 			.final { position: relative; overflow: hidden; display: grid; align-items: center; text-align: center; color: #fff; border-radius: 22px; box-shadow: 0 16px 40px rgba(15, 40, 140, 0.28); padding: 2.4rem 1.2rem 0;
 				background: radial-gradient(700px 320px at 85% 0%, rgba(120, 190, 255, 0.4), transparent 60%), radial-gradient(500px 300px at 5% 100%, rgba(47, 123, 255, 0.45), transparent 65%), linear-gradient(135deg, #0b1d4d 0%, #123f9e 55%, #1c63e0 100%); }
 			.final h2 { margin: 0 0 0.5rem; color: #fff; font-size: 1.9rem; }
@@ -239,8 +241,8 @@ const faqSchema = {
 				.who, .posts { display: flex; gap: 0.8rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.3rem 0.2rem 0.9rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
 				.who > div { flex: 0 0 80%; scroll-snap-align: start; }
 				.posts > .post { flex: 0 0 78%; scroll-snap-align: start; }
-				.nposts li:nth-child(n + 6) { display: none; }
-				.nposts li { flex-direction: column; gap: 0.2rem; }
+				.nposts :global(li:nth-child(n + 6)) { display: none; }
+				.nposts :global(li) { flex-direction: column; gap: 0.2rem; }
 				.rbtns { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
 				.rbtns a { padding: 0.6rem 0.2rem; }
 				.rbtns span { display: none; }
@@ -261,6 +263,17 @@ const faqSchema = {
 			.hb :global(.hours) { display: flex; width: fit-content; max-width: 100%; margin-top: 0.8rem; }
 			.mini-mascot { display: none; }
 			.statswrap :global(.stats) { margin-top: 1.2rem; }
+			/* 겨울 꾸밈 (11월~2월, WinterSnow.astro가 켭니다) */
+			.hb { position: relative; }
+			.hb > :global(.snow) { z-index: 0; }
+			.hero-text, .final-in { position: relative; z-index: 1; }
+			.winter-chip { display: inline-block; margin: 0.35rem 0 0 0.35rem; padding: 0.3rem 0.8rem; border-radius: 999px; background: #e8f1ff; color: #1546c8; font-size: 0.8rem; font-weight: 700; }
+			.winter-chip[hidden] { display: none; }
+			@media (max-width: 720px) { .winter-chip { display: block; width: fit-content; max-width: calc(100% - 120px); margin: 0.4rem 0 0; padding: 0.25rem 0.7rem; font-size: 0.72rem; } }
+			@media (min-width: 721px) {
+				.hb > :global(.snow) { top: -54px; left: 50%; right: auto; width: 100vw; transform: translateX(-50%); border-radius: 0 0 56px 56px / 0 0 36px 36px; --flake: rgba(255, 255, 255, 0.85); }
+				.winter-chip { background: rgba(255, 255, 255, 0.92); color: #123f9e; }
+			}
 			@media (max-width: 720px) {
 				.hb { padding: 1.1rem 0 0.4rem; gap: 0; }
 				.hb h1 { font-size: 1.85rem; margin: 0.6rem 0 0.4rem; }
@@ -354,9 +367,11 @@ const faqSchema = {
 			<Welcome />
 			<div class="hero hb hc">
 				<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+				<WinterSnow />
 				<div class="hero-text">
 					<a class="mini-mascot" data-ask="mascot_mobile" href={KAKAO_URL} target="_blank" rel="noopener" aria-label="궁금한 점 고르고 상담하기"><span>뭐가 궁금하세요?</span><img src="/brand/mascot.webp" alt="" width="209" height="360" fetchpriority="high" /></a>
 					<span class="badge">약정 0원, 위약금 0원</span>
+					<span class="winter-chip" data-winter hidden>❄ 추운 날엔 집에서 10분 셀프개통</span>
 					<h1>월 {heroMinPrice}원부터,<br />약정 없이 시작하세요</h1>
 					<p>선불폰과 알뜰폰을 비대면으로, KT망과 LG망 중에 고르세요.</p>
 					<div class="hb-cta">
@@ -582,7 +597,7 @@ const faqSchema = {
 				<section id="naver">
 					<h2 class="sec">네이버 블로그 최신 글</h2>
 					<p class="sub">개통 관련 정보를 블로그에서도 확인하세요.</p>
-					<ul class="nposts">
+					<ul class="nposts" id="nposts">
 						{naverPosts.slice(0, 4).map((p) => (
 							<li><span class="nmark" aria-hidden="true">N</span><a href={p.link} target="_blank" rel="noopener">{p.title}</a><time>{p.date.toISOString().slice(0, 10).replaceAll('-', '.')}</time></li>
 						))}
@@ -597,6 +612,7 @@ const faqSchema = {
 			<section id="contact">
 				<div class="final">
 					<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+					<WinterSnow tone="light" />
 					<div class="final-in">
 						<h2>지금 바로 상담받으세요</h2>
 						<p>운영시간 {HOURS}<br /><small>{HOLIDAY_NOTE}</small></p>
@@ -611,6 +627,53 @@ const faqSchema = {
 				<div style="margin-top:1rem"><ChannelAdd /></div>
 			</section>
 		</main>
+		<script>
+			// 네이버 블로그 최신 글: 배포 때 넣어 둔 목록을 먼저 보여 주고, 서버 함수(/api/naver-posts)에서 새 목록을 받으면 바꿉니다.
+			// 3일 안에 올린 글에는 "새 글" 표시를 붙입니다.
+			const list = document.getElementById('nposts');
+			if (list) {
+				const NEW_DAYS = 3;
+				const day = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(d).replaceAll('-', '.');
+				const mark = (li: HTMLElement, d: Date) => {
+					if (Date.now() - d.getTime() > NEW_DAYS * 86400000) return;
+					const b = document.createElement('span');
+					b.className = 'nnew';
+					b.textContent = '새 글';
+					li.querySelector('a')?.prepend(b);
+				};
+				list.querySelectorAll<HTMLElement>('li').forEach((li) => {
+					const t = li.querySelector('time')?.textContent;
+					if (t) mark(li, new Date(t.replaceAll('.', '-') + 'T12:00:00+09:00'));
+				});
+				fetch('/api/naver-posts')
+					.then((r) => (r.ok ? r.json() : null))
+					.then((data: { posts?: { title: string; link: string; date: string }[] } | null) => {
+						const posts = data?.posts ?? [];
+						if (!posts.length) return;
+						list.textContent = '';
+						for (const p of posts) {
+							if (!/^https:\/\/blog\.naver\.com\/connect_mobile\/\d+$/.test(p.link)) continue;
+							const d = new Date(p.date);
+							const li = document.createElement('li');
+							const n = document.createElement('span');
+							n.className = 'nmark';
+							n.setAttribute('aria-hidden', 'true');
+							n.textContent = 'N';
+							const a = document.createElement('a');
+							a.href = p.link;
+							a.target = '_blank';
+							a.rel = 'noopener';
+							a.textContent = p.title;
+							const time = document.createElement('time');
+							time.textContent = day(d);
+							li.append(n, a, time);
+							list.append(li);
+							mark(li, d);
+						}
+					})
+					.catch(() => {});
+			}
+		</script>
 		<Footer />
 		<style is:global>
 			.hs-btn { position: absolute; top: 42%; z-index: 3; width: 2.6rem; height: 2.6rem; border: 0; border-radius: 50%; background: var(--surface); box-shadow: 0 4px 14px rgba(15, 18, 25, 0.22); font-size: 1.1rem; font-weight: 800; color: var(--accent); cursor: pointer; display: none; }

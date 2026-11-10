@@ -22,16 +22,29 @@ import { HOURS } from '../consts';
 	.row b { min-width: 4.6em; }
 	.row span::before { content: ''; display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; margin-right: 0.4em; background: #aaa; }
 	.row span.open { color: #12805c; font-weight: 700; }
-	.row span.open::before { background: #12b76a; }
+	.row span.open::before { background: #12b76a; animation: livedot 1.8s ease-out infinite; }
+	/* 마감 1시간 전: 주황으로 바꿔 서두르시라고 알려 줍니다 (블로그 오늘 위젯과 같은 기준) */
+	.row span.open.soon { color: #b54708; }
+	.row span.open.soon::before { background: #f79009; animation-name: livedot-soon; }
 	.row span.closed { color: rgb(var(--gray)); }
+	@keyframes livedot { 0% { box-shadow: 0 0 0 0 rgba(18, 183, 106, 0.55); } 70%, 100% { box-shadow: 0 0 0 6px rgba(18, 183, 106, 0); } }
+	@keyframes livedot-soon { 0% { box-shadow: 0 0 0 0 rgba(247, 144, 9, 0.55); } 70%, 100% { box-shadow: 0 0 0 6px rgba(247, 144, 9, 0); } }
+	@media (prefers-reduced-motion: reduce) { .row span.open::before { animation: none; } }
 </style>
 
 <script>
+	import { HOLIDAYS } from '../data/holidays';
 	const RULES = { new: { open: 8 * 60, close: 21 * 60 + 50 }, port: { open: 10 * 60, close: 19 * 60 + 50 } } as const;
+	const SOON = 60; // 마감 1시간 전부터 주황색
 	const fmt = (m: number) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-	function isSundayKst() {
-		return new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', weekday: 'short' }).format(new Date()) === 'Sun';
+	const ymdKst = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+	// 번호이동을 받지 않는 날: 일요일, 신정, 설, 추석 당일
+	function restDayKst(): 'sunday' | 'holiday' | null {
+		const ymd = ymdKst();
+		if (ymd.endsWith('-01-01') || HOLIDAYS.includes(ymd)) return 'holiday';
+		return new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Seoul', weekday: 'short' }).format(new Date()) === 'Sun' ? 'sunday' : null;
 	}
+	const isSundayKst = () => restDayKst() !== null;
 	function nowKst() {
 		const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
 		const h = Number(p.find((x) => x.type === 'hour')?.value ?? 0) % 24;
@@ -42,7 +55,7 @@ import { HOURS } from '../consts';
 		if (now < 8 * 60) return '이른 시간이에요. 카톡에 남겨 두시면 오전 9시 이후에 먼저 답해 드려요.';
 		if (now < 9 * 60) return '신규가입 셀프개통은 지금부터 가능해요. 상담은 오전 9시부터예요.';
 		if (now < 10 * 60) return '상담 운영 중이에요. 번호이동은 오전 10시부터 접수돼요.';
-		if (now <= RULES.port.close) return sunday ? '상담과 신규가입은 지금 가능해요. 번호이동은 월요일 오전 10시부터예요.' : '지금 상담과 셀프개통 모두 가능해요.';
+		if (now <= RULES.port.close) return sunday ? (restDayKst() === 'holiday' ? '상담과 신규가입은 지금 가능해요. 오늘은 명절이라 번호이동은 내일 오전 10시부터예요.' : '상담과 신규가입은 지금 가능해요. 번호이동은 월요일 오전 10시부터예요.') : RULES.port.close - now <= SOON ? `번호이동은 ${fmt(RULES.port.close)}에 마감돼요. 서둘러 주세요!` : '지금 상담과 셀프개통 모두 가능해요.';
 		if (now <= RULES.new.close) return '번호이동은 오늘 마감됐어요. 신규가입은 지금도 가능해요.';
 		if (now < 22 * 60) return '오늘 접수는 마무리됐어요. 남겨 두시면 내일 아침 먼저 답해 드려요.';
 		return '오늘은 쉬는 시간이에요. 카톡에 남겨 두시면 내일 오전 9시 이후에 먼저 답해 드려요.';
@@ -55,13 +68,14 @@ import { HOURS } from '../consts';
 		if (after) after.hidden = now >= RULES.new.open && now <= RULES.new.close;
 		document.querySelectorAll<HTMLElement>('#hours-badge span[data-kind]').forEach((el) => {
 			const r = RULES[el.dataset.kind as 'new' | 'port'];
-			if (el.dataset.kind === 'port' && isSundayKst()) {
+			const rest = restDayKst();
+			if (el.dataset.kind === 'port' && rest) {
 				el.className = 'closed';
-				el.textContent = '일요일은 접수 불가, 월요일 10:00부터';
+				el.textContent = rest === 'holiday' ? '명절 당일은 접수 불가, 내일 10:00부터' : '일요일은 접수 불가, 월요일 10:00부터';
 				return;
 			}
 			if (now >= r.open && now <= r.close) {
-				el.className = 'open';
+				el.className = r.close - now <= SOON ? 'open soon' : 'open';
 				const left = r.close - now;
 				el.textContent = left <= 180 ? `지금 접수 가능 (${fmt(r.close)}까지, ${Math.floor(left / 60) > 0 ? Math.floor(left / 60) + '시간 ' : ''}${left % 60}분 남음)` : `지금 접수 가능 (${fmt(r.close)}까지)`;
 			} else if (now < r.open) {
