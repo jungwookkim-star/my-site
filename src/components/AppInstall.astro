@@ -1,0 +1,104 @@
+---
+import QRCode from 'qrcode';
+// 앤텔레콤 멤버십 앱 설치 안내. 주소는 앤텔레콤 공식 페이지(info.n-telecom.co.kr)의 QR에서 확인 (2026-11-11)
+const apps = [
+	{
+		key: 'L',
+		name: 'L망 멤버십 앱',
+		color: 'l',
+		android: 'https://play.google.com/store/apps/details?id=nrcom.ntelecomlg.nrcmembershiplg',
+		ios: 'https://apps.apple.com/kr/app/id1568423904',
+		guide: 'https://info.n-telecom.co.kr/ntelecom-asp/products/App_L.asp',
+	},
+	{
+		key: 'K',
+		name: 'K망 멤버십 앱',
+		color: 'k',
+		android: 'https://play.google.com/store/apps/details?id=nrcom.ntelecom.nrcmembership',
+		ios: 'https://apps.apple.com/kr/app/id1295585489',
+		guide: 'https://info.n-telecom.co.kr/ntelecom-asp/products/App_K.asp',
+	},
+];
+const qr = async (url: string) => QRCode.toString(url, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#111111', light: '#ffffff' } });
+const cards = await Promise.all(apps.map(async (a) => ({ ...a, qrA: await qr(a.android), qrI: await qr(a.ios) })));
+---
+
+<section id="app" class="appi">
+	<p class="eyebrow">언제 어디서든</p>
+	<h2 class="sec">앤텔레콤 <span>멤버십 앱</span> 설치</h2>
+	<p class="sub">이번 달 남은 데이터 확인부터 충전, 요금 조회까지 앱 하나로 끝. 앱에서 신규개통과 번호이동도 할 수 있어요.</p>
+	<div class="tabno">
+		<p>앱으로 <strong>신규개통이나 번호이동</strong>을 할 때 <strong>태블릿번호</strong> 칸에 아래 번호를 넣어 주세요.</p>
+		<div class="tabrow">
+			<span class="tnum" id="tabno">2946849</span>
+			<button type="button" id="tabno-copy">번호 복사</button>
+		</div>
+	</div>
+	<div class="acards">
+		{
+			cards.map((c) => (
+				<div class={'acard ' + c.color}>
+					<span class="atag">{c.name}</span>
+					<div class="qrs">
+						<figure><div class="qr" set:html={c.qrA} /><figcaption>Google Play</figcaption></figure>
+						<figure><div class="qr" set:html={c.qrI} /><figcaption>App Store</figcaption></figure>
+					</div>
+					<p class="hint">PC에서는 휴대폰 카메라로 QR을 찍고, 휴대폰에서는 아래 버튼을 누르세요.</p>
+					<div class="abtns">
+						<a href={c.android} target="_blank" rel="noopener" data-app={c.key + '-android'}>안드로이드</a>
+						<a href={c.ios} target="_blank" rel="noopener" data-app={c.key + '-ios'}>아이폰</a>
+					</div>
+					<a class="aguide" href={c.guide} target="_blank" rel="noopener">앤텔레콤 공식 앱 안내 보기 ›</a>
+				</div>
+			))
+		}
+	</div>
+	<p class="anote">내가 쓰는 망(KT 바로유심은 K망, LG 모두의 유심 원칩은 L망)에 맞는 앱을 설치하세요. 이미 개통했다면 처음 한 번 휴대폰 번호 인증을 하면 돼요.</p>
+</section>
+
+<style>
+	.appi { text-align: center; }
+	.appi .eyebrow { margin: 0 0 0.2rem; font-weight: 700; font-size: 0.9rem; color: var(--green); }
+	.appi h2 span { color: var(--green); }
+	.tabno { margin: 1rem auto 0; max-width: 34rem; padding: 0.9rem 1rem; border-radius: 16px; background: var(--tint-green); box-shadow: inset 0 0 0 1px var(--line-green); display: grid; gap: 0.6rem; justify-items: center; }
+	.tabno p { margin: 0; font-size: 0.92rem; color: var(--ink); }
+	.tabrow { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+	.tnum { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.12em; color: var(--green); user-select: all; }
+	#tabno-copy { border: 0; cursor: pointer; padding: 0.5rem 1rem; border-radius: 999px; font-weight: 700; background: var(--green); color: #fff; }
+	.acards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; margin-top: 1.2rem; }
+	.acard { min-width: 0; background: var(--surface); border-radius: 22px; box-shadow: inset 0 0 0 1px var(--line); padding: 1.2rem 1rem; display: grid; justify-items: center; gap: 0.8rem; }
+	.atag { color: #fff; font-weight: 800; padding: 0.45rem 1.1rem; border-radius: 999px; font-size: 0.95rem; }
+	.acard.l .atag { background: #5a9a1f; }
+	.acard.k .atag { background: #1f8fd0; }
+	.qrs { display: flex; gap: 1rem; justify-content: center; }
+	.qrs figure { margin: 0; display: grid; gap: 0.3rem; justify-items: center; }
+	.qr { width: 120px; height: 120px; background: #fff; border-radius: 10px; padding: 4px; box-sizing: border-box; }
+	.qr :global(svg) { width: 100%; height: 100%; display: block; }
+	.qrs figcaption { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+	.hint { margin: 0; font-size: 0.82rem; color: var(--muted); }
+	.abtns { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+	.abtns a { padding: 0.65rem 1.3rem; border-radius: 999px; font-weight: 700; text-decoration: none; color: var(--ink); background: var(--surface-3); box-shadow: inset 0 0 0 1px var(--line); }
+	.abtns a:hover { background: var(--surface-2); }
+	.aguide { font-size: 0.82rem; color: var(--muted); }
+	.anote { margin: 1rem auto 0; max-width: 40rem; font-size: 0.85rem; color: var(--muted); }
+	@media (max-width: 720px) {
+		.qrs, .hint { display: none; }
+	}
+</style>
+
+<script>
+	const copyBtn = document.getElementById('tabno-copy');
+	copyBtn?.addEventListener('click', () => {
+		const done = () => { copyBtn.textContent = '복사됐어요'; setTimeout(() => (copyBtn.textContent = '번호 복사'), 1800); };
+		const sel = () => { const n = document.getElementById('tabno'); if (n) { const r = document.createRange(); r.selectNodeContents(n); const s = getSelection(); s?.removeAllRanges(); s?.addRange(r); } };
+		if (navigator.clipboard) navigator.clipboard.writeText('2946849').then(done, sel); else sel();
+		const gtag = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+		if (gtag) gtag('event', 'app_install_click', { page_path: location.pathname, target: 'tablet-copy' });
+	});
+	document.querySelectorAll<HTMLAnchorElement>('.appi a[data-app]').forEach((a) =>
+		a.addEventListener('click', () => {
+			const gtag = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
+			if (gtag) gtag('event', 'app_install_click', { page_path: location.pathname, target: a.dataset.app });
+		}),
+	);
+</script>
