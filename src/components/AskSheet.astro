@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 import { PHONE, PHONE_LINK, KAKAO_CHAT_URL } from '../consts';
 // 마스코트·카톡 버튼을 누르면 바로 카톡으로 보내지 않고, 궁금한 주제를 먼저 고르게 하는 안내창
 const topics = [
-	{ key: 'plan', emoji: '💡', title: '요금제 추천받기', desc: '사용량에 맞는 요금제를 골라드려요', chat: '요금제 추천 부탁드려요.\n(통화·데이터 사용량: / 원하는 통신망: )' },
+	{ key: 'plan', emoji: '💡', title: '요금제 추천받기', desc: '질문 3개로 내게 맞는 요금제 찾기', href: '/#finder' },
 	{ key: 'stuck', emoji: '🛠', title: '셀프개통이 막혔어요', desc: '단계별 해결 방법부터 확인', href: '/guide/' },
 	{ key: 'second', emoji: '📱', title: '세컨드 번호 만들기', desc: '인증용·업무용·중고거래용 번호', href: '/second-number/' },
 	{ key: 'visit', emoji: '🏢', title: '외국인·미성년자 대면 개통', desc: '지역 센터 예약 문의', chat: '대면 개통 예약 문의드려요.\n(희망 지역: / 개통 종류: )' },
@@ -140,6 +140,8 @@ const topics = [
 				const text = pick.dataset.copy ? pick.dataset.copy + '\n(보던 페이지: ' + pageName() + ')' : '';
 				if (text && navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
 				if (text && note) note.textContent = '문의 양식이 복사됐어요. 카톡 채팅창에 붙여넣기 해 주세요.';
+				// 사이트 안 페이지로 가는 항목은 창을 닫아요(홈에서 /#finder를 누르면 같은 페이지 안에서 이동하므로)
+				if (!pick.dataset.copy && pick.getAttribute('target') !== '_blank') dlg.close();
 			}
 		});
 	}
