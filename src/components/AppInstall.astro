@@ -30,7 +30,7 @@ const cards = await Promise.all(apps.map(async (a) => ({ ...a, qrA: await qr(a.a
 	<div class="tabno">
 		<p>앱으로 <strong>신규개통이나 번호이동</strong>을 할 때 <strong>태블릿번호</strong> 칸에 아래 번호를 넣어 주세요.</p>
 		<div class="tabrow">
-			<span class="tnum" id="tabno">2946849</span>
+			<span class="tnum" id="tabno">2936849</span>
 			<button type="button" id="tabno-copy">번호 복사</button>
 		</div>
 	</div>
@@ -91,7 +91,7 @@ const cards = await Promise.all(apps.map(async (a) => ({ ...a, qrA: await qr(a.a
 	copyBtn?.addEventListener('click', () => {
 		const done = () => { copyBtn.textContent = '복사됐어요'; setTimeout(() => (copyBtn.textContent = '번호 복사'), 1800); };
 		const sel = () => { const n = document.getElementById('tabno'); if (n) { const r = document.createRange(); r.selectNodeContents(n); const s = getSelection(); s?.removeAllRanges(); s?.addRange(r); } };
-		if (navigator.clipboard) navigator.clipboard.writeText('2946849').then(done, sel); else sel();
+		if (navigator.clipboard) navigator.clipboard.writeText('2936849').then(done, sel); else sel();
 		const gtag = (window as unknown as { gtag?: (...x: unknown[]) => void }).gtag;
 		if (gtag) gtag('event', 'app_install_click', { page_path: location.pathname, target: 'tablet-copy' });
 	});
