@@ -1,6 +1,8 @@
 ---
 // 홈의 "개통 전에 약속하는 것". 사이트와 약관에 이미 있는 사실만 담습니다.
 import { PRICES_VERIFIED } from '../consts';
+// heading={false}: 홈의 접힌 칸 안에 넣을 때 제목을 빼요(접힌 칸 제목이 대신함)
+const { heading = true } = Astro.props;
 const [y, m, d] = PRICES_VERIFIED.split('-').map(Number);
 const items = [
 	{ t: '약정과 위약금이 없어요', d: '선불과 알뜰 요금제 모두 약정 없이 안내해요.' },
@@ -12,7 +14,7 @@ const items = [
 ---
 
 <section id="promises">
-	<h2 class="sec">개통 전에 약속하는 것</h2>
+	{heading && <h2 class="sec">개통 전에 약속하는 것</h2>}
 	<ul class="pm">
 		{items.map((i) => (
 			<li>

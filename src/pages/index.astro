@@ -32,7 +32,7 @@ import { REGIONS } from '../data/regions';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE, PHONE, PHONE_LINK, KAKAO_URL, SELF_ACTIVATION_URL, HOURS, HOLIDAY_NOTE, ACTIVATION_CODE } from '../consts';
 
 import { getCollection } from 'astro:content';
 import { getNaverPosts, NAVER_BLOG_URL } from '../lib/naverBlog';
@@ -114,11 +114,16 @@ const faqSchema = {
 			.card ul { padding-left: 1.1rem; margin: 0.5rem 0 0; }
 			.card.pre { border-top: 5px solid var(--teal); }
 			.card.post { border-top: 5px solid var(--accent); }
-			.ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem; max-width: 860px; margin: 0 auto; }
+			.ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1rem; max-width: 1100px; margin: 0 auto; }
 			.way { background: var(--surface); border-radius: 16px; box-shadow: var(--box-shadow); padding: 1.3rem 1.4rem; border-top: 5px solid var(--accent); display: flex; flex-direction: column; align-items: flex-start; }
 			.way.visit { border-top-color: #0b9a8d; }
 			.wtag { font-size: 0.78rem; font-weight: 800; color: var(--accent); background: var(--surface-2); padding: 0.2rem 0.7rem; border-radius: 999px; }
 			.way.visit .wtag { color: var(--teal); background: var(--tint-green); }
+			.way.app { border-top-color: #5a9a1f; }
+			.way.app .wtag { color: #3f7a12; background: var(--tint-green); }
+			#trustgroup { margin-top: 3rem; }
+			#trustgroup :global(.trust) { margin-top: 1.2rem; }
+			#promises-fold { margin-top: 1.2rem; }
 			.way h3 { margin: 0.7rem 0 0.5rem; font-size: 1.2rem; }
 			.way ul { margin: 0 0 1rem; padding-left: 1.1rem; font-size: 0.92rem; color: rgb(var(--gray-dark)); flex: 1; }
 			.way li { margin-bottom: 0.3rem; }
@@ -198,6 +203,8 @@ const faqSchema = {
 			.faq details > summary, details > summary { min-height: 2.6rem; }
 			details p { margin: 0.6rem 0 0; font-size: 0.92rem; color: rgb(var(--gray-dark)); }
 			.nposts { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+			.naverin { margin-top: 2.4rem; }
+			.nsub { text-align: center; font-size: 1.15rem; margin: 0 0 0.4rem; }
 			.nposts :global(li) { display: flex; align-items: center; gap: 0.8rem; background: var(--surface); border-radius: 14px; box-shadow: var(--box-shadow); padding: 0.75rem 1.1rem; margin-bottom: 0.6rem; font-size: 0.95rem; transition: transform 0.15s; }
 			.nposts :global(li:hover) { transform: translateY(-2px); }
 			.nposts :global(.nmark) { flex: 0 0 auto; width: 1.7rem; height: 1.7rem; border-radius: 8px; background: #03c75a; color: #fff; font-weight: 900; font-size: 0.95rem; display: grid; place-items: center; }
@@ -242,7 +249,7 @@ const faqSchema = {
 				.who, .posts { display: flex; gap: 0.8rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.3rem 0.2rem 0.9rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
 				.who > div { flex: 0 0 80%; scroll-snap-align: start; }
 				.posts > .post { flex: 0 0 78%; scroll-snap-align: start; }
-				.nposts :global(li:nth-child(n + 6)) { display: none; }
+				.nposts :global(li:nth-child(n + 4)) { display: none; }
 				.nposts :global(li) { flex-direction: column; gap: 0.2rem; }
 				.rbtns { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
 				.rbtns a { padding: 0.6rem 0.2rem; }
@@ -259,6 +266,7 @@ const faqSchema = {
 			.hb-who a { display: flex; flex-direction: column; justify-content: center; gap: 0.15rem; padding: 0.6rem 0.75rem; border-radius: 12px; background: var(--surface-2); color: var(--accent); text-decoration: none; text-align: left; line-height: 1.3; }
 			.hb-who b { font-size: 0.86rem; }
 			.hb-who span { font-size: 0.72rem; color: rgb(var(--gray)); }
+			.hb-who .hb-finder { grid-column: 1 / -1; }
 			.hb-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: rgb(var(--gray)); }
 			.hb .hb-note { margin-top: 0.7rem; }
 			.hb :global(.hours) { display: flex; width: fit-content; max-width: 100%; margin-top: 0.8rem; }
@@ -385,6 +393,7 @@ const faqSchema = {
 					<nav class="hb-who" aria-label="내 상황으로 바로 가기">
 						<a href="/visit/#foreign" data-who="foreign"><b>외국인이에요</b><span>Foreigner, 예약 후 방문 개통</span></a>
 						<a href="/blog/unpaid-overdue-activation/" data-who="unpaid"><b>다른 통신사 미납이 있어요</b><span>선불과 후불 차이 보기</span></a>
+						<a class="hb-finder" href="#finder" data-who="finder"><b>어떤 요금제가 맞을까요? →</b><span>질문 3개로 골라 드려요</span></a>
 					</nav>
 					<HoursBadge />
 					<p class="hb-note"><a href="/about/#verified">앤텔레콤 사전승낙 판매점</a>이에요.<br />외국인과 미성년자는 예약 후 대면 개통이에요.</p>
@@ -396,7 +405,6 @@ const faqSchema = {
 					<img src="/brand/mascot-lg.webp" alt="" width="371" height="640" loading="eager" />
 				</a>
 			</div>
-			<div class="statswrap"><HomeStats /></div>
 			<a class="resume" id="resume" href="/plans/" hidden></a>
 
 			<nav class="qnav" aria-label="홈 바로가기">
@@ -459,21 +467,15 @@ const faqSchema = {
 					<p class="sub" style="margin-top:1rem">어떤 게 맞는지 모르겠다면 <a href={KAKAO_URL} target="_blank" rel="noopener">카카오톡</a>이나 <a href={PHONE_LINK}>전화</a>로 물어보세요.</p>
 			</section>
 
-			<Promises />
-			<TrustStrip />
-
 			<a class="svband" href="/saving/">
 				<span class="svb-t"><Icon name="wallet" />지금 통신비가 얼마예요?</span>
 				<span class="svb-d">알뜰폰으로 바꾸면 한 달에 얼마나 아끼는지 계산해 보세요</span>
 				<span class="svb-go">요금 절약 계산기<Icon name="arrow" /></span>
 			</a>
 
-
-			<Reviews />
-
 			<section id="ways">
 				<h2 class="sec">나에게 맞는 개통 방법</h2>
-				<p class="sub">대부분은 셀프개통으로 끝나고, 일부는 방문 개통이 필요해요.</p>
+				<p class="sub">대부분은 셀프개통으로 끝나고, 일부는 방문 개통이 필요해요. 앤텔레콤 멤버십 앱으로도 개통할 수 있어요.</p>
 				<div class="ways">
 					<div class="way self">
 						<span class="wtag">셀프개통 (비대면)</span>
@@ -498,9 +500,38 @@ const faqSchema = {
 						</ul>
 						<a class="btn ghost sm" href="/region/">지역별 방문 개통 확인<Icon name="arrow" /></a>
 					</div>
+					<div class="way app">
+						<span class="wtag">앱 개통 (멤버십 앱)</span>
+						<h3>앤텔레콤 앱으로 직접</h3>
+						<ul>
+							<li>앤텔레콤 멤버십 앱에서 신규개통과 번호이동 가능</li>
+							<li>개통할 때 태블릿번호 <b>{ACTIVATION_CODE}</b> 입력</li>
+							<li>충전과 잔액 조회도 같은 앱에서</li>
+							<li>KT 바로유심은 K망 앱, LG 모두의 유심 원칩은 L망 앱</li>
+						</ul>
+						<a class="btn ghost sm" href="#app">앱 설치하고 개통하기<Icon name="arrow" /></a>
+					</div>
 				</div>
-				<SituationTable />
+				<details class="fold" id="situations-fold">
+					<summary><Icon name="user" />내 상황에 맞는 방법, 표로 비교하기</summary>
+					<SituationTable />
+				</details>
 			</section>
+
+			<section id="trustgroup">
+				<h2 class="sec">믿고 맡길 수 있는 이유</h2>
+				<div class="statswrap"><HomeStats /></div>
+				<TrustStrip />
+				<details class="fold" id="promises-fold">
+					<summary><Icon name="check" />개통 전에 약속하는 것 5가지</summary>
+					<Promises heading={false} />
+				</details>
+			</section>
+
+
+
+			<Reviews />
+
 
 			<details class="fold" id="stuck">
 				<summary><Icon name="chat" />개통하다 막히셨나요?</summary>
@@ -541,7 +572,10 @@ const faqSchema = {
 					</li>
 				</ol>
 				<p style="text-align:center;margin-top:1.5rem"><a class="btn self" href={SELF_ACTIVATION_URL} target="_blank" rel="noopener"><Icon name="rocket" />셀프개통 바로가기</a> <a class="btn ghost" href="/guide/">개통 과정 자세히 보기<Icon name="arrow" /></a></p>
-				<GuidePreview />
+				<details class="fold" id="gp-fold">
+					<summary><Icon name="rocket" />실제 개통 화면 미리 보기 (20단계)</summary>
+					<GuidePreview />
+				</details>
 				<details class="fold" id="prep">
 					<summary><Icon name="check" />개통 전 준비물과 유심 구매처</summary>
 					<p class="sub" style="margin-top:0.8rem">셀프개통은 준비물만 갖추면 약 10분이면 끝납니다.</p>
@@ -594,11 +628,9 @@ const faqSchema = {
 					))}
 				</div>
 				<p style="text-align:center;margin-top:1.4rem"><a class="btn ghost" href="/blog/">블로그 글 {allPosts.length}편 전체 보기<Icon name="arrow" /></a></p>
-			</section>
-
-			{naverPosts.length > 0 && (
-				<section id="naver">
-					<h2 class="sec">네이버 블로그 최신 글</h2>
+				{naverPosts.length > 0 && (
+					<div id="naver" class="naverin">
+					<h3 class="nsub">네이버 블로그 최신 글</h3>
 					<p class="sub">개통 관련 정보를 블로그에서도 확인하세요.</p>
 					<ul class="nposts" id="nposts">
 						{naverPosts.slice(0, 4).map((p) => (
@@ -609,8 +641,11 @@ const faqSchema = {
 						<a class="nf-btn" href={NAVER_BLOG_URL} target="_blank" rel="noopener" data-nf="home">네이버 블로그 이웃 추가하기 →</a>
 						<p>블로그 첫 화면 위쪽의 <b>이웃추가</b>를 누르면, 새 글을 이웃새글에서 바로 볼 수 있어요.</p>
 					</div>
-				</section>
-			)}
+					</div>
+				)}
+			</section>
+
+
 
 			<section id="contact">
 				<div class="final">
